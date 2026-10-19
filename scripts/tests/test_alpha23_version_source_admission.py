@@ -33,7 +33,8 @@ class Alpha23VersionSourceAdmissionTests(unittest.TestCase):
 
     def version_bytes(self):
         return ({path: (ROOT / historical).read_bytes() for path, historical in RELOCATIONS.items()},
-                {path: (ROOT / path).read_bytes() for path in CHANGED})
+                {path: (ROOT / candidate.ALPHA24_HISTORICAL_RELOCATIONS[path]).read_bytes()
+                 for path in CHANGED})
 
     def test_exact_two_file_transition_preserves_all_950_prior_pins(self):
         candidate.load_replay_contract(ROOT)
@@ -65,14 +66,14 @@ class Alpha23VersionSourceAdmissionTests(unittest.TestCase):
         for path in CHANGED:
             self.assertEqual(migration['replaced_source_sha256'][path], {
                 'previous_sha256': base['source_sha256'][path],
-                'sha256': candidate.digest(ROOT / path),
+                'sha256': candidate.digest(ROOT / candidate.ALPHA24_HISTORICAL_RELOCATIONS[path]),
             })
         candidate.validate_alpha23_version_delta(*self.version_bytes())
         self.assertEqual(len(candidate.COCKPIT_REPLAY_CONTRACT_PATHS), 950)
         self.assertEqual(len(candidate.ALPHA23_SOURCE_PATHS), 6)
         self.assertEqual(len(candidate.ALPHA23_WORKSPACE_PACKAGES), 13)
         self.assertEqual(candidate.ALPHA23_WORKSPACE_PACKAGES, candidate.ALPHA22_WORKSPACE_PACKAGES)
-        self.assertEqual(len(capture.check.SOURCE_PATHS), 56)
+        self.assertEqual(len(capture.check.SOURCE_PATHS), 61)
         self.assertEqual(len(capture.BOUND_FILES), 4)
         self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 499)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)

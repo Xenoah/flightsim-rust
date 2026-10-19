@@ -1,21 +1,21 @@
 {
-  "authorized_at": "2026-10-09T14:14:49Z",
+  "authorized_at": "2026-10-19T03:33:47.676937Z",
   "authorized_by": "Xenoah (repository owner; recorded by authorized development assistant)",
   "evidence": [
-    "The repository owner authorized the next GitHub Windows prerelease and direct main-branch updates; the confirmation is retained privately.",
-    "The repository owner approved the exact bundled Microsoft CRT component terms and assent presentation on 2026-10-09T06:47:12Z; the approved document is retained privately.",
+    "The repository owner explicitly authorized autonomous fixes, reporting, pushes and releases on 2026-10-19T03:33:47.676937Z after the proposed alpha.24 continuation was identified; the confirmation is retained privately.",
+    "The repository owner approved the exact bundled Microsoft CRT component terms and assent presentation on 2026-10-09T06:47:12Z; that prior approval is retained privately. This receipt does not assert a new legal agreement or change the approved terms.",
     "docs/release/components/MICROSOFT-COMPONENT-TERMS.txt",
     "docs/release/windows-component-release-notes.md",
-    "The repository owner reaffirmed direct main updates and releases after validation on 2026-10-09T14:14:49Z and requested the functional 3D cockpit on 2026-10-10; this receipt binds that standing publication instruction to the exact alpha.23 cockpit source and inventory.",
-    "docs/qa/functional-cockpit-2026-10-10.md",
-    "This authorization does not attest native success. Changed-source applicability, same-build archive verification and extracted two-aircraft smoke remain independent required gates.",
-    "docs/release/full-two-aircraft-source-admission.md"
+    "This receipt binds the current publication instruction to the exact alpha.24 version, source and release inventory; it does not attest native success. Changed-source applicability, same-build archive verification and extracted two-aircraft smoke remain independent required gates.",
+    "docs/release/full-two-aircraft-source-admission.md",
+    "docs/qa/alpha24-dependency-notice-review-2026-10-19.md",
+    "The exact source also includes the bounded CI source-tool job ceiling amendment from 30 to 45 minutes. Test content, individual process deadlines, native qualification and publication gates are unchanged; this is not a waiver of any failed or incomplete test."
   ],
-  "release_inventory_sha256": "22e3ccb5ba2c54d2d6fa971aee08d90d61ff70f560ab41254cd8d164e6e4245b",
+  "release_inventory_sha256": "26c25e7a698e6dd376fcad80d50f5d4691c36f26376b1c233ce7519952944ce4",
   "schema_version": 1,
   "scope": "github-windows-prerelease",
-  "source_inventory_sha256": "16cfd2f8c22aa67411204507dbde418ee80806e544b862f4225959a93f065243",
+  "source_inventory_sha256": "6252b803f1cd31a0797e9e190202f5e9e59ce31ab193b54adfe992279ca5cd9c",
   "status": "authorized",
   "target": "x86_64-pc-windows-msvc",
-  "version": "0.6.0-alpha.23"
+  "version": "0.6.0-alpha.24"
 }

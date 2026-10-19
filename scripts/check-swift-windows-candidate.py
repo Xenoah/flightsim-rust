@@ -46,7 +46,8 @@ HISTORICAL_REPLAY_CONTRACT_ID = "swift-candidate-replay-v3-v1"
 ALPHA22_REPLAY_CONTRACT_ID = "full-two-aircraft-alpha22-version-source-v1"
 COCKPIT_REPLAY_CONTRACT_ID = "full-two-aircraft-cockpit-source-v1"
 ALPHA23_REPLAY_CONTRACT_ID = "full-two-aircraft-alpha23-version-source-v1"
-REPLAY_CONTRACT_ID = "full-two-aircraft-cockpit-variant-source-v1"
+COCKPIT_VARIANT_REPLAY_CONTRACT_ID = "full-two-aircraft-cockpit-variant-source-v1"
+REPLAY_CONTRACT_ID = "full-two-aircraft-alpha24-version-source-v1"
 REVIEWED_RUNTIME_SOURCE = "960c3126e6a4bc22b8d4acc6e6737f8f2b473bef"
 REVIEWED_RUNTIME_TREE = "b3bbd57bc3819b1b1eda35ce4f8b476c52d1b24e"
 SOURCE_ADMISSION_SCOPE = "source-only; native, whole-target and publication gates remain unqualified"
@@ -209,6 +210,23 @@ COCKPIT_VARIANT_SOURCE_PATHS = frozenset({
     COCKPIT_VARIANT_MIGRATION_PATH, *COCKPIT_VARIANT_BASE_CONTRACT_HASHES,
     *COCKPIT_VARIANT_HISTORICAL_RELOCATIONS.values(), *COCKPIT_VARIANT_RUNTIME_PATHS,
 })
+# Eighth, version-only migration over the published aircraft-specific cockpit
+# source. Exact witnesses retain alpha.23 Cargo bytes and every prior contract.
+ALPHA24_MIGRATION_PATH = "scripts/alpha24-version-source-migration.json"
+ALPHA24_MIGRATION_SHA256 = 'f1e143dbc9d4bc1083c7e1cd8b9dc0828ae998b2564338081f2c6ffc74b7a6fb'
+ALPHA24_BASE_CONTRACT_PATH = "scripts/history/fbb5342-replay-candidate-contract.json"
+ALPHA24_BASE_CONTRACT_HASHES = {'scripts/history/fbb5342-analytical-swift-capture-contract.json': 'fe4bc5261029c264095f038bedf2ab4c124ff38a877004307c25b1ec5d489de6',
+ 'scripts/history/fbb5342-analytical-swift-source-contract.json': 'e15ea1bcac1e5a3e6a74fcf139ed2ea7f28eabc3b83049bd45898786e0470cb4',
+ 'scripts/history/fbb5342-replay-candidate-contract.json': '265b85c73686174b616deb8a6bcb884fefce2ce77f079ee72473c866df88dbd4'}
+ALPHA24_HISTORICAL_RELOCATIONS = {'Cargo.lock': 'scripts/history/fbb5342-Cargo.lock',
+ 'Cargo.toml': 'scripts/history/fbb5342-Cargo.toml'}
+ALPHA24_PREVIOUS_SHA256 = {'Cargo.lock': 'e700e74191334b92f0486ac5a60693c9b81b29fe0810138797230295b3a0e0cb',
+ 'Cargo.toml': '9b572cf2865c469832ea59b0910909684e6ac7f74a7cc16273bcafce11f31256'}
+ALPHA24_SOURCE_PATHS = frozenset({
+    ALPHA24_MIGRATION_PATH, *ALPHA24_BASE_CONTRACT_HASHES,
+    *ALPHA24_HISTORICAL_RELOCATIONS.values(),
+})
+ALPHA24_WORKSPACE_PACKAGES = ALPHA23_WORKSPACE_PACKAGES
 # The oldest main.rs witness remains the component-terms witness. Other newly
 # replaced preserved files now have their own exact published-base witnesses.
 CURRENT_HISTORICAL_RUNTIME_RELOCATIONS = {
@@ -1273,6 +1291,8 @@ COCKPIT_REPLAY_CONTRACT_PATHS = frozenset(REPLAY_CONTRACT_PATHS)
 REPLAY_CONTRACT_PATHS |= ALPHA23_SOURCE_PATHS
 ALPHA23_REPLAY_CONTRACT_PATHS = frozenset(REPLAY_CONTRACT_PATHS)
 REPLAY_CONTRACT_PATHS |= COCKPIT_VARIANT_SOURCE_PATHS
+COCKPIT_VARIANT_REPLAY_CONTRACT_PATHS = frozenset(REPLAY_CONTRACT_PATHS)
+REPLAY_CONTRACT_PATHS |= ALPHA24_SOURCE_PATHS
 
 # Independent Python encoders and their existing bytes stay frozen separately
 # from the moving reviewed implementation. Never regenerate to satisfy a pin.
@@ -2024,13 +2044,13 @@ def validate_cockpit_variant_migration(migration, pins, previous_pins, root):
             "cockpit variant source additions changed")
 
 
-def validate_replay_contract(contract):
+def validate_cockpit_variant_replay_contract(contract):
     """Admit exactly six replacements and two modules over frozen alpha.23."""
     require(isinstance(contract, dict) and set(contract) == {"schema_version", "contract",
             "base_reviewed_source", "base_reviewed_runtime_tree", "source_migration_sha256",
             "scope", "release_authorized", "source_sha256"}
             and type(contract.get("schema_version")) is int and contract["schema_version"] == 1
-            and contract.get("contract") == REPLAY_CONTRACT_ID,
+            and contract.get("contract") == COCKPIT_VARIANT_REPLAY_CONTRACT_ID,
             "invalid reviewed replay contract")
     require(contract.get("base_reviewed_source") == REVIEWED_RUNTIME_SOURCE
             and contract.get("base_reviewed_runtime_tree") == REVIEWED_RUNTIME_TREE
@@ -2039,7 +2059,7 @@ def validate_replay_contract(contract):
             and contract.get("release_authorized") is False,
             "source admission identity or scope changed")
     pins = contract.get("source_sha256")
-    require(isinstance(pins, dict) and set(pins) == REPLAY_CONTRACT_PATHS,
+    require(isinstance(pins, dict) and set(pins) == COCKPIT_VARIANT_REPLAY_CONTRACT_PATHS,
             "reviewed replay source boundary changed")
     require(all(isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value)
                 for value in pins.values()), "invalid reviewed replay source digest")
@@ -2058,7 +2078,7 @@ def validate_replay_contract(contract):
     validate_alpha23_replay_contract(previous)
     previous_pins = previous["source_sha256"]
     require(len(previous_pins) == 956
-            and set(previous_pins) == REPLAY_CONTRACT_PATHS - COCKPIT_VARIANT_SOURCE_PATHS,
+            and set(previous_pins) == COCKPIT_VARIANT_REPLAY_CONTRACT_PATHS - COCKPIT_VARIANT_SOURCE_PATHS,
             "cockpit variant prior source boundary changed")
     for path, expected in previous_pins.items():
         historical = COCKPIT_VARIANT_HISTORICAL_RELOCATIONS.get(path, path)
@@ -2069,6 +2089,138 @@ def validate_replay_contract(contract):
             "cockpit variant source migration changed")
     migration = json.loads((root / COCKPIT_VARIANT_MIGRATION_PATH).read_text(encoding="utf-8"))
     validate_cockpit_variant_migration(migration, pins, previous_pins, root)
+    return contract
+
+
+def validate_alpha24_version_delta(previous, current):
+    """Admit only one workspace and thirteen local-package version changes.
+
+    TOML semantics fix the package/field boundary; exact replacement also rejects
+    comments, whitespace, dependency order and any other incidental byte drift.
+    """
+    paths = set(ALPHA24_HISTORICAL_RELOCATIONS)
+    require(isinstance(previous, dict) and isinstance(current, dict)
+            and set(previous) == paths and set(current) == paths,
+            "alpha24 version file boundary changed")
+    old, new = "0.6.0-alpha.23", "0.6.0-alpha.24"
+    for path in paths:
+        require(isinstance(previous[path], bytes) and isinstance(current[path], bytes)
+                and 0 < len(previous[path]) <= 1024 * 1024
+                and 0 < len(current[path]) <= 1024 * 1024,
+                "alpha24 version input exceeds byte boundary: " + path)
+    before = tomllib.loads(previous["Cargo.toml"].decode("utf-8"))
+    after = tomllib.loads(current["Cargo.toml"].decode("utf-8"))
+    require(before.get("workspace", {}).get("package", {}).get("version") == old
+            and after.get("workspace", {}).get("package", {}).get("version") == new,
+            "alpha24 workspace version changed outside approved transition")
+    require(len(before["workspace"]["members"]) == 13
+            and set(before["workspace"]["members"])
+                == {"crates/" + name for name in ALPHA24_WORKSPACE_PACKAGES},
+            "alpha24 workspace membership changed")
+    after["workspace"]["package"]["version"] = old
+    require(after == before, "alpha24 manifest contains non-version changes")
+    before = tomllib.loads(previous["Cargo.lock"].decode("utf-8"))
+    after = tomllib.loads(current["Cargo.lock"].decode("utf-8"))
+    require(isinstance(before.get("package"), list) and isinstance(after.get("package"), list)
+            and len(before["package"]) == len(after["package"]),
+            "alpha24 lock package boundary changed")
+    seen = set()
+    for prior, changed in zip(before["package"], after["package"]):
+        name = prior.get("name")
+        if name in ALPHA24_WORKSPACE_PACKAGES:
+            require(name not in seen and prior.get("version") == old
+                    and changed.get("name") == name and changed.get("version") == new
+                    and "source" not in prior and "checksum" not in prior,
+                    "alpha24 local package identity changed: " + name)
+            seen.add(name)
+            changed["version"] = old
+        require(changed == prior, "alpha24 lock contains non-version changes")
+    require(seen == ALPHA24_WORKSPACE_PACKAGES and after == before,
+            "alpha24 lock workspace or metadata changed")
+    for path, count in (("Cargo.toml", 1), ("Cargo.lock", 13)):
+        require(previous[path].count(old.encode("ascii")) == count
+                and current[path] == previous[path].replace(old.encode("ascii"), new.encode("ascii")),
+                "alpha24 version bytes differ outside approved substitutions: " + path)
+
+
+def validate_replay_contract(contract):
+    """Admit only alpha.23 to alpha.24 versions over the frozen aircraft-cockpit proof."""
+    require(isinstance(contract, dict) and set(contract) == {"schema_version", "contract",
+            "base_reviewed_source", "base_reviewed_runtime_tree", "source_migration_sha256",
+            "scope", "release_authorized", "source_sha256"}
+            and type(contract.get("schema_version")) is int and contract["schema_version"] == 1
+            and contract.get("contract") == REPLAY_CONTRACT_ID,
+            "invalid reviewed replay contract")
+    require(contract.get("base_reviewed_source") == REVIEWED_RUNTIME_SOURCE
+            and contract.get("base_reviewed_runtime_tree") == REVIEWED_RUNTIME_TREE
+            and contract.get("source_migration_sha256") == ALPHA24_MIGRATION_SHA256
+            and contract.get("scope") == SOURCE_ADMISSION_SCOPE
+            and contract.get("release_authorized") is False,
+            "source admission identity or scope changed")
+    pins = contract.get("source_sha256")
+    require(isinstance(pins, dict) and set(pins) == REPLAY_CONTRACT_PATHS,
+            "reviewed replay source boundary changed")
+    require(all(isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value)
+                for value in pins.values()), "invalid reviewed replay source digest")
+    # Retain current physics guards before the generic prior-pin loop so that
+    # existing negative diagnostics and their independently fixed anchors survive.
+    for path in ("assets/aircraft/light_single.json", "crates/flightsim-fdm/src/aircraft.rs"):
+        require(pins[path] == LEGACY_SOURCE_HASHES[path], "frozen legacy input changed: " + path)
+    require(pins["crates/flightsim-fdm/src/lib.rs"] == REVIEWED_ADDITIVE_FDM_LIB_SHA256,
+            "frozen reviewed FDM module input changed")
+    root = Path(__file__).parent.parent
+    for path, expected in ALPHA24_BASE_CONTRACT_HASHES.items():
+        require(digest(root / path) == expected and pins[path] == expected,
+                "alpha24 historical contract changed: " + path)
+    previous = json.loads((root / ALPHA24_BASE_CONTRACT_PATH).read_text(encoding="utf-8"))
+    # The complete aircraft-cockpit validator remains a historical layer, with every
+    # previous migration and literal path boundary intact and no Git fetch.
+    validate_cockpit_variant_replay_contract(previous)
+    previous_pins = previous["source_sha256"]
+    require(len(previous_pins) == 968
+            and set(previous_pins) == REPLAY_CONTRACT_PATHS - ALPHA24_SOURCE_PATHS,
+            "alpha24 prior source boundary changed")
+    for path, expected in previous_pins.items():
+        historical = ALPHA24_HISTORICAL_RELOCATIONS.get(path, path)
+        require(pins.get(historical) == expected,
+                "alpha24 prior source pins changed (preserved runtime/historical contract): " + path)
+    require(digest(root / ALPHA24_MIGRATION_PATH) == ALPHA24_MIGRATION_SHA256
+            and pins[ALPHA24_MIGRATION_PATH] == ALPHA24_MIGRATION_SHA256,
+            "alpha24 version migration changed")
+    version = json.loads((root / ALPHA24_MIGRATION_PATH).read_text(encoding="utf-8"))
+    require(set(version) == {"schema_version", "identity", "base_source", "base_tree",
+            "base_source_kind", "base_contract_sha256", "previous_source_migration_sha256",
+            "preserved_runtime_sha256", "previous_version", "version", "historical_relocations",
+            "replaced_source_sha256", "added_source_sha256"}
+            and type(version["schema_version"]) is int and version["schema_version"] == 1
+            and version["identity"] == "full-two-aircraft-alpha24-version-source-migration-v1"
+            and version["base_source"] == "fbb53429bcae8a94078ea96f528b0b2ad216fdfe"
+            and version["base_tree"] == "f7a2c9e7081c16d7efac552d7b8e7de0de54a192"
+            and version["base_source_kind"] == "published-commit"
+            and version["base_contract_sha256"] == ALPHA24_BASE_CONTRACT_HASHES
+            and version["previous_source_migration_sha256"] == COCKPIT_VARIANT_MIGRATION_SHA256
+            and version["preserved_runtime_sha256"] == PRESERVED_RUNTIME_SHA256
+            and version["previous_version"] == "0.6.0-alpha.23"
+            and version["version"] == "0.6.0-alpha.24"
+            and version["historical_relocations"] == ALPHA24_HISTORICAL_RELOCATIONS
+            and version["added_source_sha256"] == {}, "invalid alpha24 version migration identity")
+    replacements = version["replaced_source_sha256"]
+    require(isinstance(replacements, dict) and set(replacements) == set(ALPHA24_PREVIOUS_SHA256),
+            "alpha24 version replacement boundary changed")
+    previous_bytes, current_bytes = {}, {}
+    for path, expected in ALPHA24_PREVIOUS_SHA256.items():
+        historical = ALPHA24_HISTORICAL_RELOCATIONS[path]
+        previous_bytes[path] = (root / historical).read_bytes()
+        require(hashlib.sha256(previous_bytes[path]).hexdigest() == expected
+                == pins[historical] == previous_pins[path],
+                "alpha24 historical Cargo bytes changed: " + path)
+        # Reconstruct the sole admitted bytes; live/export gates compare actual
+        # checkout and canonical Git bytes rather than trusting this derivation.
+        current_bytes[path] = previous_bytes[path].replace(b"0.6.0-alpha.23", b"0.6.0-alpha.24")
+        current_digest = hashlib.sha256(current_bytes[path]).hexdigest()
+        require(replacements[path] == {"previous_sha256": expected, "sha256": current_digest}
+                and pins[path] == current_digest, "alpha24 version replacement changed: " + path)
+    validate_alpha24_version_delta(previous_bytes, current_bytes)
     return contract
 
 

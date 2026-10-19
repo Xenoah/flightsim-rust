@@ -73,7 +73,7 @@ jobs:
     runs-on: ubuntu-latest
     # Allow the full canonical-source mutation sweep and all schema/reference
     # checks to finish despite hosted-runner variability.
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - name: Test offline world-data output safety

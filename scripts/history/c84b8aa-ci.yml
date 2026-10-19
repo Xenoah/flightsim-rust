@@ -1,0 +1,431 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# CI はソースを読むだけ。リリース権限は、成功した main の CI を受ける
+# release.yml にだけ与える。
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  # 警告をエラーとして扱う。警告の蓄積を許すと、本当に見るべき指摘が埋もれる。
+  RUSTFLAGS: -D warnings
+
+jobs:
+  pure_msrv:
+    name: pure core/world libraries (Rust 1.85)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.85.0
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: pure-msrv-1.85
+      # ADR-0007 retains 1.85 for these normal libraries. Criterion dev targets
+      # remain covered by the existing 1.93 test/bench jobs, not this MSRV check.
+      - name: Build pure libraries at the declared MSRV
+        run: cargo build --locked -j 2 -p flightsim-core -p flightsim-world --lib
+
+  content_download_smoke:
+    name: public synthetic download (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        if: runner.os == 'Windows'
+        with:
+          python-version: '3.12'
+      - name: Check Windows candidate process deadlines
+        if: runner.os == 'Windows'
+        run: python -m unittest scripts.tests.test_swift_windows_candidate.CandidateProcessTimeoutTests -v
+      - uses: dtolnay/rust-toolchain@1.93.0
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: content-download
+      - name: Build production download example
+        run: cargo build -j 2 --locked -p flightsim-content --features downloads --example download_region
+      - name: Download pinned synthetic package and verify offline reuse
+        shell: bash
+        run: |
+          # Explicit live-network gate, separate from ordinary offline unit tests.
+          # This is a tiny authored constant-height fixture, not real geography.
+          binary="target/debug/examples/download_region"
+          if [[ "${{ runner.os }}" == "Windows" ]]; then
+            binary="$binary.exe"
+          fi
+          url="https://raw.githubusercontent.com/Xenoah/flightsim-claude/8b4df0e1b7e744218176b1d19233a1463f304b47/crates/flightsim-app/tests/fixtures/region-synthetic.zip"
+          sha="d3b86a557404bd687baa7549ca274759cde7e68d5718ea94cb414116d72b9e73"
+          "$binary" "$url" "$sha" "$RUNNER_TEMP/region-download-cache" "$RUNNER_TEMP/region-online-store" online
+          "$binary" "$url" "$sha" "$RUNNER_TEMP/region-download-cache" "$RUNNER_TEMP/region-offline-store" offline
+
+  world_source_tools:
+    name: world source-tool boundaries
+    runs-on: ubuntu-latest
+    # Allow the full canonical-source mutation sweep and all schema/reference
+    # checks to finish despite hosted-runner variability.
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test offline world-data output safety
+        run: |
+          python3 -m venv "$RUNNER_TEMP/flightsim-source-tools"
+          "$RUNNER_TEMP/flightsim-source-tools/bin/python" -m pip install numpy==2.3.5 jsonschema==4.26.0
+          "$RUNNER_TEMP/flightsim-source-tools/bin/python" -m unittest discover -s scripts/tests -v
+          "$RUNNER_TEMP/flightsim-source-tools/bin/python" -m unittest discover -s scripts -p 'test_pack_global_terrain.py' -v
+          "$RUNNER_TEMP/flightsim-source-tools/bin/python" schemas/tests/test_aircraft_profile_schema.py
+          "$RUNNER_TEMP/flightsim-source-tools/bin/python" schemas/tests/test_aircraft_profile_v2_schema.py
+          "$RUNNER_TEMP/flightsim-source-tools/bin/python" docs/qa/replay_identity_reference.py
+          "$RUNNER_TEMP/flightsim-source-tools/bin/python" docs/qa/replay_v3_reference.py
+          "$RUNNER_TEMP/flightsim-source-tools/bin/python" docs/qa/subsonic_reference.py
+          "$RUNNER_TEMP/flightsim-source-tools/bin/python" docs/qa/jet_identity_reference.py
+          "$RUNNER_TEMP/flightsim-source-tools/bin/python" docs/qa/replay_v4_reference.py
+          "$RUNNER_TEMP/flightsim-source-tools/bin/python" tools/blender/validate_meadow_trainer.py
+          # These boundary tests fetch no geospatial source data and require no HDF5.
+
+  # 純 Rust 側（core / fdm / world / sim / tilegen）。
+  #
+  # Bevy に依存しないので数秒で終わる。**この速さは ADR-0001 の技術選定で
+  # 意図的に確保した性質**であり、描画層のビルドと混ぜて遅くしないよう分けてある。
+  # 物理や地形を壊したときに、Bevy のビルドを待たずに気付けることに価値がある。
+  core:
+    name: core (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # Windows が対象プラットフォームなので必ず含める。
+        # Linux も回すのは、プラットフォーム依存の思い込みを早期に検出するため。
+        os: [windows-latest, ubuntu-latest]
+
+    env:
+      HEADLESS: >-
+        -p flightsim-core -p flightsim-fdm -p flightsim-world
+        -p flightsim-sim -p flightsim-tilegen -p flightsim-assetgen -p flightsim-net -p flightsim-content
+        --features flightsim-content/downloads
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@1.93.0
+        with:
+          components: rustfmt, clippy
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: core
+
+      - name: Format
+        run: cargo fmt --all --check
+
+      - name: Clippy
+        run: cargo clippy ${{ env.HEADLESS }} --all-targets -- -D warnings
+
+      - name: Test
+        run: cargo test ${{ env.HEADLESS }} --all-targets
+
+      - name: Doc tests
+        run: cargo test ${{ env.HEADLESS }} --doc
+
+      # ベンチは実行しない（CI ランナーの性能は安定せず、数字に意味が無い）。
+      # ただしコンパイルは通しておく。**ビルドできないベンチは無価値**であり、
+      # 気付かないうちに腐るのがいちばんありがちな失敗。
+      - name: Benchmarks compile
+        run: cargo bench ${{ env.HEADLESS }} --no-run
+
+  # 描画層（render / input / ui / app）。Bevy を含むので重い。
+  #
+  # この matrix はコンパイルとテストまで。アプリの実起動は下の app-smoke で
+  # ソフトウェア Vulkan に固定して行い、環境差を切り分ける。
+  render:
+    name: render (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+
+    env:
+      RENDER: -p flightsim-render -p flightsim-input -p flightsim-ui -p flightsim-audio -p flightsim-app
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test Windows component dialog without recording recipient assent
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./scripts/tests/test-component-terms-dialog.ps1
+
+      # winit の x11 バックエンドが要求するもの。
+      # libasound2-dev は音（bevy_audio → alsa-sys）が要求する。
+      # ADR-0009 で音を入れるまでは feature ごと切ってあり不要だった。
+      # libudev-dev はゲームパッド（bevy_gilrs → libudev-sys）が要求する。
+      # 無いとコンパイルではなく build.rs の pkg-config が落ちる。
+      # cargo doc でも build.rs は走るので、docs ジョブにも要る。
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            libx11-dev libxkbcommon-dev libxkbcommon-x11-dev libudev-dev libasound2-dev
+
+      - uses: dtolnay/rust-toolchain@1.93.0
+        with:
+          components: clippy
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: render
+
+      - name: Clippy
+        run: cargo clippy ${{ env.RENDER }} --all-targets -- -D warnings
+
+      - name: Test
+        run: cargo test ${{ env.RENDER }} --all-targets
+
+      # Optional application networking must be exercised on both target OSes,
+      # while the ordinary offline application tests above remain required.
+      - name: Test optional region catalog application
+        run: cargo test -j 2 -p flightsim-app -p flightsim-content -p flightsim-assetgen --features flightsim-app/region-downloads --all-targets
+
+      - name: Lint optional region catalog application
+        run: cargo clippy -j 2 -p flightsim-app -p flightsim-content -p flightsim-assetgen --features flightsim-app/region-downloads --all-targets -- -D warnings
+
+  # Source/build regression only: no analytical runtime or release qualification.
+  analytic-tonemapping:
+    name: analytical tonemapping (Linux source/build)
+    runs-on: ubuntu-latest
+    # Budget for cold QA plus two fresh, isolated app builds and their audits.
+    # The final builds intentionally cannot reuse QA artifacts or each other.
+    timeout-minutes: 90
+    env:
+      CARGO_BUILD_JOBS: "2"
+      CARGO_INCREMENTAL: "0"
+      # Keep two independent Bevy build directories within the runner's disk budget.
+      CARGO_PROFILE_DEV_DEBUG: "0"
+      CARGO_PROFILE_TEST_DEBUG: "0"
+      CARGO_TERM_COLOR: never
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Linux dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            libx11-dev libxkbcommon-dev libxkbcommon-x11-dev libudev-dev libasound2-dev
+      - uses: dtolnay/rust-toolchain@1.93.0
+        with:
+          components: clippy
+      - name: Fetch checksum-bound private upstream LUT reference
+        run: |
+          # The excluded AgX reference is audit input only, outside evidence and
+          # upload roots. The source-recipe checker independently verifies it.
+          mkdir -p "$RUNNER_TEMP/tonemapping-private"
+          curl --fail --location --silent --show-error --proto '=https' \
+            --max-time 120 --retry 2 --max-filesize 4194304 \
+            --output "$RUNNER_TEMP/tonemapping-private/bevy_core_pipeline-0.18.1.crate" \
+            https://static.crates.io/crates/bevy_core_pipeline/bevy_core_pipeline-0.18.1.crate
+          echo "4d0810e85c2436e50c67448d48a83bf0bb1b5849899619ae2c7ea817221e9172  $RUNNER_TEMP/tonemapping-private/bevy_core_pipeline-0.18.1.crate" | sha256sum --check --status
+      - name: Check analytical tests, guards, and exact app artifacts
+        run: |
+          python3 scripts/ci-tonemapping.py \
+            "$RUNNER_TEMP/tonemapping-evidence" "$RUNNER_TEMP/tonemapping-build" \
+            --upstream-archive "$RUNNER_TEMP/tonemapping-private/bevy_core_pipeline-0.18.1.crate"
+      - name: Retain source/build evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: tonemapping-source-build-${{ github.run_id }}-${{ github.run_attempt }}
+          # Only logs, graphs, audit reports and provenance; never binaries.
+          path: ${{ runner.temp }}/tonemapping-evidence/
+          if-no-files-found: warn
+          retention-days: 7
+
+  architecture:
+    name: architecture rules
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.93.0
+      - uses: Swatinem/rust-cache@v2
+
+      # 設計規約を人間の注意力ではなく機械で守る。
+      # 破られた時点で落とすのが目的（ARCHITECTURE.md §2）。
+      - name: Check dependency and layering rules
+        run: bash scripts/check-architecture.sh
+
+  docs:
+    name: documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Linux dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            libx11-dev libxkbcommon-dev libxkbcommon-x11-dev libudev-dev libasound2-dev
+
+      - uses: dtolnay/rust-toolchain@1.93.0
+      - uses: Swatinem/rust-cache@v2
+
+      # 壊れたドキュメントリンクは、設計意図が読まれなくなる原因になる。
+      - name: Build docs
+        run: cargo doc --workspace --features flightsim-app/region-downloads --no-deps --document-private-items
+        env:
+          RUSTDOCFLAGS: -D warnings
+
+  # Mesa の CPU Vulkan 実装（lavapipe）で実際にアプリを立ち上げ、同梱 glTF を読み、
+  # 1 枚描画する。これは winit / wgpu / アセット解決 / Bevy の plugin 結線を通す
+  # 起動スモークであり、物理 GPU、Windows ドライバ、FPS は保証しない。
+  app-smoke:
+    name: app smoke (software Vulkan)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install software-rendering dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            libx11-dev libxkbcommon-dev libxkbcommon-x11-dev libudev-dev libasound2-dev \
+            mesa-vulkan-drivers vulkan-tools xvfb xauth
+
+      - uses: dtolnay/rust-toolchain@1.93.0
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: app-smoke
+
+      - name: Build the application
+        run: cargo build --locked --release -p flightsim-app
+
+      - name: Start, load original Swift Sport, and render one screenshot
+        id: smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          software_icd="$(find /usr/share/vulkan/icd.d -maxdepth 1 \
+            -type f -name '*lvp*.json' -print -quit)"
+          if [[ -z "$software_icd" ]]; then
+            echo "lavapipe Vulkan ICD was not installed" >&2
+            exit 1
+          fi
+
+          screenshot="$RUNNER_TEMP/flightsim-smoke.png"
+          log="$RUNNER_TEMP/flightsim-smoke.log"
+          # This proof must come from the current launch, never a stale capture.
+          rm -f -- "$screenshot"
+
+          xvfb-run -a env \
+            WGPU_BACKEND=vulkan \
+            LIBGL_ALWAYS_SOFTWARE=1 \
+            VK_ICD_FILENAMES="$software_icd" \
+            target/release/flightsim-app \
+              --aircraft swift-sport --screenshot "$screenshot" --screenshot-delay 5 \
+              >"$log" 2>&1 &
+          app_pid=$!
+
+          cleanup() {
+            if kill -0 "$app_pid" 2>/dev/null; then
+              kill "$app_pid" 2>/dev/null || true
+              wait "$app_pid" 2>/dev/null || true
+            fi
+          }
+          trap cleanup EXIT
+
+          complete_png() {
+            python3 - "$screenshot" <<'PY'
+          import pathlib
+          import sys
+
+          path = pathlib.Path(sys.argv[1])
+          if not path.is_file():
+              raise SystemExit(1)
+          data = path.read_bytes()
+          valid = (
+              len(data) > 24
+              and data.startswith(b"\x89PNG\r\n\x1a\n")
+              and data.endswith(b"\x00\x00\x00\x00IEND\xaeB\x60\x82")
+          )
+          raise SystemExit(0 if valid else 1)
+          PY
+          }
+
+          ready=false
+          for _ in $(seq 1 60); do
+            if complete_png && grep -Fq "(swift-sport)" "$log" &&
+                grep -Fq "aircraft/swift_sport.glb" "$log" &&
+                grep -Fq "aircraft model fitted:" "$log"; then
+              ready=true
+              break
+            fi
+            if ! kill -0 "$app_pid" 2>/dev/null; then
+              status=0
+              wait "$app_pid" || status=$?
+              echo "application exited before the smoke proof (status $status)" >&2
+              cat "$log"
+              exit 1
+            fi
+            sleep 1
+          done
+
+          if [[ "$ready" != true ]]; then
+            echo "application did not render a complete PNG and load the bundled model in time" >&2
+            cat "$log"
+            exit 1
+          fi
+
+          # ANSI 色コードを除いてから、ログレベルの大文字 ERROR と実際の
+          # panic / asset failure だけを検出する。警告本文の "error setting
+          # XSETTINGS" のような小文字 error は起動失敗ではない。
+          if python3 - "$log" <<'PY'
+          import pathlib
+          import re
+          import sys
+
+          text = pathlib.Path(sys.argv[1]).read_text(errors="replace")
+          plain = re.sub(r"\x1b\[[0-?]*[ -/]*[@-~]", "", text)
+          fatal = (
+              re.search(r"(?:^|\s)ERROR(?:\s|:|$)", plain, re.MULTILINE)
+              or re.search(r"(?:thread .+ panicked at|panic(?:ked)? at)", plain, re.IGNORECASE)
+              or re.search(r"Failed to load asset|unregistered type", plain, re.IGNORECASE)
+          )
+          raise SystemExit(0 if fatal else 1)
+          PY
+          then
+            echo "application logged an error during the smoke run" >&2
+            cat "$log"
+            exit 1
+          fi
+
+          # Only a fully passed smoke may publish its original-aircraft imagery.
+          # Keep diagnostic logs on failure, but leave the PNG path unavailable.
+          echo "verified_screenshot=$screenshot" >> "$GITHUB_OUTPUT"
+
+          echo "software-rendered application smoke passed"
+          tail -n 40 "$log"
+
+      - name: Upload smoke screenshot and log
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: app-smoke-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ steps.smoke.outputs.verified_screenshot }}
+            ${{ runner.temp }}/flightsim-smoke.log
+          if-no-files-found: warn
+          retention-days: 7

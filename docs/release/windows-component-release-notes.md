@@ -1,32 +1,30 @@
-## alpha.23 original analog 3D cockpit
+## alpha.24 aircraft-specific 3D cockpits
 
-The first original Cessna-style light-aircraft cockpit now couples eight physical
-instruments, needles, yokes, pedals and panel controls to simulator state. This
-shared implementation is used by Light Single, Swift Sport and legacy-model
-external profiles; it is not a replica of an identified real aircraft. Right-drag
-look-around, mouse-operated flight controls, panel illumination and a hideable
-ordinary HUD complement the existing keyboard and configured-controller inputs.
+Swift Sport now has an original primary flight display, dual center sticks and
+low canopy framing. Light Single retains its analog trainer panel and dual yokes.
+The source also supports distinct Meadow and Kestrel interiors, but this ordinary
+Windows bundle continues to contain only Light Single and Swift Sport.
 
-Gauge labels describe their actual sources: equivalent airspeed, ellipsoid
-altitude, true heading, body yaw rate and throttle command. They do not claim a
-calibrated pitot/static, barometric, magnetic-compass, gyro or engine-RPM model.
-Replay controls are locked; recorded effective-axis animation is labeled, and
-separate trim is unavailable rather than reconstructed.
+Instruments and physical controls remain coupled to existing simulation state
+and fixed-step input. Replay controls stay locked; recorded effective-axis
+animation is labeled and separate trim is unavailable. The display labels remain
+EAS, ellipsoid altitude, true heading, body yaw rate and throttle command, not
+unmodeled pitot/static, magnetic, gyro or engine-speed measurements.
 
-Fuel, mixture, starter/magnetos, electrical failures, circuit breakers,
-COM/NAV radio tuning, transponder and pressure/gyro dynamics remain unmodeled.
-Bounded-model jets and turboprops retain their existing model-owned interiors and
-2D fallback. Aircraft-specific cockpit differentiation remains pending. Generated
-geometry, display images and bitmap glyphs are original project source; no reference
-photograph or third-party mesh, texture or font is included.
+Fuel, mixture, starter/magnetos, electrical failures, radio tuning, transponder
+and pressure/gyro dynamics remain unmodeled. Generated cockpit views hide the
+whole exterior GLB, so external noses and wings are absent from those views;
+external views restore the unchanged aircraft models. Unknown or unsupported
+model/profile combinations keep their existing fallback. No reference photo,
+third-party cockpit mesh, texture, font, dependency or physics change is added.
 
-See the [cockpit control/instrument guide](https://github.com/Xenoah/flightsim-claude/blob/81bb3ea9c19c0016521a610dbeafb5029caa8713/docs/3d-cockpit.md)
-for operating instructions and exact limitations. That guide is frozen source
-documentation, not final-build evidence. Development tests and Linux llvmpipe
-captures do not establish Windows, physical-GPU, controller, audio or pilot-handling
-acceptance. This release requires its own source-bound Windows build and extracted
-two-aircraft captures. Terrain issue #6 remains open, with the earlier bounded
-terrain QA residuals and precision limits unchanged.
+See the [cockpit guide](https://github.com/Xenoah/flightsim-rust/blob/fbb53429bcae8a94078ea96f528b0b2ad216fdfe/docs/3d-cockpit.md)
+and [layout inventory](https://github.com/Xenoah/flightsim-rust/blob/fbb53429bcae8a94078ea96f528b0b2ad216fdfe/docs/aircraft-cockpit-layouts.md)
+for operating instructions and limits at the frozen runtime source. Development QA and Linux software-rendered
+captures remain separate from this release's own source-bound Windows build,
+same-archive smoke and screenshots. Those checks do not establish physical GPU,
+controller, native mouse usability, audio or pilot-handling acceptance. Terrain
+issue #6 remains open with its earlier bounded residuals and precision limits.
 
 ## Windows component terms: review before download or redistribution
 
