@@ -48,7 +48,14 @@ pub enum CockpitLayout {
 impl CockpitLayout {
     #[must_use]
     pub fn centered_pitch(self) -> Radians {
-        Radians(if self.sticks() { 24_f64 } else { 15_f64 }.to_radians())
+        // Sport keeps the horizon and approach runway below the top notices.
+        // Its forward-mounted sticks remain reachable without looking down;
+        // the separately authored jet layout retains its existing framing.
+        let degrees = match self {
+            Self::Trainer | Self::Meadow | Self::Sport => 15_f64,
+            Self::JetTrainer => 24_f64,
+        };
+        Radians(degrees.to_radians())
     }
     const fn sticks(self) -> bool {
         matches!(self, Self::Sport | Self::JetTrainer)

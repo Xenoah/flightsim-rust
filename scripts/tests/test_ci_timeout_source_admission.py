@@ -22,7 +22,7 @@ class CiTimeoutSourceAdmissionTests(unittest.TestCase):
     commit = staticmethod(fixture_module.ComponentTermsSourceAdmissionTests.commit)
 
     def pins(self):
-        return json.loads((ROOT / check.CONTRACT).read_text())['source_sha256']
+        return json.loads((ROOT / check.SWIFT_FORWARD_BASE_CONTRACT_PATH).read_text())['source_sha256']
 
     def workflow_bytes(self):
         return ((ROOT / check.CI_TIMEOUT_HISTORY_PATH).read_bytes(),
@@ -43,11 +43,12 @@ class CiTimeoutSourceAdmissionTests(unittest.TestCase):
         self.assertEqual(set(pins) - set(historical['source_sha256']), check.CI_TIMEOUT_SOURCE_PATHS)
         changed = {p for p, value in historical['source_sha256'].items() if pins[p] != value}
         self.assertEqual(changed, check.CI_TIMEOUT_REBOUND_PATHS)
-        replay = candidate.load_replay_contract(ROOT)
+        replay = json.loads((ROOT / candidate.SWIFT_FORWARD_BASE_CONTRACT_PATH).read_text())
+        candidate.validate_alpha24_replay_contract(replay)
         self.assertEqual(len(replay['source_sha256']), 974)
-        self.assertEqual(candidate.digest(ROOT / candidate.REPLAY_CONTRACT_PATH),
+        self.assertEqual(candidate.digest(ROOT / candidate.SWIFT_FORWARD_BASE_CONTRACT_PATH),
                          historical['source_sha256'][candidate.REPLAY_CONTRACT_PATH])
-        self.assertEqual(candidate.digest(ROOT / 'scripts/check-swift-windows-candidate.py'),
+        self.assertEqual(pins['scripts/check-swift-windows-candidate.py'],
                          historical['source_sha256']['scripts/check-swift-windows-candidate.py'])
         self.assertIs(replay['release_authorized'], False)
 

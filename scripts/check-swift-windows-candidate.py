@@ -47,7 +47,8 @@ ALPHA22_REPLAY_CONTRACT_ID = "full-two-aircraft-alpha22-version-source-v1"
 COCKPIT_REPLAY_CONTRACT_ID = "full-two-aircraft-cockpit-source-v1"
 ALPHA23_REPLAY_CONTRACT_ID = "full-two-aircraft-alpha23-version-source-v1"
 COCKPIT_VARIANT_REPLAY_CONTRACT_ID = "full-two-aircraft-cockpit-variant-source-v1"
-REPLAY_CONTRACT_ID = "full-two-aircraft-alpha24-version-source-v1"
+ALPHA24_REPLAY_CONTRACT_ID = "full-two-aircraft-alpha24-version-source-v1"
+REPLAY_CONTRACT_ID = "full-two-aircraft-swift-forward-visibility-source-v1"
 REVIEWED_RUNTIME_SOURCE = "960c3126e6a4bc22b8d4acc6e6737f8f2b473bef"
 REVIEWED_RUNTIME_TREE = "b3bbd57bc3819b1b1eda35ce4f8b476c52d1b24e"
 SOURCE_ADMISSION_SCOPE = "source-only; native, whole-target and publication gates remain unqualified"
@@ -227,9 +228,33 @@ ALPHA24_SOURCE_PATHS = frozenset({
     *ALPHA24_HISTORICAL_RELOCATIONS.values(),
 })
 ALPHA24_WORKSPACE_PACKAGES = ALPHA23_WORKSPACE_PACKAGES
+# Ninth runtime migration: only the reviewed Swift forward-view presentation
+# bytes may change. Published alpha.24 contracts and runtime witnesses stay exact.
+SWIFT_FORWARD_MIGRATION_PATH = 'scripts/swift-forward-visibility-source-migration.json'
+SWIFT_FORWARD_MIGRATION_SHA256 = '6bf34c0ddc0e9bf76f8a9717092e51c16d7f168379682dcfef6b40364a5d401d'
+SWIFT_FORWARD_BASE_SOURCE = '4f385e121addc036c2103d634e2bb46e6392172b'
+SWIFT_FORWARD_BASE_TREE = '47aed13ca164afcadf3c1201c411fecd00e77cd4'
+SWIFT_FORWARD_BASE_CONTRACT_PATH = 'scripts/history/4f385e1-replay-candidate-contract.json'
+SWIFT_FORWARD_BASE_CONTRACT_HASHES = {'scripts/history/4f385e1-analytical-swift-capture-contract.json': 'e66a41ae72795d2f59cfd9f1b86415f72ea489adf52d9dbd4c0680f149f27b2a',
+ 'scripts/history/4f385e1-analytical-swift-source-contract.json': 'b4d36a1a19dbad3409c277b403f7acc3aeea615f8ef7f14323298cbcfa901c8b',
+ 'scripts/history/4f385e1-replay-candidate-contract.json': '6af285ec28f56a8e1065c2918cd2751643121bbfb416145633aa2c3aea132e2f'}
+SWIFT_FORWARD_HISTORICAL_RELOCATIONS = {'crates/flightsim-app/src/cockpit_runtime.rs': 'scripts/history/4f385e1-cockpit_runtime.rs',
+ 'crates/flightsim-render/src/cockpit.rs': 'scripts/history/4f385e1-cockpit.rs',
+ 'crates/flightsim-render/src/cockpit/variants.rs': 'scripts/history/4f385e1-cockpit-variants.rs'}
+SWIFT_FORWARD_PREVIOUS_SHA256 = {'crates/flightsim-app/src/cockpit_runtime.rs': 'f88145f0f12a197d25d9daf9f881b48d1f98ddfdc9e4a167ef0958548e470546',
+ 'crates/flightsim-render/src/cockpit.rs': 'f3876b27ddfb9ca4195fa6d34436346ca0bd41a3aa361855030c9c8badccffab',
+ 'crates/flightsim-render/src/cockpit/variants.rs': '8a9576b7e129529c15e602ff52fcc98b57c62b9a0d999d6fb7954f4a51c3544d'}
+SWIFT_FORWARD_CURRENT_SHA256 = {'crates/flightsim-app/src/cockpit_runtime.rs': 'b2deef28dc41a9fac0a9530fcfa18097ec5498c6f7e736b11116db0883b7acf6',
+ 'crates/flightsim-render/src/cockpit.rs': '6388e9158f46e70d99a5f97dae6ac455044ce46faf2e4eb80bd8295c38c36a32',
+ 'crates/flightsim-render/src/cockpit/variants.rs': '5ae63c905bd09adba5f3dc564086b4dd1f513292a1cef3cd8bf57d75fb1b585f'}
+SWIFT_FORWARD_SOURCE_PATHS = frozenset({
+    SWIFT_FORWARD_MIGRATION_PATH, *SWIFT_FORWARD_BASE_CONTRACT_HASHES,
+    *SWIFT_FORWARD_HISTORICAL_RELOCATIONS.values(),
+})
 # The oldest main.rs witness remains the component-terms witness. Other newly
 # replaced preserved files now have their own exact published-base witnesses.
 CURRENT_HISTORICAL_RUNTIME_RELOCATIONS = {
+    **SWIFT_FORWARD_HISTORICAL_RELOCATIONS,
     **COCKPIT_VARIANT_HISTORICAL_RELOCATIONS,
     **COCKPIT_HISTORICAL_RELOCATIONS, **HISTORICAL_RUNTIME_RELOCATIONS,
 }
@@ -1293,6 +1318,8 @@ ALPHA23_REPLAY_CONTRACT_PATHS = frozenset(REPLAY_CONTRACT_PATHS)
 REPLAY_CONTRACT_PATHS |= COCKPIT_VARIANT_SOURCE_PATHS
 COCKPIT_VARIANT_REPLAY_CONTRACT_PATHS = frozenset(REPLAY_CONTRACT_PATHS)
 REPLAY_CONTRACT_PATHS |= ALPHA24_SOURCE_PATHS
+ALPHA24_REPLAY_CONTRACT_PATHS = frozenset(REPLAY_CONTRACT_PATHS)
+REPLAY_CONTRACT_PATHS |= SWIFT_FORWARD_SOURCE_PATHS
 
 # Independent Python encoders and their existing bytes stay frozen separately
 # from the moving reviewed implementation. Never regenerate to satisfy a pin.
@@ -2143,13 +2170,13 @@ def validate_alpha24_version_delta(previous, current):
                 "alpha24 version bytes differ outside approved substitutions: " + path)
 
 
-def validate_replay_contract(contract):
+def validate_alpha24_replay_contract(contract):
     """Admit only alpha.23 to alpha.24 versions over the frozen aircraft-cockpit proof."""
     require(isinstance(contract, dict) and set(contract) == {"schema_version", "contract",
             "base_reviewed_source", "base_reviewed_runtime_tree", "source_migration_sha256",
             "scope", "release_authorized", "source_sha256"}
             and type(contract.get("schema_version")) is int and contract["schema_version"] == 1
-            and contract.get("contract") == REPLAY_CONTRACT_ID,
+            and contract.get("contract") == ALPHA24_REPLAY_CONTRACT_ID,
             "invalid reviewed replay contract")
     require(contract.get("base_reviewed_source") == REVIEWED_RUNTIME_SOURCE
             and contract.get("base_reviewed_runtime_tree") == REVIEWED_RUNTIME_TREE
@@ -2158,7 +2185,7 @@ def validate_replay_contract(contract):
             and contract.get("release_authorized") is False,
             "source admission identity or scope changed")
     pins = contract.get("source_sha256")
-    require(isinstance(pins, dict) and set(pins) == REPLAY_CONTRACT_PATHS,
+    require(isinstance(pins, dict) and set(pins) == ALPHA24_REPLAY_CONTRACT_PATHS,
             "reviewed replay source boundary changed")
     require(all(isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value)
                 for value in pins.values()), "invalid reviewed replay source digest")
@@ -2178,7 +2205,7 @@ def validate_replay_contract(contract):
     validate_cockpit_variant_replay_contract(previous)
     previous_pins = previous["source_sha256"]
     require(len(previous_pins) == 968
-            and set(previous_pins) == REPLAY_CONTRACT_PATHS - ALPHA24_SOURCE_PATHS,
+            and set(previous_pins) == ALPHA24_REPLAY_CONTRACT_PATHS - ALPHA24_SOURCE_PATHS,
             "alpha24 prior source boundary changed")
     for path, expected in previous_pins.items():
         historical = ALPHA24_HISTORICAL_RELOCATIONS.get(path, path)
@@ -2221,6 +2248,89 @@ def validate_replay_contract(contract):
         require(replacements[path] == {"previous_sha256": expected, "sha256": current_digest}
                 and pins[path] == current_digest, "alpha24 version replacement changed: " + path)
     validate_alpha24_version_delta(previous_bytes, current_bytes)
+    return contract
+
+def validate_swift_forward_migration(migration, pins, previous_pins, root):
+    """Validate the bounded source descriptor; never admit a release or receipt."""
+    require(isinstance(migration, dict) and set(migration) == {
+            "schema_version", "identity", "base_source", "base_tree", "base_source_kind",
+            "base_source_status", "scope", "release_authorized", "base_contract_sha256",
+            "previous_source_migration_sha256", "preserved_runtime_sha256",
+            "historical_relocations", "replaced_source_sha256", "added_source_sha256"}
+            and type(migration["schema_version"]) is int and migration["schema_version"] == 1
+            and migration["identity"] == "full-two-aircraft-swift-forward-visibility-source-migration-v1"
+            and migration["base_source"] == SWIFT_FORWARD_BASE_SOURCE
+            and migration["base_tree"] == SWIFT_FORWARD_BASE_TREE
+            and migration["base_source_kind"] == "published-commit"
+            and migration["base_source_status"] == "released-alpha24-parent"
+            and migration["scope"] == SOURCE_ADMISSION_SCOPE
+            and migration["release_authorized"] is False
+            and migration["base_contract_sha256"] == SWIFT_FORWARD_BASE_CONTRACT_HASHES
+            and migration["previous_source_migration_sha256"] == ALPHA24_MIGRATION_SHA256
+            and migration["preserved_runtime_sha256"] == PRESERVED_RUNTIME_SHA256
+            and migration["historical_relocations"] == SWIFT_FORWARD_HISTORICAL_RELOCATIONS,
+            "invalid Swift forward visibility source migration identity")
+    replacements = migration["replaced_source_sha256"]
+    require(isinstance(replacements, dict)
+            and set(replacements) == set(SWIFT_FORWARD_PREVIOUS_SHA256),
+            "Swift forward visibility replacement boundary changed")
+    for path, expected in SWIFT_FORWARD_PREVIOUS_SHA256.items():
+        historical = SWIFT_FORWARD_HISTORICAL_RELOCATIONS[path]
+        row = replacements[path]
+        require(isinstance(row, dict) and set(row) == {"previous_sha256", "sha256"}
+                and row["previous_sha256"] == expected == previous_pins[path]
+                and digest(root / historical) == expected == pins[historical]
+                and row["sha256"] == SWIFT_FORWARD_CURRENT_SHA256[path]
+                and row["sha256"] != expected and pins[path] == row["sha256"],
+                "Swift forward visibility replacement changed: " + path)
+    require(migration["added_source_sha256"] == {}, "Swift forward visibility adds no runtime source")
+
+
+def validate_replay_contract(contract):
+    """Admit exactly three presentation-file replacements over frozen alpha.24."""
+    require(isinstance(contract, dict) and set(contract) == {"schema_version", "contract",
+            "base_reviewed_source", "base_reviewed_runtime_tree", "source_migration_sha256",
+            "scope", "release_authorized", "source_sha256"}
+            and type(contract.get("schema_version")) is int and contract["schema_version"] == 1
+            and contract.get("contract") == REPLAY_CONTRACT_ID,
+            "invalid reviewed replay contract")
+    require(contract.get("base_reviewed_source") == REVIEWED_RUNTIME_SOURCE
+            and contract.get("base_reviewed_runtime_tree") == REVIEWED_RUNTIME_TREE
+            and contract.get("source_migration_sha256") == SWIFT_FORWARD_MIGRATION_SHA256
+            and contract.get("scope") == SOURCE_ADMISSION_SCOPE
+            and contract.get("release_authorized") is False,
+            "source admission identity or scope changed")
+    pins = contract.get("source_sha256")
+    require(isinstance(pins, dict) and set(pins) == REPLAY_CONTRACT_PATHS,
+            "reviewed replay source boundary changed")
+    require(all(isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value)
+                for value in pins.values()), "invalid reviewed replay source digest")
+    # Preserve the diagnostics and all independent anchors of every earlier layer.
+    for path in ("assets/aircraft/light_single.json", "crates/flightsim-fdm/src/aircraft.rs"):
+        require(pins[path] == LEGACY_SOURCE_HASHES[path], "frozen legacy input changed: " + path)
+    require(pins["crates/flightsim-fdm/src/lib.rs"] == REVIEWED_ADDITIVE_FDM_LIB_SHA256,
+            "frozen reviewed FDM module input changed")
+    root = Path(__file__).parent.parent
+    for path, expected in SWIFT_FORWARD_BASE_CONTRACT_HASHES.items():
+        require(digest(root / path) == expected and pins[path] == expected,
+                "Swift forward visibility historical contract changed: " + path)
+    previous = json.loads((root / SWIFT_FORWARD_BASE_CONTRACT_PATH).read_text(encoding="utf-8"))
+    # Historical objects need not exist: exact checked-in witness bytes carry the
+    # complete original proof, including the frozen 974-path alpha.24 boundary.
+    validate_alpha24_replay_contract(previous)
+    previous_pins = previous["source_sha256"]
+    require(len(previous_pins) == 974
+            and set(previous_pins) == REPLAY_CONTRACT_PATHS - SWIFT_FORWARD_SOURCE_PATHS,
+            "Swift forward visibility prior source boundary changed")
+    for path, expected in previous_pins.items():
+        historical = SWIFT_FORWARD_HISTORICAL_RELOCATIONS.get(path, path)
+        require(pins.get(historical) == expected,
+                "Swift forward visibility prior source pins changed (preserved runtime/historical contract): " + path)
+    require(digest(root / SWIFT_FORWARD_MIGRATION_PATH) == SWIFT_FORWARD_MIGRATION_SHA256
+            and pins[SWIFT_FORWARD_MIGRATION_PATH] == SWIFT_FORWARD_MIGRATION_SHA256,
+            "Swift forward visibility source migration changed")
+    migration = json.loads((root / SWIFT_FORWARD_MIGRATION_PATH).read_text(encoding="utf-8"))
+    validate_swift_forward_migration(migration, pins, previous_pins, root)
     return contract
 
 

@@ -109,6 +109,9 @@ alpha.21 は未公開。staging の component merge とリリースを同じ完�
 - [x] コックピット内装（Cessna 172 の実寸から**手続き的に組む**。計器盤・
   グレアシールド・風防の支柱・側窓・操縦輪・座席。**3D モデルは調達していない**
   ので、再配布条件の判断が要らない）
+- [x] Swift の初期前方視界を 15 度へ戻し、両 stick を一式で前へ移動。
+  同条件の昼・夜・進入 PNG で地平線と主要表示の両立を確認。
+  [検証と残件](qa/swift-forward-view-2026-10-19.md)。source admission・native 操作・配布は別ゲート
 - [x] 夜間の滑走路灯（縁灯・進入端灯・末端灯。太陽高度で滑らかに点消灯）
 - [x] 定常風（`--wind 270/10`。FDM の空力と HUD へ。横風着陸が成立する）
 - [x] Authored background visibility and departure-relative cloud-base map editor;

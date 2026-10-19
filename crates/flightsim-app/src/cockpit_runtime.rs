@@ -1018,6 +1018,112 @@ mod picking_tests {
             }
         }
     }
+
+    #[expect(
+        clippy::cast_possible_truncation,
+        clippy::cast_precision_loss,
+        reason = "bounded test viewports and authored camera offsets use renderer f32"
+    )]
+    fn swift_forward_view(size: UVec2, scale_factor: f32) -> (Camera, Transform, Vec3) {
+        let mut camera = Camera::default();
+        camera.computed.target_info = Some(RenderTargetInfo {
+            physical_size: size,
+            scale_factor,
+        });
+        let mut projection = super::super::perspective();
+        projection.update(size.x as f32, size.y as f32);
+        camera.computed.clip_from_view = projection.get_clip_from_view();
+        let eye = aircraft_profile::SelectedAircraftProfile::builtin("swift-sport")
+            .unwrap()
+            .camera_eye()
+            .map(|v| v.get() as f32);
+        let eye = Vec3::from_array(eye);
+        let mut pointer = CockpitInteraction {
+            enabled: true,
+            centered_pitch: cockpit::CockpitLayout::Sport.centered_pitch(),
+            ..default()
+        };
+        pointer.center();
+        let view = Transform {
+            translation: eye,
+            rotation: pointer.view_rotation() * flightsim_render::body_to_camera_rotation(),
+            ..default()
+        };
+        (camera, view, eye)
+    }
+
+    #[test]
+    fn swift_default_horizon_has_room_below_top_notices_on_ground_and_approach() {
+        for (size, scale) in [
+            (UVec2::new(1280, 720), 1.0),
+            (UVec2::new(1920, 1080), 2.0),
+            (UVec2::new(1024, 768), 1.0),
+        ] {
+            let (camera, view, eye) = swift_forward_view(size, scale);
+            let height = camera.logical_viewport_rect().unwrap().height();
+            // Level and six-degree nose-down fixtures bound the observed
+            // ground/approach views. These are view tests, not FDM assumptions.
+            for (pitch, minimum, maximum) in [(0_f32, 0.25, 0.30), (-6_f32, 0.15, 0.20)] {
+                let attitude = Quat::from_rotation_y(pitch.to_radians());
+                let global = GlobalTransform::from(Transform {
+                    translation: attitude * eye,
+                    rotation: attitude * view.rotation,
+                    ..default()
+                });
+                let horizon = global.translation() + Vec3::X * 10_000.0;
+                let pixel = camera.world_to_viewport(&global, horizon).unwrap();
+                let fraction = pixel.y / height;
+                assert!(
+                    (minimum..=maximum).contains(&fraction),
+                    "Swift horizon at {fraction:.3} of viewport height, aircraft pitch {pitch}"
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn swift_forward_view_contains_whole_primary_displays_and_neutral_stick_grips() {
+        for (size, scale) in [(UVec2::new(1280, 720), 1.0), (UVec2::new(1920, 1080), 2.0)] {
+            let (camera, view, eye) = swift_forward_view(size, scale);
+            let global = GlobalTransform::from(view);
+            let viewport = camera.logical_viewport_rect().unwrap();
+            let parts = cockpit::interior_parts_for_layout(
+                eye.to_array().map(|v| Meters(f64::from(v))),
+                cockpit::CockpitLayout::Sport,
+            );
+            let mut checked = 0;
+            for part in parts.iter().filter(|part| {
+                matches!(
+                    part.display,
+                    Some(Display::Primary | Display::Flight | Display::Controls)
+                ) || part.control.is_some_and(|c| c.0 == CockpitControl::Stick)
+            }) {
+                let Some(bevy::mesh::VertexAttributeValues::Float32x3(vertices)) =
+                    part.mesh.attribute(Mesh::ATTRIBUTE_POSITION)
+                else {
+                    panic!("{} has no positions", part.name)
+                };
+                for vertex in vertices {
+                    let world = part.transform.transform_point(Vec3::from_array(*vertex));
+                    let pixel = camera.world_to_viewport(&global, world).unwrap();
+                    assert!(
+                        viewport.contains(pixel),
+                        "Swift {} vertex outside viewport at {pixel:?}",
+                        part.name
+                    );
+                    if part.display.is_some() {
+                        assert!(
+                            pixel.y < viewport.height() * 0.80,
+                            "Swift {} is too low to read above the footer",
+                            part.name
+                        );
+                    }
+                }
+                checked += 1;
+            }
+            assert_eq!(checked, 5, "PFD, flight/control state and both stick grips");
+        }
+    }
     #[test]
     fn moving_stick_remains_pickable_at_each_roll_pitch_extreme() {
         let eye = Vec3::new(0.2, -0.25, -0.8);
