@@ -1,7 +1,9 @@
-## alpha.24 aircraft-specific 3D cockpits
+## alpha.25 Swift Sport forward visibility
 
-Swift Sport now has an original primary flight display, dual center sticks and
-low canopy framing. Light Single retains its analog trainer panel and dual yokes.
+Swift Sport now starts with a 15-degree centered look pitch instead of 24 degrees,
+keeping the horizon and approach runway in view. Both sticks, animation pivots
+and interaction bounds move forward together by 0.10 m. Its original primary
+flight display, dual center sticks and low canopy framing remain unchanged. Light Single retains its analog trainer panel and dual yokes.
 The source also supports distinct Meadow and Kestrel interiors, but this ordinary
 Windows bundle continues to contain only Light Single and Swift Sport.
 
@@ -18,8 +20,8 @@ external views restore the unchanged aircraft models. Unknown or unsupported
 model/profile combinations keep their existing fallback. No reference photo,
 third-party cockpit mesh, texture, font, dependency or physics change is added.
 
-See the [cockpit guide](https://github.com/Xenoah/flightsim-rust/blob/fbb53429bcae8a94078ea96f528b0b2ad216fdfe/docs/3d-cockpit.md)
-and [layout inventory](https://github.com/Xenoah/flightsim-rust/blob/fbb53429bcae8a94078ea96f528b0b2ad216fdfe/docs/aircraft-cockpit-layouts.md)
+See the [cockpit guide](https://github.com/Xenoah/flightsim-rust/blob/754bad886cbac8f564c6c46ebdb265c54bda275c/docs/3d-cockpit.md)
+and [layout inventory](https://github.com/Xenoah/flightsim-rust/blob/754bad886cbac8f564c6c46ebdb265c54bda275c/docs/aircraft-cockpit-layouts.md)
 for operating instructions and limits at the frozen runtime source. Development QA and Linux software-rendered
 captures remain separate from this release's own source-bound Windows build,
 same-archive smoke and screenshots. Those checks do not establish physical GPU,

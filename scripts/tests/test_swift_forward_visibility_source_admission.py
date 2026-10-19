@@ -40,7 +40,8 @@ class SwiftForwardVisibilitySourceAdmissionTests(unittest.TestCase):
         return json.loads((ROOT / candidate.SWIFT_FORWARD_BASE_CONTRACT_PATH).read_text())
 
     def test_exact_three_replacements_preserve_all_974_prior_pins_and_physics(self):
-        current = candidate.load_replay_contract(ROOT)
+        current = json.loads((ROOT / candidate.ALPHA25_BASE_CONTRACT_PATH).read_text())
+        candidate.validate_swift_forward_replay_contract(current)
         previous = self.previous()
         candidate.validate_alpha24_replay_contract(previous)
         migration = json.loads((ROOT / MIGRATION).read_text())
@@ -60,7 +61,7 @@ class SwiftForwardVisibilitySourceAdmissionTests(unittest.TestCase):
         for path, expected in previous['source_sha256'].items():
             historical = RELOCATIONS.get(path, path)
             self.assertEqual(current['source_sha256'][historical], expected, path)
-            self.assertEqual(candidate.digest(ROOT / historical), expected, path)
+            self.assertEqual(candidate.digest(ROOT / candidate.ALPHA25_HISTORICAL_RELOCATIONS.get(historical, historical)), expected, path)
         for path in CHANGED:
             self.assertEqual(candidate.SWIFT_FORWARD_CURRENT_SHA256[path], candidate.digest(ROOT / path))
         self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 499)
@@ -70,7 +71,7 @@ class SwiftForwardVisibilitySourceAdmissionTests(unittest.TestCase):
         for path, expected in frozen.items():
             historical = candidate.CURRENT_HISTORICAL_RUNTIME_RELOCATIONS.get(path, path)
             self.assertEqual(current['source_sha256'][historical], expected)
-        self.assertEqual(len(check.SOURCE_PATHS), 62)
+        self.assertEqual(len(check.SOURCE_PATHS), 63)
         self.assertEqual(len(capture.BOUND_FILES), 4)
         self.assertIs(current['release_authorized'], False)
 
@@ -146,7 +147,7 @@ class SwiftForwardVisibilitySourceAdmissionTests(unittest.TestCase):
 
     def test_historical_ci_layer_and_unrelated_analytical_inputs_remain_fixed(self):
         previous = json.loads((ROOT / check.SWIFT_FORWARD_BASE_CONTRACT_PATH).read_text())
-        current = json.loads((ROOT / check.CONTRACT).read_text())
+        current = json.loads((ROOT / check.ALPHA25_BASE_CONTRACT_PATH).read_text())
         check.validate_ci_timeout_admission(ROOT, previous['source_sha256'])
         check.validate_swift_forward_admission(ROOT, current['source_sha256'])
         self.assertEqual(len(previous['source_sha256']), 61)

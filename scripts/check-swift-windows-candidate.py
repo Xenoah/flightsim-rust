@@ -48,7 +48,8 @@ COCKPIT_REPLAY_CONTRACT_ID = "full-two-aircraft-cockpit-source-v1"
 ALPHA23_REPLAY_CONTRACT_ID = "full-two-aircraft-alpha23-version-source-v1"
 COCKPIT_VARIANT_REPLAY_CONTRACT_ID = "full-two-aircraft-cockpit-variant-source-v1"
 ALPHA24_REPLAY_CONTRACT_ID = "full-two-aircraft-alpha24-version-source-v1"
-REPLAY_CONTRACT_ID = "full-two-aircraft-swift-forward-visibility-source-v1"
+SWIFT_FORWARD_REPLAY_CONTRACT_ID = "full-two-aircraft-swift-forward-visibility-source-v1"
+REPLAY_CONTRACT_ID = "full-two-aircraft-alpha25-version-source-v1"
 REVIEWED_RUNTIME_SOURCE = "960c3126e6a4bc22b8d4acc6e6737f8f2b473bef"
 REVIEWED_RUNTIME_TREE = "b3bbd57bc3819b1b1eda35ce4f8b476c52d1b24e"
 SOURCE_ADMISSION_SCOPE = "source-only; native, whole-target and publication gates remain unqualified"
@@ -251,6 +252,23 @@ SWIFT_FORWARD_SOURCE_PATHS = frozenset({
     SWIFT_FORWARD_MIGRATION_PATH, *SWIFT_FORWARD_BASE_CONTRACT_HASHES,
     *SWIFT_FORWARD_HISTORICAL_RELOCATIONS.values(),
 })
+# Tenth migration: exact version-only successor to published Swift visibility.
+# Preserve all prior runtime bytes and complete contracts as immutable witnesses.
+ALPHA25_MIGRATION_PATH = 'scripts/alpha25-version-source-migration.json'
+ALPHA25_MIGRATION_SHA256 = 'c91eb21cb2cea615deee5116aabf82229274f56127f189564923fb4055dc80e4'
+ALPHA25_BASE_CONTRACT_PATH = 'scripts/history/754bad8-replay-candidate-contract.json'
+ALPHA25_BASE_CONTRACT_HASHES = {'scripts/history/754bad8-analytical-swift-capture-contract.json': '4e8d797086bf34920ca9e8ae26c85ecdd532ec1308c32cca221afd748d6aba97',
+ 'scripts/history/754bad8-analytical-swift-source-contract.json': '6fb835000bf14e78362f273a683ad4ed7af2983415ff20021beff3d9b8dcc302',
+ 'scripts/history/754bad8-replay-candidate-contract.json': '5a969193079991cb94250995e69fb0428afff950d3f5a8971412f681ae1f025c'}
+ALPHA25_HISTORICAL_RELOCATIONS = {'Cargo.lock': 'scripts/history/754bad8-Cargo.lock',
+ 'Cargo.toml': 'scripts/history/754bad8-Cargo.toml'}
+ALPHA25_PREVIOUS_SHA256 = {'Cargo.lock': '020ffeba85f07d14d69bbaad8bba2a8e6be943fde97dd559524ca72937a54359',
+ 'Cargo.toml': 'dab096b8af04872a32fe59c2875b791790ed947ab38fd4ddee763dc071417172'}
+ALPHA25_SOURCE_PATHS = frozenset({
+    ALPHA25_MIGRATION_PATH, *ALPHA25_BASE_CONTRACT_HASHES,
+    *ALPHA25_HISTORICAL_RELOCATIONS.values(),
+})
+ALPHA25_WORKSPACE_PACKAGES = ALPHA24_WORKSPACE_PACKAGES
 # The oldest main.rs witness remains the component-terms witness. Other newly
 # replaced preserved files now have their own exact published-base witnesses.
 CURRENT_HISTORICAL_RUNTIME_RELOCATIONS = {
@@ -1320,6 +1338,8 @@ COCKPIT_VARIANT_REPLAY_CONTRACT_PATHS = frozenset(REPLAY_CONTRACT_PATHS)
 REPLAY_CONTRACT_PATHS |= ALPHA24_SOURCE_PATHS
 ALPHA24_REPLAY_CONTRACT_PATHS = frozenset(REPLAY_CONTRACT_PATHS)
 REPLAY_CONTRACT_PATHS |= SWIFT_FORWARD_SOURCE_PATHS
+SWIFT_FORWARD_REPLAY_CONTRACT_PATHS = frozenset(REPLAY_CONTRACT_PATHS)
+REPLAY_CONTRACT_PATHS |= ALPHA25_SOURCE_PATHS
 
 # Independent Python encoders and their existing bytes stay frozen separately
 # from the moving reviewed implementation. Never regenerate to satisfy a pin.
@@ -2286,13 +2306,13 @@ def validate_swift_forward_migration(migration, pins, previous_pins, root):
     require(migration["added_source_sha256"] == {}, "Swift forward visibility adds no runtime source")
 
 
-def validate_replay_contract(contract):
+def validate_swift_forward_replay_contract(contract):
     """Admit exactly three presentation-file replacements over frozen alpha.24."""
     require(isinstance(contract, dict) and set(contract) == {"schema_version", "contract",
             "base_reviewed_source", "base_reviewed_runtime_tree", "source_migration_sha256",
             "scope", "release_authorized", "source_sha256"}
             and type(contract.get("schema_version")) is int and contract["schema_version"] == 1
-            and contract.get("contract") == REPLAY_CONTRACT_ID,
+            and contract.get("contract") == SWIFT_FORWARD_REPLAY_CONTRACT_ID,
             "invalid reviewed replay contract")
     require(contract.get("base_reviewed_source") == REVIEWED_RUNTIME_SOURCE
             and contract.get("base_reviewed_runtime_tree") == REVIEWED_RUNTIME_TREE
@@ -2301,7 +2321,7 @@ def validate_replay_contract(contract):
             and contract.get("release_authorized") is False,
             "source admission identity or scope changed")
     pins = contract.get("source_sha256")
-    require(isinstance(pins, dict) and set(pins) == REPLAY_CONTRACT_PATHS,
+    require(isinstance(pins, dict) and set(pins) == SWIFT_FORWARD_REPLAY_CONTRACT_PATHS,
             "reviewed replay source boundary changed")
     require(all(isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value)
                 for value in pins.values()), "invalid reviewed replay source digest")
@@ -2320,7 +2340,7 @@ def validate_replay_contract(contract):
     validate_alpha24_replay_contract(previous)
     previous_pins = previous["source_sha256"]
     require(len(previous_pins) == 974
-            and set(previous_pins) == REPLAY_CONTRACT_PATHS - SWIFT_FORWARD_SOURCE_PATHS,
+            and set(previous_pins) == SWIFT_FORWARD_REPLAY_CONTRACT_PATHS - SWIFT_FORWARD_SOURCE_PATHS,
             "Swift forward visibility prior source boundary changed")
     for path, expected in previous_pins.items():
         historical = SWIFT_FORWARD_HISTORICAL_RELOCATIONS.get(path, path)
@@ -2333,6 +2353,137 @@ def validate_replay_contract(contract):
     validate_swift_forward_migration(migration, pins, previous_pins, root)
     return contract
 
+
+def validate_alpha25_version_delta(previous, current):
+    """Admit only one workspace and thirteen local-package version changes.
+
+    TOML semantics fix the package/field boundary; exact replacement also rejects
+    comments, whitespace, dependency order and any other incidental byte drift.
+    """
+    paths = set(ALPHA25_HISTORICAL_RELOCATIONS)
+    require(isinstance(previous, dict) and isinstance(current, dict)
+            and set(previous) == paths and set(current) == paths,
+            "alpha25 version file boundary changed")
+    old, new = "0.6.0-alpha.24", "0.6.0-alpha.25"
+    for path in paths:
+        require(isinstance(previous[path], bytes) and isinstance(current[path], bytes)
+                and 0 < len(previous[path]) <= 1024 * 1024
+                and 0 < len(current[path]) <= 1024 * 1024,
+                "alpha25 version input exceeds byte boundary: " + path)
+    before = tomllib.loads(previous["Cargo.toml"].decode("utf-8"))
+    after = tomllib.loads(current["Cargo.toml"].decode("utf-8"))
+    require(before.get("workspace", {}).get("package", {}).get("version") == old
+            and after.get("workspace", {}).get("package", {}).get("version") == new,
+            "alpha25 workspace version changed outside approved transition")
+    require(len(before["workspace"]["members"]) == 13
+            and set(before["workspace"]["members"])
+                == {"crates/" + name for name in ALPHA25_WORKSPACE_PACKAGES},
+            "alpha25 workspace membership changed")
+    after["workspace"]["package"]["version"] = old
+    require(after == before, "alpha25 manifest contains non-version changes")
+    before = tomllib.loads(previous["Cargo.lock"].decode("utf-8"))
+    after = tomllib.loads(current["Cargo.lock"].decode("utf-8"))
+    require(isinstance(before.get("package"), list) and isinstance(after.get("package"), list)
+            and len(before["package"]) == len(after["package"]),
+            "alpha25 lock package boundary changed")
+    seen = set()
+    for prior, changed in zip(before["package"], after["package"]):
+        name = prior.get("name")
+        if name in ALPHA25_WORKSPACE_PACKAGES:
+            require(name not in seen and prior.get("version") == old
+                    and changed.get("name") == name and changed.get("version") == new
+                    and "source" not in prior and "checksum" not in prior,
+                    "alpha25 local package identity changed: " + name)
+            seen.add(name)
+            changed["version"] = old
+        require(changed == prior, "alpha25 lock contains non-version changes")
+    require(seen == ALPHA25_WORKSPACE_PACKAGES and after == before,
+            "alpha25 lock workspace or metadata changed")
+    for path, count in (("Cargo.toml", 1), ("Cargo.lock", 13)):
+        require(previous[path].count(old.encode("ascii")) == count
+                and current[path] == previous[path].replace(old.encode("ascii"), new.encode("ascii")),
+                "alpha25 version bytes differ outside approved substitutions: " + path)
+
+
+def validate_replay_contract(contract):
+    """Admit only alpha.24 to alpha.25 versions over the frozen Swift visibility proof."""
+    require(isinstance(contract, dict) and set(contract) == {"schema_version", "contract",
+            "base_reviewed_source", "base_reviewed_runtime_tree", "source_migration_sha256",
+            "scope", "release_authorized", "source_sha256"}
+            and type(contract.get("schema_version")) is int and contract["schema_version"] == 1
+            and contract.get("contract") == REPLAY_CONTRACT_ID,
+            "invalid reviewed replay contract")
+    require(contract.get("base_reviewed_source") == REVIEWED_RUNTIME_SOURCE
+            and contract.get("base_reviewed_runtime_tree") == REVIEWED_RUNTIME_TREE
+            and contract.get("source_migration_sha256") == ALPHA25_MIGRATION_SHA256
+            and contract.get("scope") == SOURCE_ADMISSION_SCOPE
+            and contract.get("release_authorized") is False,
+            "source admission identity or scope changed")
+    pins = contract.get("source_sha256")
+    require(isinstance(pins, dict) and set(pins) == REPLAY_CONTRACT_PATHS,
+            "reviewed replay source boundary changed")
+    require(all(isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value)
+                for value in pins.values()), "invalid reviewed replay source digest")
+    # Retain current physics guards before the generic prior-pin loop so that
+    # existing negative diagnostics and their independently fixed anchors survive.
+    for path in ("assets/aircraft/light_single.json", "crates/flightsim-fdm/src/aircraft.rs"):
+        require(pins[path] == LEGACY_SOURCE_HASHES[path], "frozen legacy input changed: " + path)
+    require(pins["crates/flightsim-fdm/src/lib.rs"] == REVIEWED_ADDITIVE_FDM_LIB_SHA256,
+            "frozen reviewed FDM module input changed")
+    root = Path(__file__).parent.parent
+    for path, expected in ALPHA25_BASE_CONTRACT_HASHES.items():
+        require(digest(root / path) == expected and pins[path] == expected,
+                "alpha25 historical contract changed: " + path)
+    previous = json.loads((root / ALPHA25_BASE_CONTRACT_PATH).read_text(encoding="utf-8"))
+    # The complete Swift visibility validator remains a historical layer, with every
+    # previous migration and literal path boundary intact and no Git fetch.
+    validate_swift_forward_replay_contract(previous)
+    previous_pins = previous["source_sha256"]
+    require(len(previous_pins) == 981
+            and set(previous_pins) == REPLAY_CONTRACT_PATHS - ALPHA25_SOURCE_PATHS,
+            "alpha25 prior source boundary changed")
+    for path, expected in previous_pins.items():
+        historical = ALPHA25_HISTORICAL_RELOCATIONS.get(path, path)
+        require(pins.get(historical) == expected,
+                "alpha25 prior source pins changed (preserved runtime/historical contract): " + path)
+    require(digest(root / ALPHA25_MIGRATION_PATH) == ALPHA25_MIGRATION_SHA256
+            and pins[ALPHA25_MIGRATION_PATH] == ALPHA25_MIGRATION_SHA256,
+            "alpha25 version migration changed")
+    version = json.loads((root / ALPHA25_MIGRATION_PATH).read_text(encoding="utf-8"))
+    require(set(version) == {"schema_version", "identity", "base_source", "base_tree",
+            "base_source_kind", "base_contract_sha256", "previous_source_migration_sha256",
+            "preserved_runtime_sha256", "previous_version", "version", "historical_relocations",
+            "replaced_source_sha256", "added_source_sha256"}
+            and type(version["schema_version"]) is int and version["schema_version"] == 1
+            and version["identity"] == "full-two-aircraft-alpha25-version-source-migration-v1"
+            and version["base_source"] == "754bad886cbac8f564c6c46ebdb265c54bda275c"
+            and version["base_tree"] == "ae0558fe04c5fe700b47a5116b9977561f57b1c3"
+            and version["base_source_kind"] == "published-commit"
+            and version["base_contract_sha256"] == ALPHA25_BASE_CONTRACT_HASHES
+            and version["previous_source_migration_sha256"] == SWIFT_FORWARD_MIGRATION_SHA256
+            and version["preserved_runtime_sha256"] == PRESERVED_RUNTIME_SHA256
+            and version["previous_version"] == "0.6.0-alpha.24"
+            and version["version"] == "0.6.0-alpha.25"
+            and version["historical_relocations"] == ALPHA25_HISTORICAL_RELOCATIONS
+            and version["added_source_sha256"] == {}, "invalid alpha25 version migration identity")
+    replacements = version["replaced_source_sha256"]
+    require(isinstance(replacements, dict) and set(replacements) == set(ALPHA25_PREVIOUS_SHA256),
+            "alpha25 version replacement boundary changed")
+    previous_bytes, current_bytes = {}, {}
+    for path, expected in ALPHA25_PREVIOUS_SHA256.items():
+        historical = ALPHA25_HISTORICAL_RELOCATIONS[path]
+        previous_bytes[path] = (root / historical).read_bytes()
+        require(hashlib.sha256(previous_bytes[path]).hexdigest() == expected
+                == pins[historical] == previous_pins[path],
+                "alpha25 historical Cargo bytes changed: " + path)
+        # Reconstruct the sole admitted bytes; live/export gates compare actual
+        # checkout and canonical Git bytes rather than trusting this derivation.
+        current_bytes[path] = previous_bytes[path].replace(b"0.6.0-alpha.24", b"0.6.0-alpha.25")
+        current_digest = hashlib.sha256(current_bytes[path]).hexdigest()
+        require(replacements[path] == {"previous_sha256": expected, "sha256": current_digest}
+                and pins[path] == current_digest, "alpha25 version replacement changed: " + path)
+    validate_alpha25_version_delta(previous_bytes, current_bytes)
+    return contract
 
 def load_replay_contract(repo):
     return validate_replay_contract(json.loads((repo / REPLAY_CONTRACT_PATH).read_text(encoding="utf-8")))
