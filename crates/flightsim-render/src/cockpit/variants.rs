@@ -3,7 +3,15 @@
 use super::*;
 
 pub(super) fn add_stick(parts: &mut Vec<CockpitPart>, eye: Vec3, side: f32, layout: CockpitLayout) {
-    let pivot = eye + Vec3::new(0.39, side * 0.25 - eye.y, 0.70);
+    // Keep both complete grips in Sport's forward-facing 15-degree view.
+    // Translate the whole assembly, including its animation pivot, rather than
+    // moving only the hit target or tilting the camera away from the runway.
+    let forward = if layout == CockpitLayout::Sport {
+        0.49
+    } else {
+        0.39
+    };
+    let pivot = eye + Vec3::new(forward, side * 0.25 - eye.y, 0.70);
     parts.push(part(
         "stick gaiter",
         Sphere::new(1.0)
@@ -187,6 +195,93 @@ pub(super) fn finish(parts: &mut Vec<CockpitPart>, eye: Vec3, layout: CockpitLay
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn sport_forward_view_preserves_other_layouts_and_translates_the_complete_sticks() {
+        for (layout, pitch) in [
+            (CockpitLayout::Trainer, 15_f64),
+            (CockpitLayout::Meadow, 15_f64),
+            (CockpitLayout::Sport, 15_f64),
+            (CockpitLayout::JetTrainer, 24_f64),
+        ] {
+            assert_eq!(layout.centered_pitch(), Radians(pitch.to_radians()));
+        }
+        let eye = Vec3::new(0.2, -0.25, -0.8);
+        for side in [-1.0, 1.0] {
+            let mut sport = vec![];
+            let mut jet = vec![];
+            add_stick(&mut sport, eye, side, CockpitLayout::Sport);
+            add_stick(&mut jet, eye, side, CockpitLayout::JetTrainer);
+            assert_eq!(sport.len(), jet.len());
+            for (sport, jet) in sport.iter().zip(&jet) {
+                assert_eq!(sport.name, jet.name);
+                assert_eq!(sport.control, jet.control);
+                assert!(
+                    sport
+                        .transform
+                        .rotation
+                        .abs_diff_eq(jet.transform.rotation, 1e-6)
+                );
+                assert!(
+                    (sport.transform.translation - jet.transform.translation)
+                        .abs_diff_eq(Vec3::X * 0.10, 1e-6)
+                );
+                if let Motion::Stick { pivot } = sport.motion {
+                    let Motion::Stick { pivot: jet_pivot } = jet.motion else {
+                        panic!("jet stick motion changed")
+                    };
+                    assert!(
+                        pivot.abs_diff_eq(eye + Vec3::new(0.49, side * 0.25 - eye.y, 0.70), 1e-6)
+                    );
+                    assert!(
+                        jet_pivot
+                            .abs_diff_eq(eye + Vec3::new(0.39, side * 0.25 - eye.y, 0.70), 1e-6)
+                    );
+                }
+            }
+        }
+    }
+    #[test]
+    fn sport_sticks_keep_clear_of_the_panel_through_their_full_control_travel() {
+        let eye = Vec3::new(0.2, -0.25, -0.8);
+        let parts = interior_parts_for_layout(
+            eye.to_array().map(|v| Meters(f64::from(v))),
+            CockpitLayout::Sport,
+        );
+        let display_front = parts
+            .iter()
+            .find(|part| part.display == Some(Display::Primary))
+            .unwrap()
+            .transform
+            .translation
+            .x;
+        for pitch in [-1.0, -0.5, 0.0, 0.5, 1.0] {
+            for roll in [-1.0, -0.5, 0.0, 0.5, 1.0] {
+                let state = CockpitState {
+                    controls: ControlInputs::new(roll, pitch, 0.0, 0.0, 0.0),
+                    ..default()
+                };
+                for part in parts
+                    .iter()
+                    .filter(|part| matches!(part.motion, Motion::Stick { .. }))
+                {
+                    let pose = animated_transform(part.transform, part.motion, &state);
+                    let Some(bevy::mesh::VertexAttributeValues::Float32x3(vertices)) =
+                        part.mesh.attribute(Mesh::ATTRIBUTE_POSITION)
+                    else {
+                        panic!("stick mesh positions")
+                    };
+                    for vertex in vertices {
+                        let point = pose.transform_point(Vec3::from_array(*vertex));
+                        assert!(
+                            point.x + 0.025 < display_front,
+                            "{} reaches the panel at roll {roll}, pitch {pitch}",
+                            part.name
+                        );
+                    }
+                }
+            }
+        }
+    }
     #[test]
     fn trainer_switch_row_center_rays_clear_the_neutral_yoke_shafts() {
         let eye = Vec3::new(0.6, -0.25, -0.9);

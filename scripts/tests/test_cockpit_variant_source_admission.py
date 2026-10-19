@@ -88,22 +88,22 @@ class CockpitVariantSourceAdmissionTests(unittest.TestCase):
             self.assertEqual(current['source_sha256'][historical], expected, path)
             self.assertEqual(candidate.digest(ROOT / candidate.ALPHA24_HISTORICAL_RELOCATIONS.get(historical, historical)), expected, path)
         for path, expected in candidate.COCKPIT_VARIANT_BASE_CONTRACT_HASHES.items():
-            self.assertEqual(candidate.digest(ROOT / path), expected, path)
+            self.assertEqual(candidate.digest(ROOT / candidate.SWIFT_FORWARD_HISTORICAL_RELOCATIONS.get(path, path)), expected, path)
         for path in CHANGED:
             expected = base['source_sha256'][path]
             self.assertEqual(candidate.COCKPIT_VARIANT_PREVIOUS_SHA256[path], expected)
             self.assertEqual(migration['replaced_source_sha256'][path], {
-                'previous_sha256': expected, 'sha256': candidate.digest(ROOT / path)})
-            self.assertNotEqual(candidate.digest(ROOT / path), expected)
+                'previous_sha256': expected, 'sha256': candidate.digest(ROOT / candidate.SWIFT_FORWARD_HISTORICAL_RELOCATIONS.get(path, path))})
+            self.assertNotEqual(candidate.digest(ROOT / candidate.SWIFT_FORWARD_HISTORICAL_RELOCATIONS.get(path, path)), expected)
         for path in RUNTIME:
-            self.assertEqual(migration['added_source_sha256'][path], candidate.digest(ROOT / path))
+            self.assertEqual(migration['added_source_sha256'][path], candidate.digest(ROOT / candidate.SWIFT_FORWARD_HISTORICAL_RELOCATIONS.get(path, path)))
         preserved = json.loads((ROOT / candidate.PRESERVED_RUNTIME_PATH).read_text())['source_sha256']
         self.assertEqual(len(preserved), 497)
         self.assertEqual(len(candidate.PRESERVED_CRATE_SOURCE_PATHS), 492)
         self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 499)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)
         self.assertEqual(len(candidate.CORE_PIPELINE_SOURCE_PATHS), 55)
-        self.assertEqual(len(capture.check.SOURCE_PATHS), 61)
+        self.assertEqual(len(capture.check.SOURCE_PATHS), 62)
         self.assertEqual(len(capture.BOUND_FILES), 4)
         self.assertEqual(current['contract'], 'full-two-aircraft-cockpit-variant-source-v1')
         self.assertEqual(current['scope'], candidate.SOURCE_ADMISSION_SCOPE)

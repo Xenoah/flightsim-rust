@@ -27,8 +27,10 @@ not become selectable aircraft. No fighter or stealth model is supplied.
 All layouts support roll/pitch by dragging either yoke/stick, rudder pedals,
 throttle, flaps, trim, momentary service brakes, instrument illumination,
 look-around/reset and ordinary HUD visibility. Home centers the view 15° down
-for yokes or 24° down for sticks, keeping the panel and primary controls in view. Animation uses the existing
-controls; sticks pivot in pitch/roll, yokes rotate/translate. Kestrel’s single
+for Trainer, Meadow and Swift, or 24° down for Kestrel. Swift's sticks are mounted
+10 cm farther forward than Kestrel's, keeping both grips in its initial 60° view
+while leaving room above the panel for the runway and horizon. Animation uses
+the existing controls; sticks pivot in pitch/roll, yokes rotate/translate. Kestrel’s single
 lever represents its aggregate throttle command, not multiple engines.
 
 Swift’s display shows EAS knots, pitch/roll, ellipsoid altitude feet, vertical

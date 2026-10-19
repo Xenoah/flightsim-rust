@@ -628,3 +628,8 @@ only geometry/artwork/presentation. No FDM or replay law changes. Read
 suppresses the old screen-fixed six-pack; unsupported bounded-model interiors
 retain their existing fallback. Explicit profile/model bindings select layouts,
 while active scene ownership selects visibility and interaction capability. HUD decluttering never owns critical notices or attribution.
+
+Swift's centered view uses 15 degrees down with its complete stick assemblies
+0.10 m farther forward relative to the eye. Other layouts retain their framing.
+The [forward-view QA](docs/qa/swift-forward-view-2026-10-19.md) separates local
+projection/PNG evidence from outstanding source-admission and native gates.

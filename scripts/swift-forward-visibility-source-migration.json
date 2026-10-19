@@ -1,0 +1,37 @@
+{
+  "added_source_sha256": {},
+  "base_contract_sha256": {
+    "scripts/history/4f385e1-analytical-swift-capture-contract.json": "e66a41ae72795d2f59cfd9f1b86415f72ea489adf52d9dbd4c0680f149f27b2a",
+    "scripts/history/4f385e1-analytical-swift-source-contract.json": "b4d36a1a19dbad3409c277b403f7acc3aeea615f8ef7f14323298cbcfa901c8b",
+    "scripts/history/4f385e1-replay-candidate-contract.json": "6af285ec28f56a8e1065c2918cd2751643121bbfb416145633aa2c3aea132e2f"
+  },
+  "base_source": "4f385e121addc036c2103d634e2bb46e6392172b",
+  "base_source_kind": "published-commit",
+  "base_source_status": "released-alpha24-parent",
+  "base_tree": "47aed13ca164afcadf3c1201c411fecd00e77cd4",
+  "historical_relocations": {
+    "crates/flightsim-app/src/cockpit_runtime.rs": "scripts/history/4f385e1-cockpit_runtime.rs",
+    "crates/flightsim-render/src/cockpit.rs": "scripts/history/4f385e1-cockpit.rs",
+    "crates/flightsim-render/src/cockpit/variants.rs": "scripts/history/4f385e1-cockpit-variants.rs"
+  },
+  "identity": "full-two-aircraft-swift-forward-visibility-source-migration-v1",
+  "preserved_runtime_sha256": "c9b71ddad46396b3b6ba8961a17f8323a28788f3c641e51f5c47098846653667",
+  "previous_source_migration_sha256": "f1e143dbc9d4bc1083c7e1cd8b9dc0828ae998b2564338081f2c6ffc74b7a6fb",
+  "release_authorized": false,
+  "replaced_source_sha256": {
+    "crates/flightsim-app/src/cockpit_runtime.rs": {
+      "previous_sha256": "f88145f0f12a197d25d9daf9f881b48d1f98ddfdc9e4a167ef0958548e470546",
+      "sha256": "b2deef28dc41a9fac0a9530fcfa18097ec5498c6f7e736b11116db0883b7acf6"
+    },
+    "crates/flightsim-render/src/cockpit.rs": {
+      "previous_sha256": "f3876b27ddfb9ca4195fa6d34436346ca0bd41a3aa361855030c9c8badccffab",
+      "sha256": "6388e9158f46e70d99a5f97dae6ac455044ce46faf2e4eb80bd8295c38c36a32"
+    },
+    "crates/flightsim-render/src/cockpit/variants.rs": {
+      "previous_sha256": "8a9576b7e129529c15e602ff52fcc98b57c62b9a0d999d6fb7954f4a51c3544d",
+      "sha256": "5ae63c905bd09adba5f3dc564086b4dd1f513292a1cef3cd8bf57d75fb1b585f"
+    }
+  },
+  "schema_version": 1,
+  "scope": "source-only; native, whole-target and publication gates remain unqualified"
+}

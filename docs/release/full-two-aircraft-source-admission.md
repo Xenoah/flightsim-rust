@@ -325,3 +325,43 @@ boundary retains four inputs and exact inherited hashes. The 974-pin replay
 contract, alpha.24 version-only validator, all historical migrations, runtime,
 rights review and publication gates remain unchanged. Neither successful CI nor
 this tooling amendment supplies fresh Windows evidence or release authority.
+
+## Swift Sport forward-visibility source amendment
+
+The successor `scripts/swift-forward-visibility-source-migration.json` is based on
+published alpha.24 source `4f385e121addc036c2103d634e2bb46e6392172b`, tree
+`47aed13ca164afcadf3c1201c411fecd00e77cd4`. It admits only the reviewed complete
+bytes of `crates/flightsim-render/src/cockpit.rs`,
+`crates/flightsim-render/src/cockpit/variants.rs` and
+`crates/flightsim-app/src/cockpit_runtime.rs`. Swift's initial look pitch changes
+from 24 to 15 degrees; its stick, animation pivot and interaction bounds move
+0.10 m forward together. The app-file changes are regression tests. No new runtime
+file, package version, dependency, physics, replay, aircraft asset or workflow
+change is admitted.
+
+Six byte-exact `scripts/history/4f385e1-*` witnesses retain all three previous
+contracts and all three replaced runtime files. The complete alpha.24 validator
+remains a frozen 974-pin historical layer. The outer contract adds those witnesses
+and the fixed descriptor, reaching 981 pins; its identity is
+`full-two-aircraft-swift-forward-visibility-source-v1`. Every previous pin is
+preserved, relocating only the three replaced runtime identities. The literal
+499-member crate boundary, 497 original runtime identities, all earlier migration
+descriptors and 102 independent replay anchors are unchanged. Fixed descriptor
+and replacement hashes reject jointly resealed runtime/manifest/contract attacks.
+
+The analytical successor preserves the exact published 61-input CI-only contract
+and runs its unchanged bounded 30-to-45-minute validator before the new layer.
+Only the source auditors, replay contract, this guide and affected test assertions
+are rebound. One new mutation-test input brings its boundary to 62; capture keeps
+four inputs and exact inherited hashes. Current identities are
+`analytical-swift-forward-visibility-source-admission-v1` and
+`analytical-swift-forward-visibility-capture-source-admission-v1`.
+
+This source-only amendment cannot reuse alpha.24 native captures, applicability
+or publication receipts as evidence for the changed source. The genuine Linux
+software-rendered visual comparison is recorded in
+[`docs/qa/swift-forward-view-2026-10-19.md`](../qa/swift-forward-view-2026-10-19.md).
+Its original 78 source-pin rejections remain a historical failed proposal check;
+the successor must pass its own fresh committed-source validation. Native,
+whole-target rights, exact-inventory authorization and publication gates remain
+separate and unqualified by this migration.
