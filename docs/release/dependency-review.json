@@ -103,7 +103,7 @@
     },
     "windows_dialog_execution_accepted": false
   },
-  "coverage_interpretation": "Completed source/notice coverage assessment uses the controlled ordinary Rust1.93.0 MSVC release recipe, exact359 Cargo source closure,1264 edges,510 verified header records, three complete modified vendor trees and exact source/runtime notice bytes. The unchanged supported hosted VS Enterprise source route and standard release CRT/startup family, plus eligible public SDK UM/UCRT library category where actually applicable, cover the plausible supplier set conservatively. Nonempty build-script requests are the reviewed BLAKE3 assembly libraries and winapi Windows API families. No observed contribution falls outside these covered source families. Installed tool samples are not asserted exhaustive, final linker command/toolset/SDK/static membership remain unknown, and no exact member map is required by this coverage method. SDK installations do not establish copied proprietary SDK code; no separate SDK benchmark restriction is imposed on FlightSim. Only the executable is shipped as native code; external OS, graphics and v14 runtime prerequisites are not redistributed app files. Approved component terms and project/supplier notices are represented at their exact separate source-copy destinations. Coverage here means source/notice/licensing applicability, not dynamic module execution, successful rendering, physical hardware coverage, individual recipient assent or publication permission. Exact installed candidate comparison is now bound to real environment-only run37902203369 (VS Enterprise18.10, toolsets14.29/14.44/14.51, SDK26100). This updates the supplier applicability assessment without claiming that the future application has used those files. All actual candidate fields remain exact future-match conditions; no new family-based acceptance rule was introduced. Alpha.22 amendment: that completed supplier coverage is retained as historical conditional applicability, not as a newly observed platform. Fresh static target metadata verifies the same359 package names, versions except11 project workspace updates, features and1264 normal/build edges modulo those project identities. The modified bevy_pbr source change and shared zune provenance-manifest identity are explicitly reconciled; exact fresh Windows facts must still satisfy a separately completed applicability review. Alpha.23 amendment: all 359 package records and 1,264 ordered normal/build edges were reconciled after only 11 project identity substitutions; all 510 source-header records, three embedded dependency assets, three complete modified vendor trees and 557 supplemental files remain exact. Prior supplier/native coverage remains historical conditional applicability. No new platform, final-link, dynamic-module or recipient-assent fact is inferred from this source-only review.",
+  "coverage_interpretation": "Completed source/notice coverage assessment uses the controlled ordinary Rust1.93.0 MSVC release recipe, exact359 Cargo source closure,1264 edges,510 verified header records, three complete modified vendor trees and exact source/runtime notice bytes. The unchanged supported hosted VS Enterprise source route and standard release CRT/startup family, plus eligible public SDK UM/UCRT library category where actually applicable, cover the plausible supplier set conservatively. Nonempty build-script requests are the reviewed BLAKE3 assembly libraries and winapi Windows API families. No observed contribution falls outside these covered source families. Installed tool samples are not asserted exhaustive, final linker command/toolset/SDK/static membership remain unknown, and no exact member map is required by this coverage method. SDK installations do not establish copied proprietary SDK code; no separate SDK benchmark restriction is imposed on FlightSim. Only the executable is shipped as native code; external OS, graphics and v14 runtime prerequisites are not redistributed app files. Approved component terms and project/supplier notices are represented at their exact separate source-copy destinations. Coverage here means source/notice/licensing applicability, not dynamic module execution, successful rendering, physical hardware coverage, individual recipient assent or publication permission. Exact installed candidate comparison is now bound to real environment-only run37902203369 (VS Enterprise18.10, toolsets14.29/14.44/14.51, SDK26100). This updates the supplier applicability assessment without claiming that the future application has used those files. All actual candidate fields remain exact future-match conditions; no new family-based acceptance rule was introduced. Alpha.22 amendment: that completed supplier coverage is retained as historical conditional applicability, not as a newly observed platform. Fresh static target metadata verifies the same359 package names, versions except11 project workspace updates, features and1264 normal/build edges modulo those project identities. The modified bevy_pbr source change and shared zune provenance-manifest identity are explicitly reconciled; exact fresh Windows facts must still satisfy a separately completed applicability review. Alpha.23 amendment: all 359 package records and 1,264 ordered normal/build edges were reconciled after only 11 project identity substitutions; all 510 source-header records, three embedded dependency assets, three complete modified vendor trees and 557 supplemental files remain exact. Prior supplier/native coverage remains historical conditional applicability. No new platform, final-link, dynamic-module or recipient-assent fact is inferred from this source-only review. Alpha.24 amendment: the fresh ordinary source collection and exact tree preserve all 359 conservative package records, 1,264 ordered normal/build edges, 347 exact feature sets and 12 null conservative-only memberships after the 11 project version substitutions. All 735 original notice texts, 510 source-header records, three embedded assets, three complete modified vendor trees and 557 supplemental files remain exact. The bounded original aircraft-specific cockpit runtime changes introduce no new third-party source, dependency or notice. This remains source-only evidence; prior supplier/native observations retain their historical conditional applicability and require a separately completed fresh native review.",
   "distribution_qualified": false,
   "environment_evidence": {
     "artifact_zip": {
@@ -123,9 +123,9 @@
   },
   "inventory": {
     "bytes": 407610,
-    "sha256": "3038e9253ce86edbf8f566ab3653ada7d03ff951a4d6942affecf8b72b69de6e"
+    "sha256": "59d3385ecd3912e87a3eff21362acf870afc37483437fee5b2db1299d0a0c573"
   },
-  "inventory_sha256": "3038e9253ce86edbf8f566ab3653ada7d03ff951a4d6942affecf8b72b69de6e",
+  "inventory_sha256": "59d3385ecd3912e87a3eff21362acf870afc37483437fee5b2db1299d0a0c573",
   "kind": "whole_target_dependency_content_review",
   "native_evidence": {
     "build_summary": {
@@ -4148,7 +4148,7 @@
       "exact_features": [
         "default"
       ],
-      "id": "flightsim-app@0.6.0-alpha.23",
+      "id": "flightsim-app@0.6.0-alpha.24",
       "modified_source": null,
       "obligations": [
         "Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged.",
@@ -4163,7 +4163,7 @@
       "conservative_features": [],
       "declared_license": "MIT OR Apache-2.0",
       "exact_features": [],
-      "id": "flightsim-audio@0.6.0-alpha.23",
+      "id": "flightsim-audio@0.6.0-alpha.24",
       "modified_source": null,
       "obligations": [
         "Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged.",
@@ -4182,7 +4182,7 @@
       "exact_features": [
         "default"
       ],
-      "id": "flightsim-content@0.6.0-alpha.23",
+      "id": "flightsim-content@0.6.0-alpha.24",
       "modified_source": null,
       "obligations": [
         "Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged.",
@@ -4197,7 +4197,7 @@
       "conservative_features": [],
       "declared_license": "MIT OR Apache-2.0",
       "exact_features": [],
-      "id": "flightsim-core@0.6.0-alpha.23",
+      "id": "flightsim-core@0.6.0-alpha.24",
       "modified_source": null,
       "obligations": [
         "Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged.",
@@ -4212,7 +4212,7 @@
       "conservative_features": [],
       "declared_license": "MIT OR Apache-2.0",
       "exact_features": [],
-      "id": "flightsim-fdm@0.6.0-alpha.23",
+      "id": "flightsim-fdm@0.6.0-alpha.24",
       "modified_source": null,
       "obligations": [
         "Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged.",
@@ -4227,7 +4227,7 @@
       "conservative_features": [],
       "declared_license": "MIT OR Apache-2.0",
       "exact_features": [],
-      "id": "flightsim-input@0.6.0-alpha.23",
+      "id": "flightsim-input@0.6.0-alpha.24",
       "modified_source": null,
       "obligations": [
         "Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged.",
@@ -4242,7 +4242,7 @@
       "conservative_features": [],
       "declared_license": "MIT OR Apache-2.0",
       "exact_features": [],
-      "id": "flightsim-net@0.6.0-alpha.23",
+      "id": "flightsim-net@0.6.0-alpha.24",
       "modified_source": null,
       "obligations": [
         "Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged.",
@@ -4259,7 +4259,7 @@
       ],
       "declared_license": "MIT OR Apache-2.0",
       "exact_features": [],
-      "id": "flightsim-render@0.6.0-alpha.23",
+      "id": "flightsim-render@0.6.0-alpha.24",
       "modified_source": null,
       "obligations": [
         "Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged.",
@@ -4274,7 +4274,7 @@
       "conservative_features": [],
       "declared_license": "MIT OR Apache-2.0",
       "exact_features": [],
-      "id": "flightsim-sim@0.6.0-alpha.23",
+      "id": "flightsim-sim@0.6.0-alpha.24",
       "modified_source": null,
       "obligations": [
         "Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged.",
@@ -4289,7 +4289,7 @@
       "conservative_features": [],
       "declared_license": "MIT OR Apache-2.0",
       "exact_features": [],
-      "id": "flightsim-ui@0.6.0-alpha.23",
+      "id": "flightsim-ui@0.6.0-alpha.24",
       "modified_source": null,
       "obligations": [
         "Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged.",
@@ -4304,7 +4304,7 @@
       "conservative_features": [],
       "declared_license": "MIT OR Apache-2.0",
       "exact_features": [],
-      "id": "flightsim-world@0.6.0-alpha.23",
+      "id": "flightsim-world@0.6.0-alpha.24",
       "modified_source": null,
       "obligations": [
         "Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged.",
@@ -11472,178 +11472,178 @@
     {
       "evidence": [
         {
-          "path": "licenses/flightsim-app-0.6.0-alpha.23/LICENSE-MIT",
+          "path": "licenses/flightsim-app-0.6.0-alpha.24/LICENSE-MIT",
           "sha256": "43d5e9a1dc86439b7882faa044d442dbaf4a0ef1056b1387f24866e0c9dbeb43",
-          "source": "Exact unchanged project licence bytes in alpha.23 target-filtered source collection; LICENSE-MIT"
+          "source": "Exact unchanged project licence bytes in alpha.24 target-filtered source collection; LICENSE-MIT"
         },
         {
-          "path": "licenses/flightsim-app-0.6.0-alpha.23/LICENSE-APACHE",
+          "path": "licenses/flightsim-app-0.6.0-alpha.24/LICENSE-APACHE",
           "sha256": "8b87d8cfb6a827ee6fa7224b150b994dc2842fc69fdf07273f291abb6c4b21a9",
-          "source": "Exact unchanged project licence bytes in alpha.23 target-filtered source collection; LICENSE-APACHE"
+          "source": "Exact unchanged project licence bytes in alpha.24 target-filtered source collection; LICENSE-APACHE"
         }
       ],
-      "id": "flightsim-app@0.6.0-alpha.23",
-      "reason": "Selected distribution route: MIT. Project-authored workspace source remains under the existing MIT/Apache grant; the controlled component-terms implementation adds no Cargo dependency or third-party source. Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged. No copyleft/source-offer obligation is introduced by this MIT route; other component terms and notices still apply. Alpha.22 source amendment changes only the workspace version and the separately reviewed terrain implementation; original project licence texts are unchanged. Historical source550 native observations are not relabeled. Alpha.23 source amendment covers the original project-authored procedural cockpit and workspace version update. Generated geometry, display textures and bitmap glyphs introduce no copied reference photograph, third-party asset or new dependency. Historical native observations remain unchanged."
+      "id": "flightsim-app@0.6.0-alpha.24",
+      "reason": "Selected distribution route: MIT. Project-authored workspace source remains under the existing MIT/Apache grant; the controlled component-terms implementation adds no Cargo dependency or third-party source. Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged. No copyleft/source-offer obligation is introduced by this MIT route; other component terms and notices still apply. Alpha.22 source amendment changes only the workspace version and the separately reviewed terrain implementation; original project licence texts are unchanged. Historical source550 native observations are not relabeled. Alpha.23 source amendment covers the original project-authored procedural cockpit and workspace version update. Generated geometry, display textures and bitmap glyphs introduce no copied reference photograph, third-party asset or new dependency. Historical native observations remain unchanged. Alpha.24 source amendment covers the bounded project-authored aircraft-specific cockpit layouts and workspace version update. Original procedural geometry/display artwork, bitmap lettering and presentation wiring add no third-party source or dependency; references are not redistributed. Existing source/licence routes and historical native observations remain unchanged."
     },
     {
       "evidence": [
         {
-          "path": "licenses/flightsim-audio-0.6.0-alpha.23/LICENSE-MIT",
+          "path": "licenses/flightsim-audio-0.6.0-alpha.24/LICENSE-MIT",
           "sha256": "43d5e9a1dc86439b7882faa044d442dbaf4a0ef1056b1387f24866e0c9dbeb43",
-          "source": "Exact unchanged project licence bytes in alpha.23 target-filtered source collection; LICENSE-MIT"
+          "source": "Exact unchanged project licence bytes in alpha.24 target-filtered source collection; LICENSE-MIT"
         },
         {
-          "path": "licenses/flightsim-audio-0.6.0-alpha.23/LICENSE-APACHE",
+          "path": "licenses/flightsim-audio-0.6.0-alpha.24/LICENSE-APACHE",
           "sha256": "8b87d8cfb6a827ee6fa7224b150b994dc2842fc69fdf07273f291abb6c4b21a9",
-          "source": "Exact unchanged project licence bytes in alpha.23 target-filtered source collection; LICENSE-APACHE"
+          "source": "Exact unchanged project licence bytes in alpha.24 target-filtered source collection; LICENSE-APACHE"
         }
       ],
-      "id": "flightsim-audio@0.6.0-alpha.23",
-      "reason": "Selected distribution route: MIT. Project-authored workspace source remains under the existing MIT/Apache grant; the controlled component-terms implementation adds no Cargo dependency or third-party source. Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged. No copyleft/source-offer obligation is introduced by this MIT route; other component terms and notices still apply. Alpha.22 source amendment changes only the workspace version and the separately reviewed terrain implementation; original project licence texts are unchanged. Historical source550 native observations are not relabeled. Alpha.23 source amendment covers the original project-authored procedural cockpit and workspace version update. Generated geometry, display textures and bitmap glyphs introduce no copied reference photograph, third-party asset or new dependency. Historical native observations remain unchanged."
+      "id": "flightsim-audio@0.6.0-alpha.24",
+      "reason": "Selected distribution route: MIT. Project-authored workspace source remains under the existing MIT/Apache grant; the controlled component-terms implementation adds no Cargo dependency or third-party source. Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged. No copyleft/source-offer obligation is introduced by this MIT route; other component terms and notices still apply. Alpha.22 source amendment changes only the workspace version and the separately reviewed terrain implementation; original project licence texts are unchanged. Historical source550 native observations are not relabeled. Alpha.23 source amendment covers the original project-authored procedural cockpit and workspace version update. Generated geometry, display textures and bitmap glyphs introduce no copied reference photograph, third-party asset or new dependency. Historical native observations remain unchanged. Alpha.24 source amendment covers the bounded project-authored aircraft-specific cockpit layouts and workspace version update. Original procedural geometry/display artwork, bitmap lettering and presentation wiring add no third-party source or dependency; references are not redistributed. Existing source/licence routes and historical native observations remain unchanged."
     },
     {
       "evidence": [
         {
-          "path": "licenses/flightsim-content-0.6.0-alpha.23/LICENSE-MIT",
+          "path": "licenses/flightsim-content-0.6.0-alpha.24/LICENSE-MIT",
           "sha256": "43d5e9a1dc86439b7882faa044d442dbaf4a0ef1056b1387f24866e0c9dbeb43",
-          "source": "Exact unchanged project licence bytes in alpha.23 target-filtered source collection; LICENSE-MIT"
+          "source": "Exact unchanged project licence bytes in alpha.24 target-filtered source collection; LICENSE-MIT"
         },
         {
-          "path": "licenses/flightsim-content-0.6.0-alpha.23/LICENSE-APACHE",
+          "path": "licenses/flightsim-content-0.6.0-alpha.24/LICENSE-APACHE",
           "sha256": "8b87d8cfb6a827ee6fa7224b150b994dc2842fc69fdf07273f291abb6c4b21a9",
-          "source": "Exact unchanged project licence bytes in alpha.23 target-filtered source collection; LICENSE-APACHE"
+          "source": "Exact unchanged project licence bytes in alpha.24 target-filtered source collection; LICENSE-APACHE"
         }
       ],
-      "id": "flightsim-content@0.6.0-alpha.23",
-      "reason": "Selected distribution route: MIT. Project-authored workspace source remains under the existing MIT/Apache grant; the controlled component-terms implementation adds no Cargo dependency or third-party source. Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged. No copyleft/source-offer obligation is introduced by this MIT route; other component terms and notices still apply. Alpha.22 source amendment changes only the workspace version and the separately reviewed terrain implementation; original project licence texts are unchanged. Historical source550 native observations are not relabeled. Alpha.23 source amendment covers the original project-authored procedural cockpit and workspace version update. Generated geometry, display textures and bitmap glyphs introduce no copied reference photograph, third-party asset or new dependency. Historical native observations remain unchanged."
+      "id": "flightsim-content@0.6.0-alpha.24",
+      "reason": "Selected distribution route: MIT. Project-authored workspace source remains under the existing MIT/Apache grant; the controlled component-terms implementation adds no Cargo dependency or third-party source. Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged. No copyleft/source-offer obligation is introduced by this MIT route; other component terms and notices still apply. Alpha.22 source amendment changes only the workspace version and the separately reviewed terrain implementation; original project licence texts are unchanged. Historical source550 native observations are not relabeled. Alpha.23 source amendment covers the original project-authored procedural cockpit and workspace version update. Generated geometry, display textures and bitmap glyphs introduce no copied reference photograph, third-party asset or new dependency. Historical native observations remain unchanged. Alpha.24 source amendment covers the bounded project-authored aircraft-specific cockpit layouts and workspace version update. Original procedural geometry/display artwork, bitmap lettering and presentation wiring add no third-party source or dependency; references are not redistributed. Existing source/licence routes and historical native observations remain unchanged."
     },
     {
       "evidence": [
         {
-          "path": "licenses/flightsim-core-0.6.0-alpha.23/LICENSE-MIT",
+          "path": "licenses/flightsim-core-0.6.0-alpha.24/LICENSE-MIT",
           "sha256": "43d5e9a1dc86439b7882faa044d442dbaf4a0ef1056b1387f24866e0c9dbeb43",
-          "source": "Exact unchanged project licence bytes in alpha.23 target-filtered source collection; LICENSE-MIT"
+          "source": "Exact unchanged project licence bytes in alpha.24 target-filtered source collection; LICENSE-MIT"
         },
         {
-          "path": "licenses/flightsim-core-0.6.0-alpha.23/LICENSE-APACHE",
+          "path": "licenses/flightsim-core-0.6.0-alpha.24/LICENSE-APACHE",
           "sha256": "8b87d8cfb6a827ee6fa7224b150b994dc2842fc69fdf07273f291abb6c4b21a9",
-          "source": "Exact unchanged project licence bytes in alpha.23 target-filtered source collection; LICENSE-APACHE"
+          "source": "Exact unchanged project licence bytes in alpha.24 target-filtered source collection; LICENSE-APACHE"
         }
       ],
-      "id": "flightsim-core@0.6.0-alpha.23",
-      "reason": "Selected distribution route: MIT. Project-authored workspace source remains under the existing MIT/Apache grant; the controlled component-terms implementation adds no Cargo dependency or third-party source. Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged. No copyleft/source-offer obligation is introduced by this MIT route; other component terms and notices still apply. Alpha.22 source amendment changes only the workspace version and the separately reviewed terrain implementation; original project licence texts are unchanged. Historical source550 native observations are not relabeled. Alpha.23 source amendment covers the original project-authored procedural cockpit and workspace version update. Generated geometry, display textures and bitmap glyphs introduce no copied reference photograph, third-party asset or new dependency. Historical native observations remain unchanged."
+      "id": "flightsim-core@0.6.0-alpha.24",
+      "reason": "Selected distribution route: MIT. Project-authored workspace source remains under the existing MIT/Apache grant; the controlled component-terms implementation adds no Cargo dependency or third-party source. Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged. No copyleft/source-offer obligation is introduced by this MIT route; other component terms and notices still apply. Alpha.22 source amendment changes only the workspace version and the separately reviewed terrain implementation; original project licence texts are unchanged. Historical source550 native observations are not relabeled. Alpha.23 source amendment covers the original project-authored procedural cockpit and workspace version update. Generated geometry, display textures and bitmap glyphs introduce no copied reference photograph, third-party asset or new dependency. Historical native observations remain unchanged. Alpha.24 source amendment covers the bounded project-authored aircraft-specific cockpit layouts and workspace version update. Original procedural geometry/display artwork, bitmap lettering and presentation wiring add no third-party source or dependency; references are not redistributed. Existing source/licence routes and historical native observations remain unchanged."
     },
     {
       "evidence": [
         {
-          "path": "licenses/flightsim-fdm-0.6.0-alpha.23/LICENSE-MIT",
+          "path": "licenses/flightsim-fdm-0.6.0-alpha.24/LICENSE-MIT",
           "sha256": "43d5e9a1dc86439b7882faa044d442dbaf4a0ef1056b1387f24866e0c9dbeb43",
-          "source": "Exact unchanged project licence bytes in alpha.23 target-filtered source collection; LICENSE-MIT"
+          "source": "Exact unchanged project licence bytes in alpha.24 target-filtered source collection; LICENSE-MIT"
         },
         {
-          "path": "licenses/flightsim-fdm-0.6.0-alpha.23/LICENSE-APACHE",
+          "path": "licenses/flightsim-fdm-0.6.0-alpha.24/LICENSE-APACHE",
           "sha256": "8b87d8cfb6a827ee6fa7224b150b994dc2842fc69fdf07273f291abb6c4b21a9",
-          "source": "Exact unchanged project licence bytes in alpha.23 target-filtered source collection; LICENSE-APACHE"
+          "source": "Exact unchanged project licence bytes in alpha.24 target-filtered source collection; LICENSE-APACHE"
         }
       ],
-      "id": "flightsim-fdm@0.6.0-alpha.23",
-      "reason": "Selected distribution route: MIT. Project-authored workspace source remains under the existing MIT/Apache grant; the controlled component-terms implementation adds no Cargo dependency or third-party source. Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged. No copyleft/source-offer obligation is introduced by this MIT route; other component terms and notices still apply. Alpha.22 source amendment changes only the workspace version and the separately reviewed terrain implementation; original project licence texts are unchanged. Historical source550 native observations are not relabeled. Alpha.23 source amendment covers the original project-authored procedural cockpit and workspace version update. Generated geometry, display textures and bitmap glyphs introduce no copied reference photograph, third-party asset or new dependency. Historical native observations remain unchanged."
+      "id": "flightsim-fdm@0.6.0-alpha.24",
+      "reason": "Selected distribution route: MIT. Project-authored workspace source remains under the existing MIT/Apache grant; the controlled component-terms implementation adds no Cargo dependency or third-party source. Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged. No copyleft/source-offer obligation is introduced by this MIT route; other component terms and notices still apply. Alpha.22 source amendment changes only the workspace version and the separately reviewed terrain implementation; original project licence texts are unchanged. Historical source550 native observations are not relabeled. Alpha.23 source amendment covers the original project-authored procedural cockpit and workspace version update. Generated geometry, display textures and bitmap glyphs introduce no copied reference photograph, third-party asset or new dependency. Historical native observations remain unchanged. Alpha.24 source amendment covers the bounded project-authored aircraft-specific cockpit layouts and workspace version update. Original procedural geometry/display artwork, bitmap lettering and presentation wiring add no third-party source or dependency; references are not redistributed. Existing source/licence routes and historical native observations remain unchanged."
     },
     {
       "evidence": [
         {
-          "path": "licenses/flightsim-input-0.6.0-alpha.23/LICENSE-MIT",
+          "path": "licenses/flightsim-input-0.6.0-alpha.24/LICENSE-MIT",
           "sha256": "43d5e9a1dc86439b7882faa044d442dbaf4a0ef1056b1387f24866e0c9dbeb43",
-          "source": "Exact unchanged project licence bytes in alpha.23 target-filtered source collection; LICENSE-MIT"
+          "source": "Exact unchanged project licence bytes in alpha.24 target-filtered source collection; LICENSE-MIT"
         },
         {
-          "path": "licenses/flightsim-input-0.6.0-alpha.23/LICENSE-APACHE",
+          "path": "licenses/flightsim-input-0.6.0-alpha.24/LICENSE-APACHE",
           "sha256": "8b87d8cfb6a827ee6fa7224b150b994dc2842fc69fdf07273f291abb6c4b21a9",
-          "source": "Exact unchanged project licence bytes in alpha.23 target-filtered source collection; LICENSE-APACHE"
+          "source": "Exact unchanged project licence bytes in alpha.24 target-filtered source collection; LICENSE-APACHE"
         }
       ],
-      "id": "flightsim-input@0.6.0-alpha.23",
-      "reason": "Selected distribution route: MIT. Project-authored workspace source remains under the existing MIT/Apache grant; the controlled component-terms implementation adds no Cargo dependency or third-party source. Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged. No copyleft/source-offer obligation is introduced by this MIT route; other component terms and notices still apply. Alpha.22 source amendment changes only the workspace version and the separately reviewed terrain implementation; original project licence texts are unchanged. Historical source550 native observations are not relabeled. Alpha.23 source amendment covers the original project-authored procedural cockpit and workspace version update. Generated geometry, display textures and bitmap glyphs introduce no copied reference photograph, third-party asset or new dependency. Historical native observations remain unchanged."
+      "id": "flightsim-input@0.6.0-alpha.24",
+      "reason": "Selected distribution route: MIT. Project-authored workspace source remains under the existing MIT/Apache grant; the controlled component-terms implementation adds no Cargo dependency or third-party source. Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged. No copyleft/source-offer obligation is introduced by this MIT route; other component terms and notices still apply. Alpha.22 source amendment changes only the workspace version and the separately reviewed terrain implementation; original project licence texts are unchanged. Historical source550 native observations are not relabeled. Alpha.23 source amendment covers the original project-authored procedural cockpit and workspace version update. Generated geometry, display textures and bitmap glyphs introduce no copied reference photograph, third-party asset or new dependency. Historical native observations remain unchanged. Alpha.24 source amendment covers the bounded project-authored aircraft-specific cockpit layouts and workspace version update. Original procedural geometry/display artwork, bitmap lettering and presentation wiring add no third-party source or dependency; references are not redistributed. Existing source/licence routes and historical native observations remain unchanged."
     },
     {
       "evidence": [
         {
-          "path": "licenses/flightsim-net-0.6.0-alpha.23/LICENSE-MIT",
+          "path": "licenses/flightsim-net-0.6.0-alpha.24/LICENSE-MIT",
           "sha256": "43d5e9a1dc86439b7882faa044d442dbaf4a0ef1056b1387f24866e0c9dbeb43",
-          "source": "Exact unchanged project licence bytes in alpha.23 target-filtered source collection; LICENSE-MIT"
+          "source": "Exact unchanged project licence bytes in alpha.24 target-filtered source collection; LICENSE-MIT"
         },
         {
-          "path": "licenses/flightsim-net-0.6.0-alpha.23/LICENSE-APACHE",
+          "path": "licenses/flightsim-net-0.6.0-alpha.24/LICENSE-APACHE",
           "sha256": "8b87d8cfb6a827ee6fa7224b150b994dc2842fc69fdf07273f291abb6c4b21a9",
-          "source": "Exact unchanged project licence bytes in alpha.23 target-filtered source collection; LICENSE-APACHE"
+          "source": "Exact unchanged project licence bytes in alpha.24 target-filtered source collection; LICENSE-APACHE"
         }
       ],
-      "id": "flightsim-net@0.6.0-alpha.23",
-      "reason": "Selected distribution route: MIT. Project-authored workspace source remains under the existing MIT/Apache grant; the controlled component-terms implementation adds no Cargo dependency or third-party source. Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged. No copyleft/source-offer obligation is introduced by this MIT route; other component terms and notices still apply. Alpha.22 source amendment changes only the workspace version and the separately reviewed terrain implementation; original project licence texts are unchanged. Historical source550 native observations are not relabeled. Alpha.23 source amendment covers the original project-authored procedural cockpit and workspace version update. Generated geometry, display textures and bitmap glyphs introduce no copied reference photograph, third-party asset or new dependency. Historical native observations remain unchanged."
+      "id": "flightsim-net@0.6.0-alpha.24",
+      "reason": "Selected distribution route: MIT. Project-authored workspace source remains under the existing MIT/Apache grant; the controlled component-terms implementation adds no Cargo dependency or third-party source. Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged. No copyleft/source-offer obligation is introduced by this MIT route; other component terms and notices still apply. Alpha.22 source amendment changes only the workspace version and the separately reviewed terrain implementation; original project licence texts are unchanged. Historical source550 native observations are not relabeled. Alpha.23 source amendment covers the original project-authored procedural cockpit and workspace version update. Generated geometry, display textures and bitmap glyphs introduce no copied reference photograph, third-party asset or new dependency. Historical native observations remain unchanged. Alpha.24 source amendment covers the bounded project-authored aircraft-specific cockpit layouts and workspace version update. Original procedural geometry/display artwork, bitmap lettering and presentation wiring add no third-party source or dependency; references are not redistributed. Existing source/licence routes and historical native observations remain unchanged."
     },
     {
       "evidence": [
         {
-          "path": "licenses/flightsim-render-0.6.0-alpha.23/LICENSE-MIT",
+          "path": "licenses/flightsim-render-0.6.0-alpha.24/LICENSE-MIT",
           "sha256": "43d5e9a1dc86439b7882faa044d442dbaf4a0ef1056b1387f24866e0c9dbeb43",
-          "source": "Exact unchanged project licence bytes in alpha.23 target-filtered source collection; LICENSE-MIT"
+          "source": "Exact unchanged project licence bytes in alpha.24 target-filtered source collection; LICENSE-MIT"
         },
         {
-          "path": "licenses/flightsim-render-0.6.0-alpha.23/LICENSE-APACHE",
+          "path": "licenses/flightsim-render-0.6.0-alpha.24/LICENSE-APACHE",
           "sha256": "8b87d8cfb6a827ee6fa7224b150b994dc2842fc69fdf07273f291abb6c4b21a9",
-          "source": "Exact unchanged project licence bytes in alpha.23 target-filtered source collection; LICENSE-APACHE"
+          "source": "Exact unchanged project licence bytes in alpha.24 target-filtered source collection; LICENSE-APACHE"
         }
       ],
-      "id": "flightsim-render@0.6.0-alpha.23",
-      "reason": "Selected distribution route: MIT. Project-authored workspace source remains under the existing MIT/Apache grant; the controlled component-terms implementation adds no Cargo dependency or third-party source. Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged. No copyleft/source-offer obligation is introduced by this MIT route; other component terms and notices still apply. Alpha.22 source amendment changes only the workspace version and the separately reviewed terrain implementation; original project licence texts are unchanged. Historical source550 native observations are not relabeled. Alpha.23 source amendment covers the original project-authored procedural cockpit and workspace version update. Generated geometry, display textures and bitmap glyphs introduce no copied reference photograph, third-party asset or new dependency. Historical native observations remain unchanged."
+      "id": "flightsim-render@0.6.0-alpha.24",
+      "reason": "Selected distribution route: MIT. Project-authored workspace source remains under the existing MIT/Apache grant; the controlled component-terms implementation adds no Cargo dependency or third-party source. Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged. No copyleft/source-offer obligation is introduced by this MIT route; other component terms and notices still apply. Alpha.22 source amendment changes only the workspace version and the separately reviewed terrain implementation; original project licence texts are unchanged. Historical source550 native observations are not relabeled. Alpha.23 source amendment covers the original project-authored procedural cockpit and workspace version update. Generated geometry, display textures and bitmap glyphs introduce no copied reference photograph, third-party asset or new dependency. Historical native observations remain unchanged. Alpha.24 source amendment covers the bounded project-authored aircraft-specific cockpit layouts and workspace version update. Original procedural geometry/display artwork, bitmap lettering and presentation wiring add no third-party source or dependency; references are not redistributed. Existing source/licence routes and historical native observations remain unchanged."
     },
     {
       "evidence": [
         {
-          "path": "licenses/flightsim-sim-0.6.0-alpha.23/LICENSE-MIT",
+          "path": "licenses/flightsim-sim-0.6.0-alpha.24/LICENSE-MIT",
           "sha256": "43d5e9a1dc86439b7882faa044d442dbaf4a0ef1056b1387f24866e0c9dbeb43",
-          "source": "Exact unchanged project licence bytes in alpha.23 target-filtered source collection; LICENSE-MIT"
+          "source": "Exact unchanged project licence bytes in alpha.24 target-filtered source collection; LICENSE-MIT"
         },
         {
-          "path": "licenses/flightsim-sim-0.6.0-alpha.23/LICENSE-APACHE",
+          "path": "licenses/flightsim-sim-0.6.0-alpha.24/LICENSE-APACHE",
           "sha256": "8b87d8cfb6a827ee6fa7224b150b994dc2842fc69fdf07273f291abb6c4b21a9",
-          "source": "Exact unchanged project licence bytes in alpha.23 target-filtered source collection; LICENSE-APACHE"
+          "source": "Exact unchanged project licence bytes in alpha.24 target-filtered source collection; LICENSE-APACHE"
         }
       ],
-      "id": "flightsim-sim@0.6.0-alpha.23",
-      "reason": "Selected distribution route: MIT. Project-authored workspace source remains under the existing MIT/Apache grant; the controlled component-terms implementation adds no Cargo dependency or third-party source. Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged. No copyleft/source-offer obligation is introduced by this MIT route; other component terms and notices still apply. Alpha.22 source amendment changes only the workspace version and the separately reviewed terrain implementation; original project licence texts are unchanged. Historical source550 native observations are not relabeled. Alpha.23 source amendment covers the original project-authored procedural cockpit and workspace version update. Generated geometry, display textures and bitmap glyphs introduce no copied reference photograph, third-party asset or new dependency. Historical native observations remain unchanged."
+      "id": "flightsim-sim@0.6.0-alpha.24",
+      "reason": "Selected distribution route: MIT. Project-authored workspace source remains under the existing MIT/Apache grant; the controlled component-terms implementation adds no Cargo dependency or third-party source. Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged. No copyleft/source-offer obligation is introduced by this MIT route; other component terms and notices still apply. Alpha.22 source amendment changes only the workspace version and the separately reviewed terrain implementation; original project licence texts are unchanged. Historical source550 native observations are not relabeled. Alpha.23 source amendment covers the original project-authored procedural cockpit and workspace version update. Generated geometry, display textures and bitmap glyphs introduce no copied reference photograph, third-party asset or new dependency. Historical native observations remain unchanged. Alpha.24 source amendment covers the bounded project-authored aircraft-specific cockpit layouts and workspace version update. Original procedural geometry/display artwork, bitmap lettering and presentation wiring add no third-party source or dependency; references are not redistributed. Existing source/licence routes and historical native observations remain unchanged."
     },
     {
       "evidence": [
         {
-          "path": "licenses/flightsim-ui-0.6.0-alpha.23/LICENSE-MIT",
+          "path": "licenses/flightsim-ui-0.6.0-alpha.24/LICENSE-MIT",
           "sha256": "43d5e9a1dc86439b7882faa044d442dbaf4a0ef1056b1387f24866e0c9dbeb43",
-          "source": "Exact unchanged project licence bytes in alpha.23 target-filtered source collection; LICENSE-MIT"
+          "source": "Exact unchanged project licence bytes in alpha.24 target-filtered source collection; LICENSE-MIT"
         },
         {
-          "path": "licenses/flightsim-ui-0.6.0-alpha.23/LICENSE-APACHE",
+          "path": "licenses/flightsim-ui-0.6.0-alpha.24/LICENSE-APACHE",
           "sha256": "8b87d8cfb6a827ee6fa7224b150b994dc2842fc69fdf07273f291abb6c4b21a9",
-          "source": "Exact unchanged project licence bytes in alpha.23 target-filtered source collection; LICENSE-APACHE"
+          "source": "Exact unchanged project licence bytes in alpha.24 target-filtered source collection; LICENSE-APACHE"
         }
       ],
-      "id": "flightsim-ui@0.6.0-alpha.23",
-      "reason": "Selected distribution route: MIT. Project-authored workspace source remains under the existing MIT/Apache grant; the controlled component-terms implementation adds no Cargo dependency or third-party source. Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged. No copyleft/source-offer obligation is introduced by this MIT route; other component terms and notices still apply. Alpha.22 source amendment changes only the workspace version and the separately reviewed terrain implementation; original project licence texts are unchanged. Historical source550 native observations are not relabeled. Alpha.23 source amendment covers the original project-authored procedural cockpit and workspace version update. Generated geometry, display textures and bitmap glyphs introduce no copied reference photograph, third-party asset or new dependency. Historical native observations remain unchanged."
+      "id": "flightsim-ui@0.6.0-alpha.24",
+      "reason": "Selected distribution route: MIT. Project-authored workspace source remains under the existing MIT/Apache grant; the controlled component-terms implementation adds no Cargo dependency or third-party source. Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged. No copyleft/source-offer obligation is introduced by this MIT route; other component terms and notices still apply. Alpha.22 source amendment changes only the workspace version and the separately reviewed terrain implementation; original project licence texts are unchanged. Historical source550 native observations are not relabeled. Alpha.23 source amendment covers the original project-authored procedural cockpit and workspace version update. Generated geometry, display textures and bitmap glyphs introduce no copied reference photograph, third-party asset or new dependency. Historical native observations remain unchanged. Alpha.24 source amendment covers the bounded project-authored aircraft-specific cockpit layouts and workspace version update. Original procedural geometry/display artwork, bitmap lettering and presentation wiring add no third-party source or dependency; references are not redistributed. Existing source/licence routes and historical native observations remain unchanged."
     },
     {
       "evidence": [
         {
-          "path": "licenses/flightsim-world-0.6.0-alpha.23/LICENSE-MIT",
+          "path": "licenses/flightsim-world-0.6.0-alpha.24/LICENSE-MIT",
           "sha256": "43d5e9a1dc86439b7882faa044d442dbaf4a0ef1056b1387f24866e0c9dbeb43",
-          "source": "Exact unchanged project licence bytes in alpha.23 target-filtered source collection; LICENSE-MIT"
+          "source": "Exact unchanged project licence bytes in alpha.24 target-filtered source collection; LICENSE-MIT"
         },
         {
-          "path": "licenses/flightsim-world-0.6.0-alpha.23/LICENSE-APACHE",
+          "path": "licenses/flightsim-world-0.6.0-alpha.24/LICENSE-APACHE",
           "sha256": "8b87d8cfb6a827ee6fa7224b150b994dc2842fc69fdf07273f291abb6c4b21a9",
-          "source": "Exact unchanged project licence bytes in alpha.23 target-filtered source collection; LICENSE-APACHE"
+          "source": "Exact unchanged project licence bytes in alpha.24 target-filtered source collection; LICENSE-APACHE"
         }
       ],
-      "id": "flightsim-world@0.6.0-alpha.23",
-      "reason": "Selected distribution route: MIT. Project-authored workspace source remains under the existing MIT/Apache grant; the controlled component-terms implementation adds no Cargo dependency or third-party source. Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged. No copyleft/source-offer obligation is introduced by this MIT route; other component terms and notices still apply. Alpha.22 source amendment changes only the workspace version and the separately reviewed terrain implementation; original project licence texts are unchanged. Historical source550 native observations are not relabeled. Alpha.23 source amendment covers the original project-authored procedural cockpit and workspace version update. Generated geometry, display textures and bitmap glyphs introduce no copied reference photograph, third-party asset or new dependency. Historical native observations remain unchanged."
+      "id": "flightsim-world@0.6.0-alpha.24",
+      "reason": "Selected distribution route: MIT. Project-authored workspace source remains under the existing MIT/Apache grant; the controlled component-terms implementation adds no Cargo dependency or third-party source. Retain complete selected licence and actual copyright/permission notices in accompanying distribution documentation; all collected notices stay unchanged. No copyleft/source-offer obligation is introduced by this MIT route; other component terms and notices still apply. Alpha.22 source amendment changes only the workspace version and the separately reviewed terrain implementation; original project licence texts are unchanged. Historical source550 native observations are not relabeled. Alpha.23 source amendment covers the original project-authored procedural cockpit and workspace version update. Generated geometry, display textures and bitmap glyphs introduce no copied reference photograph, third-party asset or new dependency. Historical native observations remain unchanged. Alpha.24 source amendment covers the bounded project-authored aircraft-specific cockpit layouts and workspace version update. Original procedural geometry/display artwork, bitmap lettering and presentation wiring add no third-party source or dependency; references are not redistributed. Existing source/licence routes and historical native observations remain unchanged."
     },
     {
       "evidence": [
@@ -17833,7 +17833,7 @@
       "reason": "All557 selected additions are physically integrated unchanged:508 source-header notice texts,3 AccessKit/ron nested records,4 pxfm CORE-MATH/LLVM notices,9 retained zune IJG/libjpeg-turbo/stb/libultrahdr origin notices,20 exact Rust1.93.0 runtime/compiler-builtins/libm/LLVM notice texts and13 accepted constgebra/hexf evidence files. The two other header spans are project SPDX identifiers backed by already included full project licenses. The old unlicensed zune code excerpt is withheld. Source headers and nested licenses are cumulative with the selected crate route; AND obligations remain conjunctive. The exact Rust standard-library copyright and six installed grant texts match observed native bytes;21 installed rlibs are candidates, not asserted linked members. The adaptation notice with DRAFT in its historical filename contains completed factual modification attribution and is retained unchanged, not treated as an inactive legal agreement."
     }
   ],
-  "reviewed_at": "2026-10-10T12:54:16Z",
+  "reviewed_at": "2026-10-19T03:40:00Z",
   "reviewed_by": "OpenAI assistant; substantive source, license-route and notice applicability review",
   "runtime_accepted": false,
   "runtime_observation": {
@@ -17844,76 +17844,114 @@
     "status": "failed"
   },
   "schema_version": 1,
-  "scope": "Bounded alpha.23 source/notice amendment using genuine Linux-host Rust 1.93.0 ordinary Windows-target metadata and a fresh exact original-notice assembly. The first original Cessna-style light-aircraft cockpit uses project-authored geometry, procedural images and bitmap glyphs; no reference photograph or third-party mesh, texture or font is included. The full dependency/feature closure, modified vendor trees, source headers, embedded assets, licence routes and supplemental notices remain exact except 11 project workspace version identities and their notice destinations. source_sha/source_tree, native_evidence, environment_evidence, component_conditions and runtime_observation remain explicitly historical; they are not alpha.23 Windows observations. Rights and the approved Microsoft component policy are unchanged. Genuine changed-source Windows facts, separately completed applicability and publication authority, and final same-build delivery checks remain required.",
+  "scope": "Bounded alpha.24 source/notice amendment using genuine Linux-host Rust 1.93.0 ordinary Windows-target metadata, an exact normal/build tree and a fresh unmodified original-notice assembly. The project-authored aircraft-specific cockpit layouts use procedural geometry, original display artwork and bitmap glyphs; reference photographs are not incorporated or redistributed. The full dependency/feature closure, modified vendor trees, source headers, embedded assets, licence routes and supplemental notices remain exact except 11 runtime-closure project version identities and their notice destinations. source_sha/source_tree, native_evidence, environment_evidence, component_conditions and runtime_observation remain explicitly historical; they are not alpha.24 Windows observations. Rights and the approved Microsoft component policy are unchanged. Genuine changed-source Windows facts, separately completed applicability and publication authority, and final same-build delivery checks remain required.",
   "source_content_amendment": {
-    "candidate_source": "a51d7c5118d85a23c71942e0f15cde75153dc964",
-    "candidate_source_kind": "unpublished-local-checkpoint",
-    "candidate_tree": "5d876a6db564fffdddfdeebcdae7579b6139ab84",
+    "candidate_source": "fbb53429bcae8a94078ea96f528b0b2ad216fdfe",
+    "candidate_source_kind": "published-runtime-base-plus-byte-bound-uncommitted-version-amendment",
+    "candidate_tree": "f7a2c9e7081c16d7efac552d7b8e7de0de54a192",
     "cargo_lock": {
       "bytes": 154591,
-      "sha256": "e700e74191334b92f0486ac5a60693c9b81b29fe0810138797230295b3a0e0cb"
+      "sha256": "020ffeba85f07d14d69bbaad8bba2a8e6be943fde97dd559524ca72937a54359"
     },
     "cargo_toml": {
       "bytes": 5018,
-      "sha256": "9b572cf2865c469832ea59b0910909684e6ac7f74a7cc16273bcafce11f31256"
+      "sha256": "dab096b8af04872a32fe59c2875b791790ed947ab38fd4ddee763dc071417172"
     },
     "changed_original_notice_bytes": [],
     "cockpit_guide": {
-      "bytes": 4820,
-      "path": "docs/3d-cockpit.md",
-      "sha256": "db0ee906acd1116f6c966d85d4f119f62af0490a77201f6ee1267fc6c43d8541"
+      "bytes": 6023,
+      "path": "docs/aircraft-cockpit-layouts.md",
+      "sha256": "6489414206b0ebbae00fd8fefa5dd5ebe8d929f2e633c1b3854a3982224fe114"
     },
     "collector": {
       "bytes": 13342,
       "sha256": "5f2ea6860e414ae91dd9672dd1fc75060d0cecce3ba2ae7837afae5cb1fa02f9"
     },
     "collector_host": "x86_64-unknown-linux-gnu",
+    "comparison_metadata": {
+      "bytes": 2392709,
+      "sha256": "f16ff976dc0a78490bcaf8f15984fcd610b3032cc68113dec809ec88083ad9a3"
+    },
     "compiler": {
       "bytes": 196,
       "sha256": "83e4eefd5e010a92d9f63328bf8219e23fe5e4cf5e5d17ce53d0263cfa4218a6"
     },
+    "counts": {
+      "embedded_dependency_assets": 3,
+      "exact_graph_packages": 347,
+      "normal_build_edges": 1264,
+      "original_assembly_files": 737,
+      "original_notice_files": 735,
+      "package_records": 359,
+      "source_header_records": 510,
+      "supplemental_files": 557
+    },
+    "development_qa_report": {
+      "bytes": 7896,
+      "path": "docs/qa/aircraft-cockpits-2026-10-10.md",
+      "sha256": "2c4cfef199d8b0690fcca4188a0dc24abd570a5888af1ea20e9c5678e24809f3"
+    },
     "fresh_original_inventory": {
       "bytes": 407610,
-      "sha256": "3038e9253ce86edbf8f566ab3653ada7d03ff951a4d6942affecf8b72b69de6e"
+      "sha256": "59d3385ecd3912e87a3eff21362acf870afc37483437fee5b2db1299d0a0c573"
     },
     "graph": {
-      "bytes": 79648,
-      "sha256": "a42fc4acc1f77e4ecdcdb2c27265fc664b026eb015a833108004e4b759220546"
-    },
-    "historical_alpha22_native_projection": {
-      "bytes": 2913589,
-      "sha256": "8e36a29e61f85003c703f6f247253c286c52282a46401cd03789b65fc7acad95"
+      "bytes": 79193,
+      "sha256": "0f172c10c8fb70ec2caac7e6263572ef2b431245f6b6d29703936e3c5b70a227"
     },
     "historical_dependency_review": {
-      "bytes": 1105086,
-      "sha256": "a69284406a8a80676c308e0ed1e7ec11b24dfa7a8a735c4edf580c3c1e96ae21"
+      "bytes": 1112649,
+      "sha256": "67424e20473e63c921b9ce9a67e48f4e93fca927cf6859b1180589d576568d9c"
     },
     "historical_original_inventory": {
       "bytes": 407610,
-      "sha256": "9028d70de8e818f2e72666a2686b198424cf4f78986b47c5d5683091f1949730"
+      "sha256": "3038e9253ce86edbf8f566ab3653ada7d03ff951a4d6942affecf8b72b69de6e"
     },
-    "kind": "alpha23_source_notice_amendment_not_native_observation",
-    "limits": "Source/notice assessment only. The original two collector findings remain with exact reviewed resolutions. Prior review amendment is preserved separately, and no old native source/tree, binary, trace, runtime or supplier fact is relabeled.",
+    "kind": "alpha24_source_notice_amendment_not_native_observation",
+    "limits": "Source/notice assessment only. candidate_source/tree identify the published runtime base, not a committed alpha.24 release; the local version change is separately bound by exact Cargo hashes. The two raw collector findings retain exact existing reviewed resolutions. All earlier source amendments are preserved unchanged in history. No old native source/tree, binary, trace, runtime, supplier or recipient-assent fact is relabeled.",
     "metadata": {
-      "bytes": 2430708,
-      "sha256": "9126bc307acea43d8872c6161d8137795cb7d1efe80a86ab68dc9bf409091034"
+      "bytes": 2392709,
+      "sha256": "64b63da56455bdaed5a3d6e040d13ec9dfc096f6fc479ee00b935b73473c0d65"
     },
+    "modified_vendor_trees": [
+      {
+        "files": 55,
+        "id": "bevy_core_pipeline@0.18.1",
+        "source_root": "vendor/bevy_core_pipeline"
+      },
+      {
+        "files": 149,
+        "id": "bevy_pbr@0.18.1",
+        "source_root": "vendor/bevy_pbr"
+      },
+      {
+        "files": 58,
+        "id": "zune-jpeg@0.5.15",
+        "source_root": "vendor/zune-jpeg"
+      }
+    ],
     "new_native_build_observed": false,
     "new_runtime_observed": false,
     "new_supplier_observed": false,
     "notice_order_changes": [],
-    "published_cockpit_source": "81bb3ea9c19c0016521a610dbeafb5029caa8713",
-    "published_cockpit_tree": "dde21933b02c962108916c6a5efeef20d8f32a6f",
+    "previous_reviewed_at": "2026-10-10T12:54:16Z",
+    "published_cockpit_source": "fbb53429bcae8a94078ea96f528b0b2ad216fdfe",
+    "published_cockpit_tree": "f7a2c9e7081c16d7efac552d7b8e7de0de54a192",
     "qa_report": {
-      "bytes": 7665,
-      "path": "docs/qa/functional-cockpit-2026-10-10.md",
-      "sha256": "547a25f687e642f709de0f46d7b186c5ebcb59541c33191cdc8ea1a2f0d7b11e"
+      "bytes": 7531,
+      "path": "docs/qa/alpha24-dependency-notice-review-2026-10-19.md",
+      "sha256": "a2fa1cfc3dee81571de3f68227a95910c7e6d8e05928b4c9983ef9faebda01d0"
     },
     "release_authorized": false,
     "same_557_supplemental_bytes": true,
     "schema_version": 1,
     "target": "x86_64-pc-windows-msvc",
     "toolchain": "1.93.0",
+    "variant_source_migration": {
+      "bytes": 3582,
+      "path": "scripts/cockpit-variant-source-migration.json",
+      "sha256": "df88b6a7740626cb14c43a3421253d96336b66d4524e37fd2964e57c82b44bfd"
+    },
     "workspace_version_updates": [
       "flightsim-app",
       "flightsim-audio",
@@ -17980,6 +18018,89 @@
         "bytes": 12576,
         "path": "docs/qa/terrain-night-moving-2026-10-09.md",
         "sha256": "94e3b41854ed377beaa225e822c0b2eae6d4455860f322246ef2cc1daf4c6eca"
+      },
+      "release_authorized": false,
+      "same_557_supplemental_bytes": true,
+      "schema_version": 1,
+      "target": "x86_64-pc-windows-msvc",
+      "toolchain": "1.93.0",
+      "workspace_version_updates": [
+        "flightsim-app",
+        "flightsim-audio",
+        "flightsim-content",
+        "flightsim-core",
+        "flightsim-fdm",
+        "flightsim-input",
+        "flightsim-net",
+        "flightsim-render",
+        "flightsim-sim",
+        "flightsim-ui",
+        "flightsim-world"
+      ]
+    },
+    {
+      "candidate_source": "a51d7c5118d85a23c71942e0f15cde75153dc964",
+      "candidate_source_kind": "unpublished-local-checkpoint",
+      "candidate_tree": "5d876a6db564fffdddfdeebcdae7579b6139ab84",
+      "cargo_lock": {
+        "bytes": 154591,
+        "sha256": "e700e74191334b92f0486ac5a60693c9b81b29fe0810138797230295b3a0e0cb"
+      },
+      "cargo_toml": {
+        "bytes": 5018,
+        "sha256": "9b572cf2865c469832ea59b0910909684e6ac7f74a7cc16273bcafce11f31256"
+      },
+      "changed_original_notice_bytes": [],
+      "cockpit_guide": {
+        "bytes": 4820,
+        "path": "docs/3d-cockpit.md",
+        "sha256": "db0ee906acd1116f6c966d85d4f119f62af0490a77201f6ee1267fc6c43d8541"
+      },
+      "collector": {
+        "bytes": 13342,
+        "sha256": "5f2ea6860e414ae91dd9672dd1fc75060d0cecce3ba2ae7837afae5cb1fa02f9"
+      },
+      "collector_host": "x86_64-unknown-linux-gnu",
+      "compiler": {
+        "bytes": 196,
+        "sha256": "83e4eefd5e010a92d9f63328bf8219e23fe5e4cf5e5d17ce53d0263cfa4218a6"
+      },
+      "fresh_original_inventory": {
+        "bytes": 407610,
+        "sha256": "3038e9253ce86edbf8f566ab3653ada7d03ff951a4d6942affecf8b72b69de6e"
+      },
+      "graph": {
+        "bytes": 79648,
+        "sha256": "a42fc4acc1f77e4ecdcdb2c27265fc664b026eb015a833108004e4b759220546"
+      },
+      "historical_alpha22_native_projection": {
+        "bytes": 2913589,
+        "sha256": "8e36a29e61f85003c703f6f247253c286c52282a46401cd03789b65fc7acad95"
+      },
+      "historical_dependency_review": {
+        "bytes": 1105086,
+        "sha256": "a69284406a8a80676c308e0ed1e7ec11b24dfa7a8a735c4edf580c3c1e96ae21"
+      },
+      "historical_original_inventory": {
+        "bytes": 407610,
+        "sha256": "9028d70de8e818f2e72666a2686b198424cf4f78986b47c5d5683091f1949730"
+      },
+      "kind": "alpha23_source_notice_amendment_not_native_observation",
+      "limits": "Source/notice assessment only. The original two collector findings remain with exact reviewed resolutions. Prior review amendment is preserved separately, and no old native source/tree, binary, trace, runtime or supplier fact is relabeled.",
+      "metadata": {
+        "bytes": 2430708,
+        "sha256": "9126bc307acea43d8872c6161d8137795cb7d1efe80a86ab68dc9bf409091034"
+      },
+      "new_native_build_observed": false,
+      "new_runtime_observed": false,
+      "new_supplier_observed": false,
+      "notice_order_changes": [],
+      "published_cockpit_source": "81bb3ea9c19c0016521a610dbeafb5029caa8713",
+      "published_cockpit_tree": "dde21933b02c962108916c6a5efeef20d8f32a6f",
+      "qa_report": {
+        "bytes": 7665,
+        "path": "docs/qa/functional-cockpit-2026-10-10.md",
+        "sha256": "547a25f687e642f709de0f46d7b186c5ebcb59541c33191cdc8ea1a2f0d7b11e"
       },
       "release_authorized": false,
       "same_557_supplemental_bytes": true,

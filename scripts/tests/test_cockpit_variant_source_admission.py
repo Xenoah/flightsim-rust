@@ -48,7 +48,8 @@ class CockpitVariantSourceAdmissionTests(unittest.TestCase):
     commit = staticmethod(fixture_module.ComponentTermsSourceAdmissionTests.commit)
 
     def test_exact_six_replacements_twelve_additions_preserve_all_956_prior_pins(self):
-        current = candidate.load_replay_contract(ROOT)
+        current = json.loads((ROOT / candidate.ALPHA24_BASE_CONTRACT_PATH).read_text())
+        candidate.validate_cockpit_variant_replay_contract(current)
         base = json.loads((ROOT / candidate.COCKPIT_VARIANT_BASE_CONTRACT_PATH).read_text())
         migration = json.loads((ROOT / MIGRATION).read_text())
         candidate.validate_alpha23_replay_contract(base)
@@ -85,7 +86,7 @@ class CockpitVariantSourceAdmissionTests(unittest.TestCase):
         for path, expected in base['source_sha256'].items():
             historical = RELOCATIONS.get(path, path)
             self.assertEqual(current['source_sha256'][historical], expected, path)
-            self.assertEqual(candidate.digest(ROOT / historical), expected, path)
+            self.assertEqual(candidate.digest(ROOT / candidate.ALPHA24_HISTORICAL_RELOCATIONS.get(historical, historical)), expected, path)
         for path, expected in candidate.COCKPIT_VARIANT_BASE_CONTRACT_HASHES.items():
             self.assertEqual(candidate.digest(ROOT / path), expected, path)
         for path in CHANGED:
@@ -102,14 +103,15 @@ class CockpitVariantSourceAdmissionTests(unittest.TestCase):
         self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 499)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)
         self.assertEqual(len(candidate.CORE_PIPELINE_SOURCE_PATHS), 55)
-        self.assertEqual(len(capture.check.SOURCE_PATHS), 56)
+        self.assertEqual(len(capture.check.SOURCE_PATHS), 57)
         self.assertEqual(len(capture.BOUND_FILES), 4)
         self.assertEqual(current['contract'], 'full-two-aircraft-cockpit-variant-source-v1')
         self.assertEqual(current['scope'], candidate.SOURCE_ADMISSION_SCOPE)
         self.assertIs(current['release_authorized'], False)
 
     def test_descriptor_identity_base_and_source_only_authority_are_not_self_asserted(self):
-        current = candidate.load_replay_contract(ROOT)
+        current = json.loads((ROOT / candidate.ALPHA24_BASE_CONTRACT_PATH).read_text())
+        candidate.validate_cockpit_variant_replay_contract(current)
         base = json.loads((ROOT / candidate.COCKPIT_VARIANT_BASE_CONTRACT_PATH).read_text())
         positive = json.loads((ROOT / MIGRATION).read_text())
         def validate(value):
@@ -355,7 +357,7 @@ class CockpitVariantSourceAdmissionTests(unittest.TestCase):
         candidate.validate_modified_source_checkout(repo)
 
     def test_version_physics_replay_rights_and_original_witnesses_are_unchanged(self):
-        current = candidate.load_replay_contract(ROOT)['source_sha256']
+        current = json.loads((ROOT / candidate.ALPHA24_BASE_CONTRACT_PATH).read_text())['source_sha256']
         base = json.loads((ROOT / candidate.COCKPIT_VARIANT_BASE_CONTRACT_PATH).read_text())['source_sha256']
         unchanged = {'Cargo.toml', 'Cargo.lock', candidate.PRESERVED_RUNTIME_PATH,
                      candidate.COMPONENT_TERMS_MIGRATION_PATH, candidate.TERRAIN_CENTROID_MIGRATION_PATH,
@@ -367,7 +369,7 @@ class CockpitVariantSourceAdmissionTests(unittest.TestCase):
             'crates/flightsim-fdm/', 'crates/flightsim-sim/', 'assets/', 'docs/release/'))}
         for path in unchanged:
             expected = base.get(path, candidate.INDEPENDENT_REPLAY_HASHES.get(path))
-            self.assertEqual(candidate.digest(ROOT / path), expected, path)
+            self.assertEqual(candidate.digest(ROOT / candidate.ALPHA24_HISTORICAL_RELOCATIONS.get(path, path)), expected, path)
             if path in base:
                 self.assertEqual(current[path], expected, path)
 

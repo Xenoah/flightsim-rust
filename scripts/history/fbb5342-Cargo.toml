@@ -1,0 +1,124 @@
+[workspace]
+resolver = "3"
+exclude = ["vendor/osmpbf", "vendor/zune-jpeg", "vendor/bevy_pbr", "vendor/bevy_core_pipeline"]
+members = [
+    "crates/flightsim-core",
+    "crates/flightsim-fdm",
+    "crates/flightsim-world",
+    "crates/flightsim-content",
+    "crates/flightsim-tilegen",
+    "crates/flightsim-assetgen",
+    "crates/flightsim-sim",
+    "crates/flightsim-render",
+    "crates/flightsim-app",
+    "crates/flightsim-audio",
+    "crates/flightsim-ui",
+    "crates/flightsim-input",
+    "crates/flightsim-net",
+]
+
+[workspace.package]
+version = "0.6.0-alpha.23"
+edition = "2024"
+rust-version = "1.85"
+license = "MIT OR Apache-2.0"
+
+[workspace.dependencies]
+flightsim-core = { path = "crates/flightsim-core" }
+flightsim-fdm = { path = "crates/flightsim-fdm" }
+flightsim-world = { path = "crates/flightsim-world" }
+flightsim-content = { path = "crates/flightsim-content" }
+flightsim-tilegen = { path = "crates/flightsim-tilegen" }
+flightsim-sim = { path = "crates/flightsim-sim" }
+# Runnable packages choose the tone curve; see docs/analytic-tonemapping.md.
+flightsim-render = { path = "crates/flightsim-render", default-features = false }
+flightsim-app = { path = "crates/flightsim-app" }
+flightsim-audio = { path = "crates/flightsim-audio" }
+flightsim-ui = { path = "crates/flightsim-ui" }
+flightsim-input = { path = "crates/flightsim-input" }
+flightsim-net = { path = "crates/flightsim-net" }
+
+glam = "0.30"
+
+# ベンチ専用。実行時の依存グラフには現れない
+# （check-architecture.sh は --edges normal で見ている）。
+criterion = "0.8"
+
+# ADR-0007: 0.19 は MSRV 1.95 で現行ツールチェーン (1.93) では解決すらされない。
+# feature は既定を切って明示列挙する。音声と glTF は入れない
+# （Linux CI が libasound2-dev を要求しなくなる）。
+bevy = { version = "0.18.1", default-features = false, features = [
+    # **これが無いと glTF シーンの生成が実行時に panic する。**
+    # 0.18 は反射の型登録を自動化しており（inventory 経由）、その仕組み自体が
+    # この feature で入る。GltfPlugin は register_type を 1 つも呼ばないので、
+    # 切れていると `scene contains the unregistered type` で落ちる。
+    # bevy の default（3d）には入っているが、既定を切って列挙すると落ちる。
+    # **コンパイルは通り、実データの .glb を読むまで気付けない。**
+    "reflect_auto_register",
+    "bevy_asset",
+    # 機体モデルの読み込み。ADR-0007 では「必要になった時点で足す」と
+    # していたもので、ここがその時点。
+    "bevy_gltf",
+    "bevy_log",
+    "bevy_core_pipeline",
+    "bevy_pbr",
+    "bevy_render",
+    "bevy_window",
+    "bevy_winit",
+    "bevy_ui",
+    "bevy_ui_render",
+    "bevy_text",
+    "default_font",
+    # スクリーンショットの保存に要る。描画結果を目視で確かめる手段が無いと、
+    # 「動いてはいるが絵が出ていない」に気付けない。
+    "png",
+    # **モデルのテクスチャに要る。** Meshy はベースカラーを JPEG で返す。
+    # 無いと glTF の読み込みが丸ごと失敗する（テクスチャが抜けるのではない）:
+    # `invalid image mime type: image/jpeg`。
+    "jpeg",
+    # ゲームパッド。M2 の残項目。キーボードの舵は矩形入力しかできず、
+    # 着陸の当て舵が実質不可能。アナログ軸はゲームとしての操縦性に直結する。
+    "bevy_gilrs",
+    # 音。**エンジン音・風切り音・失速警報に要る。** 失速が近いことを
+    # 視覚以外で知る手段が他に無い（計器を見ていないと分からない）。
+    "bevy_audio",
+    # 合成した波形を WAV として渡すため。音声ファイルは同梱しない（ADR-0009）。
+    "wav",
+    "multi_threaded",
+    # LUTs (ordinary) or explicit KTX2 (analytical) are selected by app/render.
+    "zstd_rust",
+    "x11",
+    "std",
+] }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+missing_debug_implementations = "warn"
+
+[workspace.lints.clippy]
+# 数値シミュレーションでの定番の事故を機械的に潰す。
+# 単位取り違えと精度劣化はレビューで見つけるより lint で止めるほうが確実。
+cast_possible_truncation = "warn"
+cast_precision_loss = "warn"
+cast_lossless = "warn"
+float_cmp = "warn"
+needless_pass_by_value = "warn"
+doc_markdown = "allow"
+
+# 開発ビルドでも物理が実時間で動く程度には最適化する。
+# 依存クレートは常にフル最適化（ビルド時間は初回のみ）。
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+
+# Local original-equivalent routine replacement; exact provenance is vendored.
+[patch.crates-io]
+zune-jpeg = { path = "vendor/zune-jpeg" }
+bevy_pbr = { path = "vendor/bevy_pbr" }
+bevy_core_pipeline = { path = "vendor/bevy_core_pipeline" }
