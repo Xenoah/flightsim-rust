@@ -35,7 +35,7 @@ IDENTITY = tone.ANALYTICAL_SWIFT_RECIPE
 TARGET, TOOLCHAIN = candidate.TARGET, candidate.TOOLCHAIN
 FEATURES = ['analytic-tonemapping', 'commercial-staging']
 CONTRACT = 'scripts/analytical-swift-source-contract.json'
-SOURCE_ADMISSION = 'analytical-swift-alpha24-version-source-admission-v1'
+SOURCE_ADMISSION = 'analytical-swift-alpha24-ci-timeout-source-admission-v1'
 SOURCE_RECIPE = tone.TWO_LUT_SOURCE
 SOURCE_PATHS = {
     'Cargo.toml', 'Cargo.lock', 'crates/flightsim-app/Cargo.toml',
@@ -79,6 +79,36 @@ SOURCE_PATHS = {
     'docs/qa/terrain-stitch-source-bindings-2026-10-09.md',
     'docs/adr/0032-terrain-three-source-corners.md',
 } | candidate.COMPONENT_TERMS_SOURCE_PATHS
+# A separate tooling-only layer preserves the exact alpha.24 runtime migration.
+# The historical workflow is complete: only this job's 30 -> 45 minute budget
+# may change. All tests, commands, permissions and other jobs remain byte-exact.
+CI_TIMEOUT_MIGRATION_PATH = 'scripts/ci-timeout-source-migration.json'
+CI_TIMEOUT_MIGRATION_SHA256 = '33375880cd5a90b934914464d2ed415421378698879d3993193f2931ba93bebc'
+CI_TIMEOUT_WORKFLOW_PATH = '.github/workflows/ci.yml'
+CI_TIMEOUT_HISTORY_PATH = 'scripts/history/c84b8aa-ci.yml'
+CI_TIMEOUT_PREVIOUS_SHA256 = '9018bf9b4a64d7a68d007a2000a7cdf45439ebe92fb16c42c4d0aab9f670d6dd'
+CI_TIMEOUT_CURRENT_SHA256 = '19ff459cddeb90a060d3bb254f5346bb46b9c070d578f0e5973735304a35dd91'
+CI_TIMEOUT_BASE_CONTRACT_PATH = 'scripts/history/c84b8aa-analytical-swift-source-contract.json'
+CI_TIMEOUT_BASE_CONTRACT_SHA256 = '94291d136bd71ac239f3e7e453f32f4870dd3421ed636c8f77800b4f4f7bdadb'
+CI_TIMEOUT_BASE_SOURCE_PATHS = frozenset(SOURCE_PATHS)
+CI_TIMEOUT_SOURCE_PATHS = frozenset({
+    CI_TIMEOUT_MIGRATION_PATH, CI_TIMEOUT_HISTORY_PATH, CI_TIMEOUT_BASE_CONTRACT_PATH,
+    'scripts/tests/test_ci_timeout_source_admission.py',
+})
+# Only the auditor, its bound documentation, and current count/identity assertions
+# are rebound alongside the sole workflow field. Runtime and release gates do not move.
+CI_TIMEOUT_REBOUND_PATHS = frozenset({
+    CI_TIMEOUT_WORKFLOW_PATH, 'scripts/check-analytical-swift-recipe.py',
+    'docs/release/full-two-aircraft-source-admission.md',
+    'scripts/tests/test_alpha23_version_source_admission.py',
+    'scripts/tests/test_alpha24_version_source_admission.py',
+    'scripts/tests/test_analytical_swift_recipe.py',
+    'scripts/tests/test_cockpit_source_admission.py',
+    'scripts/tests/test_cockpit_variant_source_admission.py',
+    'scripts/tests/test_component_terms_source_admission.py',
+    'scripts/tests/test_terrain_stitch_source_admission.py',
+})
+SOURCE_PATHS |= CI_TIMEOUT_SOURCE_PATHS
 GATES = {
     'combined_feature_regressions': 'Combined release/MSVC app/render tests and Clippy; real render tonemapping_modes; ordinary controls and mixed/neither rejection',
     'exact_identity_and_legacy_tests': 'Existing fingerprint and three exact legacy tests, one executed passing test each under combined release/MSVC features',
@@ -129,6 +159,71 @@ def validate_header(value, source_sha):
     require(set(value.get('modes', {})) == {'analytic', 'ordinary'}, 'both isolated build captures are required')
 
 
+def validate_ci_timeout_delta(previous, current):
+    """Accept the complete known workflow with exactly one job-budget replacement."""
+    require(isinstance(previous, bytes) and isinstance(current, bytes)
+            and 0 < len(previous) <= 1024 * 1024 and 0 < len(current) <= 1024 * 1024,
+            'CI timeout workflow exceeds byte boundary')
+    import hashlib
+    require(hashlib.sha256(previous).hexdigest() == CI_TIMEOUT_PREVIOUS_SHA256,
+            'CI timeout historical workflow changed')
+    before = (b'  world_source_tools:\n'
+              b'    name: world source-tool boundaries\n'
+              b'    runs-on: ubuntu-latest\n'
+              b'    # Allow the full canonical-source mutation sweep and all schema/reference\n'
+              b'    # checks to finish despite hosted-runner variability.\n'
+              b'    timeout-minutes: 30\n')
+    after = before.replace(b'timeout-minutes: 30', b'timeout-minutes: 45')
+    require(previous.count(before) == 1 and current == previous.replace(before, after)
+            and hashlib.sha256(current).hexdigest() == CI_TIMEOUT_CURRENT_SHA256,
+            'CI workflow changed outside exact world_source_tools 30-to-45 budget')
+
+
+def validate_ci_timeout_admission(repo, pins):
+    """Keep the runtime proof and all unrelated analytical inputs unchanged."""
+    require(digest(repo / CI_TIMEOUT_MIGRATION_PATH) == CI_TIMEOUT_MIGRATION_SHA256
+            and pins.get(CI_TIMEOUT_MIGRATION_PATH) == CI_TIMEOUT_MIGRATION_SHA256,
+            'CI timeout migration changed')
+    migration = json.loads((repo / CI_TIMEOUT_MIGRATION_PATH).read_text(encoding='utf-8'))
+    expected = {
+        'schema_version': 1, 'identity': 'analytical-swift-ci-timeout-source-migration-v1',
+        'base_source': 'c84b8aa97d38250ddb1c5495e2d65e3917be8b4c',
+        'base_tree': 'c9d792a5f0fc1641a6a050ce41a56f2a5b8afb2b',
+        'base_source_kind': 'published-commit',
+        'scope': 'source-only CI job budget; no test, native, runtime, rights or publication gate change',
+        'release_authorized': False,
+        'runtime_source_migration_sha256': candidate.ALPHA24_MIGRATION_SHA256,
+        'base_analytical_contract': {'path': CI_TIMEOUT_BASE_CONTRACT_PATH,
+                                     'sha256': CI_TIMEOUT_BASE_CONTRACT_SHA256},
+        'workflow': {'path': CI_TIMEOUT_WORKFLOW_PATH, 'historical_path': CI_TIMEOUT_HISTORY_PATH,
+                     'previous_sha256': CI_TIMEOUT_PREVIOUS_SHA256,
+                     'sha256': CI_TIMEOUT_CURRENT_SHA256, 'job': 'world_source_tools',
+                     'previous_timeout_minutes': 30, 'timeout_minutes': 45},
+    }
+    require(type(migration.get('schema_version')) is int
+            and migration.get('release_authorized') is False and migration == expected,
+            'invalid CI-only timeout migration identity or scope')
+    require(digest(repo / CI_TIMEOUT_BASE_CONTRACT_PATH) == CI_TIMEOUT_BASE_CONTRACT_SHA256
+            and pins.get(CI_TIMEOUT_BASE_CONTRACT_PATH) == CI_TIMEOUT_BASE_CONTRACT_SHA256,
+            'CI timeout historical analytical contract changed')
+    previous = json.loads((repo / CI_TIMEOUT_BASE_CONTRACT_PATH).read_text(encoding='utf-8'))
+    require(previous['source_admission'] == 'analytical-swift-alpha24-version-source-admission-v1'
+            and previous['source_migration_sha256'] == candidate.ALPHA24_MIGRATION_SHA256
+            and previous['release_authorized'] is False
+            and set(previous['source_sha256']) == CI_TIMEOUT_BASE_SOURCE_PATHS,
+            'CI timeout previous analytical boundary changed')
+    require(set(pins) == CI_TIMEOUT_BASE_SOURCE_PATHS | CI_TIMEOUT_SOURCE_PATHS,
+            'CI timeout analytical boundary changed')
+    for path, expected in previous['source_sha256'].items():
+        if path not in CI_TIMEOUT_REBOUND_PATHS:
+            require(pins.get(path) == expected, 'CI timeout unrelated analytical source changed: ' + path)
+    validate_ci_timeout_delta((repo / CI_TIMEOUT_HISTORY_PATH).read_bytes(),
+                              (repo / CI_TIMEOUT_WORKFLOW_PATH).read_bytes())
+    require(pins.get(CI_TIMEOUT_HISTORY_PATH) == CI_TIMEOUT_PREVIOUS_SHA256
+            and pins.get(CI_TIMEOUT_WORKFLOW_PATH) == CI_TIMEOUT_CURRENT_SHA256,
+            'CI timeout workflow pins changed')
+
+
 def source_evidence(repo, expected):
     # Versioned source admission retains the historical 404 pins and all 102 independent anchors.
     source = candidate.source_inputs(repo, expected)
@@ -147,6 +242,7 @@ def source_evidence(repo, expected):
             'invalid analytical source contract')
     pins = contract.get('source_sha256')
     require(isinstance(pins, dict) and set(pins) == SOURCE_PATHS, 'analytical source boundary changed')
+    validate_ci_timeout_admission(repo, pins)
     files = {entry['path']: entry for entry in source['files']}
     require(CONTRACT in files, 'analytical source contract must be tracked')
     for relative in SOURCE_PATHS | {CONTRACT}:

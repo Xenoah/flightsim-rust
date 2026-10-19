@@ -30,7 +30,7 @@ SPEC.loader.exec_module(check)
 require = check.require
 IDENTITY = 'analytical-swift-msvc-build-capture-v1'
 CONTRACT = 'scripts/analytical-swift-capture-contract.json'
-SOURCE_ADMISSION = 'analytical-swift-alpha24-version-capture-source-admission-v1'
+SOURCE_ADMISSION = 'analytical-swift-alpha24-ci-timeout-capture-source-admission-v1'
 REFERENCE = 'reference/bevy_core_pipeline-0.18.1.crate'
 BOUND_FILES = {
     'scripts/capture-analytical-swift-msvc.py',
@@ -38,7 +38,7 @@ BOUND_FILES = {
     '.github/workflows/analytical-swift-msvc-build.yml',
     'docs/release/analytical-swift-msvc-capture.md',
 }
-INHERITED_CONTRACTS = {'scripts/analytical-swift-source-contract.json': '94291d136bd71ac239f3e7e453f32f4870dd3421ed636c8f77800b4f4f7bdadb', 'scripts/replay-candidate-contract.json': '6af285ec28f56a8e1065c2918cd2751643121bbfb416145633aa2c3aea132e2f'}
+INHERITED_CONTRACTS = {'scripts/analytical-swift-source-contract.json': 'b4d36a1a19dbad3409c277b403f7acc3aeea615f8ef7f14323298cbcfa901c8b', 'scripts/replay-candidate-contract.json': '6af285ec28f56a8e1065c2918cd2751643121bbfb416145633aa2c3aea132e2f'}
 
 MODES = ('analytic', 'ordinary')
 OUTPUTS = {'rustc': 'rustc.txt', 'graph': 'graph.txt', 'build': 'messages.jsonl', 'metadata': 'metadata.json'}

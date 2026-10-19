@@ -8,12 +8,13 @@
     "docs/release/windows-component-release-notes.md",
     "This receipt binds the current publication instruction to the exact alpha.24 version, source and release inventory; it does not attest native success. Changed-source applicability, same-build archive verification and extracted two-aircraft smoke remain independent required gates.",
     "docs/release/full-two-aircraft-source-admission.md",
-    "docs/qa/alpha24-dependency-notice-review-2026-10-19.md"
+    "docs/qa/alpha24-dependency-notice-review-2026-10-19.md",
+    "The exact source also includes the bounded CI source-tool job ceiling amendment from 30 to 45 minutes. Test content, individual process deadlines, native qualification and publication gates are unchanged; this is not a waiver of any failed or incomplete test."
   ],
-  "release_inventory_sha256": "db89a40c60f3ac1b17c64a1cfdab1309179f606c5079c2fc0c13e536215455bd",
+  "release_inventory_sha256": "26c25e7a698e6dd376fcad80d50f5d4691c36f26376b1c233ce7519952944ce4",
   "schema_version": 1,
   "scope": "github-windows-prerelease",
-  "source_inventory_sha256": "f960597f09e44807e51a329724f96b3accd253be7c3d11af8e4b517c5ce9d99f",
+  "source_inventory_sha256": "6252b803f1cd31a0797e9e190202f5e9e59ce31ab193b54adfe992279ca5cd9c",
   "status": "authorized",
   "target": "x86_64-pc-windows-msvc",
   "version": "0.6.0-alpha.24"

@@ -293,3 +293,35 @@ rights, source-hosting verification nor publication authority. The final full
 runtime recipe remains release MSVC/Rust 1.93.0 with default features and no
 additional features, Light Single default plus Swift, and ordinary Tony. Actual
 full recipe qualification and inventory-bound authorization remain separate.
+
+## CI source-tool budget amendment
+
+[PR #52 CI run 39201495425, job 117895225581](https://github.com/Xenoah/flightsim-rust/actions/runs/39201495425/job/117895225581)
+was cancelled at `2026-10-19T05:20:48Z` by the 30-minute job ceiling, with no
+preceding assertion failure and the suite still incomplete.
+The same-source local suite completed 781 tests in 1952.594 seconds with one
+Windows-only skip.
+
+The alpha.24 runtime/version admission above is unchanged. The separate
+`scripts/ci-timeout-source-migration.json` tooling layer uses published source
+`c84b8aa97d38250ddb1c5495e2d65e3917be8b4c`, tree
+`c9d792a5f0fc1641a6a050ce41a56f2a5b8afb2b`, as provenance. Two immutable
+`scripts/history/c84b8aa-*` witnesses preserve its complete CI workflow and
+57-input analytical source contract.
+
+The only workflow change is `world_source_tools.timeout-minutes: 30` to `45`.
+Complete byte comparison against the fixed historical workflow rejects every
+other job, command, dependency, permission, test selection, whitespace or ordering
+change. All tests and required gates continue to run. This is a CI job ceiling;
+it changes no native capture, process, smoke or publication deadline.
+
+The analytical source boundary is now 61 inputs: the previous 57 plus the two
+witnesses, fixed closed migration descriptor and exact-delta mutation tests.
+Only the workflow, auditor, this explanation and existing source-count/identity
+assertions are rebound. The current identities are
+`analytical-swift-alpha24-ci-timeout-source-admission-v1` and
+`analytical-swift-alpha24-ci-timeout-capture-source-admission-v1`. The capture
+boundary retains four inputs and exact inherited hashes. The 974-pin replay
+contract, alpha.24 version-only validator, all historical migrations, runtime,
+rights review and publication gates remain unchanged. Neither successful CI nor
+this tooling amendment supplies fresh Windows evidence or release authority.

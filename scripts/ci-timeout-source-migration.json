@@ -1,0 +1,23 @@
+{
+  "base_analytical_contract": {
+    "path": "scripts/history/c84b8aa-analytical-swift-source-contract.json",
+    "sha256": "94291d136bd71ac239f3e7e453f32f4870dd3421ed636c8f77800b4f4f7bdadb"
+  },
+  "base_source": "c84b8aa97d38250ddb1c5495e2d65e3917be8b4c",
+  "base_source_kind": "published-commit",
+  "base_tree": "c9d792a5f0fc1641a6a050ce41a56f2a5b8afb2b",
+  "identity": "analytical-swift-ci-timeout-source-migration-v1",
+  "release_authorized": false,
+  "runtime_source_migration_sha256": "f1e143dbc9d4bc1083c7e1cd8b9dc0828ae998b2564338081f2c6ffc74b7a6fb",
+  "schema_version": 1,
+  "scope": "source-only CI job budget; no test, native, runtime, rights or publication gate change",
+  "workflow": {
+    "historical_path": "scripts/history/c84b8aa-ci.yml",
+    "job": "world_source_tools",
+    "path": ".github/workflows/ci.yml",
+    "previous_sha256": "9018bf9b4a64d7a68d007a2000a7cdf45439ebe92fb16c42c4d0aab9f670d6dd",
+    "previous_timeout_minutes": 30,
+    "sha256": "19ff459cddeb90a060d3bb254f5346bb46b9c070d578f0e5973735304a35dd91",
+    "timeout_minutes": 45
+  }
+}
