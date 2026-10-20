@@ -56,10 +56,13 @@ fn layout_app(size: UVec2, state: HudState, status: ReplayStatus) -> App {
     .init_resource::<TutorialVisibility>()
     .init_resource::<Paused>()
     .init_resource::<CrashNotice>()
+    .init_resource::<TrafficPanel>()
+    .init_resource::<InputDiagnosticsPanel>()
     .add_systems(
         Startup,
         (
             spawn_hud,
+            traffic::spawn_traffic_panel,
             replay::spawn_replay_banner,
             spawn_tutorial_prompt,
             pause::spawn_pause_overlay,
@@ -70,6 +73,11 @@ fn layout_app(size: UVec2, state: HudState, status: ReplayStatus) -> App {
         Update,
         (
             update_hud,
+            traffic::update_traffic_panel
+                .in_set(FlightDisplaySystems)
+                .before(update_help_for_replay)
+                .before(update_flight_log_display)
+                .before(pause::update_pause_reference),
             replay::update_replay_banner,
             update_help_for_replay,
             update_flight_log_display,
@@ -918,5 +926,40 @@ fn paused_overlay_reserves_wrapped_attribution_during_resize_in_the_same_update(
                 assert!((footer_rect.max.y - (size.as_vec2().y - 12.0)).abs() < 1.0);
             }
         }
+    }
+}
+
+#[test]
+fn chase_traffic_and_flight_guide_share_measured_space() {
+    for size in [
+        UVec2::new(1280, 720),
+        UVec2::new(1180, 812),
+        UVec2::new(900, 600),
+        UVec2::new(899, 600),
+        UVec2::new(640, 480),
+    ] {
+        let mut app = layout_app(size, flight_hud(false), ReplayStatus::default());
+        app.world_mut()
+            .resource_mut::<DataAttribution>()
+            .set(FULL_CREDIT);
+        *app.world_mut().resource_mut::<TrafficPanel>() = TrafficPanel { visible: true, text: "SYNTHETIC\nTRAFFIC01 090deg 2nm +500ft\nTRAFFIC02 180deg 3nm -500ft\nTRAFFIC03 270deg 4nm +1000ft".into() };
+        app.update();
+        assert_complete_hud_clear(&mut app, size);
+        let world = app.world_mut();
+        let root = world
+            .query_filtered::<(Entity, &Node), With<traffic::TrafficRoot>>()
+            .iter(world)
+            .find(|(_, node)| node.display != Display::None)
+            .expect("visible traffic")
+            .0;
+        let help = entity::<HudHelp>(world);
+        assert!(
+            rect(world, root).intersect(rect(world, help)).is_empty(),
+            "traffic covers guide at {size:?}"
+        );
+        assert_eq!(
+            world.get::<Text>(help).unwrap().as_str(),
+            compact_help_text()
+        );
     }
 }
