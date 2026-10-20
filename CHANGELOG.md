@@ -5,6 +5,18 @@
 
 ---
 
+## 0.6.0-alpha.25 — Swift Sport の前方視界修正（配布準備、2026-10-19）
+
+- Swift Sport の中央視点の俯角を 24 度から 15 度に変更し、前方の地平線と進入先の滑走路を見やすくする
+- 左右の操縦桿・回転支点・操作判定を一緒に 10 cm 前へ移動。従来の操作範囲と入力の結線を維持
+- Light Single、Meadow、Kestrel の視点、物理・replay・同梱素材・依存関係・規約は変更しない
+- alpha.24 からの版番号変更は workspace 1 箇所と lockfile のローカル 13 package に限定。公開済み前方視界修正の全 runtime bytes と過去の source admission を保持
+
+[実画像と開発 QA](docs/qa/swift-forward-view-2026-10-19.md) は Linux software renderer の観測です。
+[alpha.25 配布準備](docs/qa/alpha25-release-preparation-2026-10-19.md) は別の新規 Windows capture、
+native applicability、同一 archive の 2 機種 smoke、公開後アセット照合を必要とします。
+配布成功、実 GPU、実マウス入力や操縦特性の受け入れをこの節だけでは主張しません。
+
 ## 0.6.0-alpha.24 — 機体別の 3D 操縦席（配布準備、2026-10-19）
 
 - Light Single のアナログ計器盤・操縦輪を維持し、Swift Sport に独自の主飛行表示と左右の操縦桿を追加

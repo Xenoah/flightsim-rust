@@ -35,7 +35,7 @@ IDENTITY = tone.ANALYTICAL_SWIFT_RECIPE
 TARGET, TOOLCHAIN = candidate.TARGET, candidate.TOOLCHAIN
 FEATURES = ['analytic-tonemapping', 'commercial-staging']
 CONTRACT = 'scripts/analytical-swift-source-contract.json'
-SOURCE_ADMISSION = 'analytical-swift-forward-visibility-source-admission-v1'
+SOURCE_ADMISSION = 'analytical-swift-alpha25-version-source-admission-v1'
 SOURCE_RECIPE = tone.TWO_LUT_SOURCE
 SOURCE_PATHS = {
     'Cargo.toml', 'Cargo.lock', 'crates/flightsim-app/Cargo.toml',
@@ -129,6 +129,24 @@ SWIFT_FORWARD_REBOUND_PATHS = frozenset({
     'scripts/tests/test_ci_timeout_source_admission.py',
 })
 SOURCE_PATHS |= SWIFT_FORWARD_SOURCE_PATHS
+SWIFT_FORWARD_ADMISSION_SOURCE_PATHS = frozenset(SOURCE_PATHS)
+ALPHA25_BASE_CONTRACT_PATH = 'scripts/history/754bad8-analytical-swift-source-contract.json'
+ALPHA25_SOURCE_PATHS = frozenset({'scripts/tests/test_alpha25_version_source_admission.py'})
+ALPHA25_REBOUND_PATHS = frozenset({
+    'Cargo.toml', 'Cargo.lock', 'scripts/replay-candidate-contract.json',
+    'scripts/check-swift-windows-candidate.py', 'scripts/check-analytical-swift-recipe.py',
+    'docs/release/full-two-aircraft-source-admission.md',
+    'scripts/tests/test_swift_windows_candidate.py', 'scripts/tests/test_full_source_admission.py',
+    'scripts/tests/test_analytical_swift_recipe.py',
+    'scripts/tests/test_alpha23_version_source_admission.py',
+    'scripts/tests/test_alpha24_version_source_admission.py',
+    'scripts/tests/test_cockpit_source_admission.py',
+    'scripts/tests/test_cockpit_variant_source_admission.py',
+    'scripts/tests/test_component_terms_source_admission.py',
+    'scripts/tests/test_terrain_stitch_source_admission.py',
+    'scripts/tests/test_swift_forward_visibility_source_admission.py',
+})
+SOURCE_PATHS |= ALPHA25_SOURCE_PATHS
 GATES = {
     'combined_feature_regressions': 'Combined release/MSVC app/render tests and Clippy; real render tonemapping_modes; ordinary controls and mixed/neither rejection',
     'exact_identity_and_legacy_tests': 'Existing fingerprint and three exact legacy tests, one executed passing test each under combined release/MSVC features',
@@ -263,10 +281,36 @@ def validate_swift_forward_admission(repo, pins):
             and set(previous['source_sha256']) == SWIFT_FORWARD_BASE_SOURCE_PATHS,
             'invalid Swift forward visibility historical analytical contract')
     validate_ci_timeout_admission(repo, previous['source_sha256'])
-    require(isinstance(pins, dict) and set(pins) == SOURCE_PATHS,
+    require(isinstance(pins, dict) and set(pins) == SWIFT_FORWARD_ADMISSION_SOURCE_PATHS,
             'Swift forward visibility analytical boundary changed')
     for path, expected in previous['source_sha256'].items():
         if path not in SWIFT_FORWARD_REBOUND_PATHS:
+            require(pins.get(path) == expected, 'unrelated analytical input changed: ' + path)
+
+
+def validate_alpha25_admission(repo, pins):
+    """Retain the exact published 62-input Swift visibility proof beneath this successor."""
+    path = ALPHA25_BASE_CONTRACT_PATH
+    require(digest(repo / path) == candidate.ALPHA25_BASE_CONTRACT_HASHES[path],
+            'alpha25 version historical analytical contract changed')
+    previous = json.loads((repo / path).read_text(encoding='utf-8'))
+    require(set(previous) == {'schema_version', 'recipe', 'source_admission', 'source_recipe',
+            'base_reviewed_source', 'base_reviewed_runtime_tree', 'source_migration_sha256',
+            'release_authorized', 'source_sha256'}
+            and type(previous['schema_version']) is int and previous['schema_version'] == 1
+            and previous['recipe'] == IDENTITY and previous['source_recipe'] == SOURCE_RECIPE
+            and previous['source_admission'] == 'analytical-swift-forward-visibility-source-admission-v1'
+            and previous['base_reviewed_source'] == candidate.REVIEWED_RUNTIME_SOURCE
+            and previous['base_reviewed_runtime_tree'] == candidate.REVIEWED_RUNTIME_TREE
+            and previous['source_migration_sha256'] == candidate.SWIFT_FORWARD_MIGRATION_SHA256
+            and previous['release_authorized'] is False
+            and set(previous['source_sha256']) == SWIFT_FORWARD_ADMISSION_SOURCE_PATHS,
+            'invalid alpha25 version historical analytical contract')
+    validate_swift_forward_admission(repo, previous['source_sha256'])
+    require(isinstance(pins, dict) and set(pins) == SOURCE_PATHS,
+            'alpha25 version analytical boundary changed')
+    for path, expected in previous['source_sha256'].items():
+        if path not in ALPHA25_REBOUND_PATHS:
             require(pins.get(path) == expected, 'unrelated analytical input changed: ' + path)
 
 
@@ -281,14 +325,14 @@ def source_evidence(repo, expected):
             and contract.get('schema_version') == 1 and contract.get('recipe') == IDENTITY
             and contract.get('base_reviewed_source') == candidate.REVIEWED_RUNTIME_SOURCE
             and contract.get('base_reviewed_runtime_tree') == candidate.REVIEWED_RUNTIME_TREE
-            and contract.get('source_migration_sha256') == candidate.SWIFT_FORWARD_MIGRATION_SHA256
+            and contract.get('source_migration_sha256') == candidate.ALPHA25_MIGRATION_SHA256
             and contract.get('source_admission') == SOURCE_ADMISSION
             and contract.get('source_recipe') == SOURCE_RECIPE
             and contract.get('release_authorized') is False,
             'invalid analytical source contract')
     pins = contract.get('source_sha256')
     require(isinstance(pins, dict) and set(pins) == SOURCE_PATHS, 'analytical source boundary changed')
-    validate_swift_forward_admission(repo, pins)
+    validate_alpha25_admission(repo, pins)
     files = {entry['path']: entry for entry in source['files']}
     require(CONTRACT in files, 'analytical source contract must be tracked')
     for relative in SOURCE_PATHS | {CONTRACT}:

@@ -1,7 +1,22 @@
-# Full two-aircraft alpha.24 version source admission, version 1
+# Full two-aircraft alpha.25 version source admission, version 1
 
-This source-only identity is `full-two-aircraft-alpha24-version-source-v1`.
-The current version-only migration extends the published aircraft-specific
+The current source-only identity is `full-two-aircraft-alpha25-version-source-v1`.
+It admits only the alpha.24 to alpha.25 workspace/local-package version change
+over published Swift visibility source `754bad886cbac8f564c6c46ebdb265c54bda275c`.
+The current contracts bind **987 replay files, 63 analytical inputs and four
+capture inputs**. All prior validators, exact historical witnesses, 499 current
+crate members, 497 original runtime identities and 102 independent replay anchors
+remain enforced. No source-admission pass qualifies native execution or release.
+See the [current alpha.25 boundary](#alpha25-version-only-source-amendment) below.
+
+The intervening sections record earlier admission stages. Their identities,
+counts and observations describe those historical stages, not the current
+alpha.25 contract or new Windows evidence.
+
+## Historical alpha.24 overview and inherited boundaries
+
+At this stage the source-only identity was `full-two-aircraft-alpha24-version-source-v1`.
+That version-only migration extends the published aircraft-specific
 cockpit source and every preserved alpha.23 version, cockpit, alpha.22 version,
 terrain-stitch, terrain-centroid and component-terms migration. None supplies
 native or publication evidence for alpha.24. Each previous admission identity
@@ -17,7 +32,7 @@ project-license texts. Every execution still requires its actual final clean com
 Prior `55094fa` builds, graphs and native observations remain reference evidence;
 none are qualified evidence for the changed runtime.
 
-The current replay source contract names 974 exact files. Its literal path sets
+That stage's replay source contract named 974 exact files. Its literal path sets
 include the previous 404-file boundary, every one of the 55 local core-pipeline
 files, complete original-highwing inputs and provenance, and the frozen 497
 runtime identities. The frozen map itself is unchanged. Its earlier changed
@@ -95,6 +110,8 @@ geometry change, its historical witnesses and source mutation-test boundary.
 
 ## Alpha.22 version-only boundary
 
+**Historical stage; superseded by the current alpha.25 outer boundary.**
+
 `scripts/alpha22-version-source-migration.json` permits exactly the workspace
 version in `Cargo.toml` and the versions of the thirteen named local flightsim
 packages in `Cargo.lock` to move from `0.6.0-alpha.21` to `0.6.0-alpha.22`.
@@ -127,6 +144,8 @@ never become alpha.22 approvals. Fresh inventory-bound review and authorization,
 exact-final-source CI, Windows build and extracted-archive smoke remain separate.
 
 ## State-coupled cockpit boundary
+
+**Historical stage; superseded by the current alpha.25 outer boundary.**
 
 `scripts/cockpit-source-migration.json` binds exactly four replacements:
 `crates/flightsim-app/src/main.rs`, `crates/flightsim-app/src/aircraft_scene.rs`,
@@ -253,6 +272,8 @@ remain independent gates.
 
 ## Alpha.24 version-only outer boundary
 
+**Historical stage; superseded by the current alpha.25 outer boundary.**
+
 `scripts/alpha24-version-source-migration.json` permits only the workspace version
 in `Cargo.toml` and the thirteen literal local package versions in `Cargo.lock`
 to advance from `0.6.0-alpha.23` to `0.6.0-alpha.24`. Its published base is
@@ -296,6 +317,8 @@ full recipe qualification and inventory-bound authorization remain separate.
 
 ## CI source-tool budget amendment
 
+**Historical stage; superseded by the current alpha.25 outer boundary.**
+
 [PR #52 CI run 39201495425, job 117895225581](https://github.com/Xenoah/flightsim-rust/actions/runs/39201495425/job/117895225581)
 was cancelled at `2026-10-19T05:20:48Z` by the 30-minute job ceiling, with no
 preceding assertion failure and the suite still incomplete.
@@ -327,6 +350,8 @@ rights review and publication gates remain unchanged. Neither successful CI nor
 this tooling amendment supplies fresh Windows evidence or release authority.
 
 ## Swift Sport forward-visibility source amendment
+
+**Historical stage; superseded by the current alpha.25 outer boundary.**
 
 The successor `scripts/swift-forward-visibility-source-migration.json` is based on
 published alpha.24 source `4f385e121addc036c2103d634e2bb46e6392172b`, tree
@@ -365,3 +390,44 @@ Its original 78 source-pin rejections remain a historical failed proposal check;
 the successor must pass its own fresh committed-source validation. Native,
 whole-target rights, exact-inventory authorization and publication gates remain
 separate and unqualified by this migration.
+
+## Alpha.25 version-only source amendment
+
+`scripts/alpha25-version-source-migration.json` is a closed, version-only
+successor to published Swift forward-visibility source
+`754bad886cbac8f564c6c46ebdb265c54bda275c`, tree
+`ae0558fe04c5fe700b47a5116b9977561f57b1c3`. Its sole runtime-input delta is
+`0.6.0-alpha.24` to `0.6.0-alpha.25`: one workspace version in `Cargo.toml` and
+thirteen local-package versions in `Cargo.lock`. Complete parsed TOML documents
+must otherwise remain identical, and exact whole-file substitution rejects
+extra comments, whitespace, reordered packages, dependencies, features or paths.
+The existing one-MiB input bounds remain enforced.
+
+Five exact `scripts/history/754bad8-*` witnesses preserve both Cargo inputs and
+all three source contracts. The complete 981-pin Swift visibility validator
+remains a historical layer, including its three fixed presentation-file hashes
+and all previous version, cockpit and CI-only proofs. Only those five witnesses
+and the descriptor are added, reaching 987 replay pins. The 499-member crate
+boundary, 497 original runtime identities and 102 independent replay anchors
+remain exact. No new runtime implementation, asset, physics, replay, dependency
+or workflow change is admitted by this version migration.
+
+The analytical successor first validates the frozen 62-input Swift contract,
+which still validates the complete published CI-only layer. Only the Cargo pair,
+source auditors, replay contract, this guide and affected test assertions are
+rebound. One new alpha.25 adversarial suite brings its boundary to 63 inputs.
+Capture keeps four exact inputs and inherited contract hashes. Current identities
+are `full-two-aircraft-alpha25-version-source-v1`,
+`analytical-swift-alpha25-version-source-admission-v1` and
+`analytical-swift-alpha25-version-capture-source-admission-v1`.
+
+No alpha.24 Windows observation or publication receipt becomes evidence for
+alpha.25 through a version substitution. Fresh ordinary target-filtered notice
+collection, substantive source/notice review, genuine changed-source Windows
+capture, complete native-content applicability review and final inventory-bound
+authorization remain separate. The final source still requires its own CI,
+fresh same-build release MSVC capture, exact archive/extraction checks and the
+unchanged Light Single cockpit plus Swift Sport chase smoke. A Swift cockpit
+visual comparison is separately identified; the chase smoke does not establish
+that view's appearance. The approved component terms and all publication gates
+remain unchanged. See [alpha.25 preparation](../qa/alpha25-release-preparation-2026-10-19.md).

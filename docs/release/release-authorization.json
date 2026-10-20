@@ -10,13 +10,14 @@
     "docs/release/full-two-aircraft-source-admission.md",
     "docs/qa/alpha24-dependency-notice-review-2026-10-19.md",
     "The exact source also includes the bounded CI source-tool job ceiling amendment from 30 to 45 minutes. Test content, individual process deadlines, native qualification and publication gates are unchanged; this is not a waiver of any failed or incomplete test.",
-    "docs/release/full-review-applicability.json binds genuine ordinary Windows Release run 39225763586 and its independently revalidated native facts. This authorization preserves the existing supplier terms and does not replace final-source capture, archive verification or extracted-bundle smoke."
+    "docs/release/full-review-applicability.json binds genuine ordinary Windows Release run 39225763586 and its independently revalidated native facts. This authorization preserves the existing supplier terms and does not replace final-source capture, archive verification or extracted-bundle smoke.",
+    "The same repository-owner autonomous development, push and release instruction now binds the alpha.25 Swift forward-view successor. docs/qa/alpha25-release-preparation-2026-10-19.md and docs/qa/alpha25-dependency-notice-review-2026-10-19.md describe its bounded source-only preparation. The preceding alpha.24 native applicability remains historical and must be re-reviewed from genuine successor Windows facts; no existing runtime success or legal assent is transferred by this receipt."
   ],
-  "release_inventory_sha256": "c028d07401c43fe6ead30a73a6a00fc9e0b7f3c00a9ee73e26119f3bcacbd7ce",
+  "release_inventory_sha256": "0b36fd11cb8f4cca630cea581b4f07f85d848108f5673229483fbda92af6c5df",
   "schema_version": 1,
   "scope": "github-windows-prerelease",
-  "source_inventory_sha256": "95caeec691144856c0acb321831b11ba2e37b51562cc54e23f0adf6dfc88c886",
+  "source_inventory_sha256": "66c6b668633f12c64eefb65c4cb199671cff7db0369c9bd467eda0f17b201d11",
   "status": "authorized",
   "target": "x86_64-pc-windows-msvc",
-  "version": "0.6.0-alpha.24"
+  "version": "0.6.0-alpha.25"
 }
