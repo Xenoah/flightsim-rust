@@ -1,16 +1,16 @@
 {
   "basis": {
-    "metadata_sha256": "64b63da56455bdaed5a3d6e040d13ec9dfc096f6fc479ee00b935b73473c0d65",
+    "metadata_sha256": "8fbc9a2952e57830c09671ca22e32c6cdd0e11c5bc8d44ffcd6e95fd3b9deb0e",
     "native_projection": {
-      "bytes": 2995095,
-      "sha256": "7270411b3f86998928d4c16f18d8338910526c7522634c09ed44bcbc4016fff7"
+      "bytes": 2995101,
+      "sha256": "c69983de4a4ad7f078cb5fb2d54f773049166690f61534f8d95da3becc16273e"
     },
     "original_inventory": {
       "bytes": 407610,
-      "sha256": "59d3385ecd3912e87a3eff21362acf870afc37483437fee5b2db1299d0a0c573"
+      "sha256": "f5d6ddd9ef0827544135912ae46d3a6901d8de3911039f7cfb835947c9eec735"
     },
-    "source_sha": "de2e4d35ef21cd35c4445d7c6eb8a12bed48fed7",
-    "source_tree": "e539130259ec717f1b3cf92605e6bf827e823942"
+    "source_sha": "0ea01f227dfd552c2d547b2d83949fc06f7c19cd",
+    "source_tree": "de45083263e31c9cb3093e033f34503736720918"
   },
   "coverage": {
     "evidence": [
@@ -46,16 +46,24 @@
       "Alpha.24 official https://visualstudio.microsoft.com/license-terms/vs2026-ga-pro-enterprise/ still links https://visualstudio.microsoft.com/wp-content/uploads/2025/10/Visual_Studio_2026-License-Enterprise_Professional_ENU.docx. Re-downloaded 2026-10-19: 67523 bytes SHA256 dd2ab92a7c2bb90dd509e16572707a34b13bc0bc09b9199d115f25594ac39053, exactly the existing supplier review original. The current official https://learn.microsoft.com/en-us/visualstudio/releases/2026/redistribution retains the valid-licensed-copy/eligible-file distribution route and excludes preview files. No separate runtime installer is bundled, no new agreement acceptance action occurs, and previous terms protections remain conditional on their existing applicable rights.",
       "Alpha.24 current dependency review 1122191 bytes SHA256 fb29e32699f2956b46f92255c94f7402ffa8817ade72c5936f62d79d29acafdd preserves every prior source amendment, original native/environment observation and supplier review as history. docs/qa/alpha24-dependency-notice-review-2026-10-19.md records the exact source-only collection. All 510 source headers and three embedded assets retain the preceding complete native section identities; the 737 original plus 557 supplemental assembly file scope remains unchanged.",
       "Alpha.24 selected source delta is exactly CHANGELOG.md, Cargo.lock, Cargo.toml, README.md and the six replacements plus two additions bound by scripts/cockpit-variant-source-migration.json. All current and historical runtime file hashes match that migration. scripts/alpha24-version-source-migration.json and scripts/ci-timeout-source-migration.json bind their exact version-only and world_source_tools timeout-only changes. The complete source-content boundary has 2244 files, with 28 additions, 30 changed records and no removals relative to preceding applicability; no prospective file replacement is used.",
-      "Alpha.24 bounded cockpit provenance and development limits remain in docs/aircraft-cockpit-layouts.md, docs/adr/0034-aircraft-specific-cockpit-layouts.md and docs/qa/aircraft-cockpits-2026-10-10.md. The retained terrain issue 6 and physical-GPU/appearance residuals are not closed by this content review. Final-source authorization, a fresh final-source Windows capture, exact same-build archive checks, extracted Light Single/Swift smoke and the existing component-term UI rules remain independent mandatory delivery checks."
+      "Alpha.24 bounded cockpit provenance and development limits remain in docs/aircraft-cockpit-layouts.md, docs/adr/0034-aircraft-specific-cockpit-layouts.md and docs/qa/aircraft-cockpits-2026-10-10.md. The retained terrain issue 6 and physical-GPU/appearance residuals are not closed by this content review. Final-source authorization, a fresh final-source Windows capture, exact same-build archive checks, extracted Light Single/Swift smoke and the existing component-term UI rules remain independent mandatory delivery checks.",
+      "Alpha.25 genuine bootstrap https://github.com/Xenoah/flightsim-rust/actions/runs/39357521387/job/118415693412; source 0ea01f227dfd552c2d547b2d83949fc06f7c19cd; tree de45083263e31c9cb3093e033f34503736720918. Capture/audit and preparation revalidation succeeded; assembly stopped at old applicability at 2026-10-20T03:05:47Z before archive/extracted smoke. The failure-only projector independently revalidated the original private inputs and uploaded artifact 12237524222. Raw original approval/coverage/runtime flags remain false.",
+      "Alpha.25 direct comparison baseline is the original final alpha.24 ordinary-native-review.json from https://github.com/Xenoah/flightsim-rust/actions/runs/39249808180: 2915397 bytes SHA256 9ca0ca2a8e906a2c71ab9a611c78026dd4cf857731ce1fadaddc0a5dfadd4c64, source 4f385e121addc036c2103d634e2bb46e6392172b, tree 47aed13ca164afcadf3c1201c411fecd00e77cd4. All eleven recomputed baseline section hashes equal the preceding applicability record, 470532 bytes SHA256 dc4006edaaa96f70ee24be0d8d3b648c84af1bed55241a6b516a25d237d0a755. Both native packets remain unchanged; this comparison uses actual prior facts, not reconstructed historical observations.",
+      "Alpha.25 all eight non-source/package/graph complete sections match the actual alpha.24 packet exactly. The complete Microsoft section SHA256 remains 7842eb969fd3335e743242458762456cce166658f69f47f514161231b7f338e0, including every observed file size/hash/status/version, terms candidate and unresolved selection/entitlement/acceptance field. The runner log retains image 20261007.264.1 and the same immutable provider image reference already reviewed for alpha.24. The prior official agreement original and supplier/component conditions retain their historical bindings; no new supplier terms review or agreement acceptance is claimed.",
+      "Alpha.25 package comparison changes only eleven workspace id/version fields and 22 notice directory paths; exact inverse substitution yields the actual preceding package array, SHA256 5dbcefa14f85c873c0562b82cd11b9091a9863b70c41bddea98e624df4f09739. Graph comparison changes only endpoints for those local identities and yields the actual preceding complete graph, SHA256 07dafb54dd542d8a3ff2c204b534e79b2a093e500fbaf6c4aae8c09e2380c7aa. All 1264 ordered normal/build edges also match the independently collected alpha.25 source graph. No edge, target condition, feature or original notice order is waived.",
+      "Alpha.25 selected source comparison has 818 exact path/mode/size/hash records, with seven changes and no additions/removals. Cargo.toml and Cargo.lock are the actual alpha.24 bytes after only one and thirteen project-version substitutions respectively. The three source replacements and retained predecessors match scripts/swift-forward-visibility-source-migration.json exactly: crates/flightsim-render/src/cockpit.rs, crates/flightsim-render/src/cockpit/variants.rs and test-only crates/flightsim-app/src/cockpit_runtime.rs. README.md and CHANGELOG.md supply the remaining two declared documentation changes. No prospective source substitution is used.",
+      "Alpha.25 current dependency review is 1133331 bytes SHA256 29184319f57bcd4f227a76c9eb571fdd8e6c598c499358fdc1af885f3da46c9c. It appends the alpha.24 source amendment unchanged and preserves all earlier native/environment/supplier records. docs/qa/alpha25-dependency-notice-review-2026-10-19.md records the fresh source collection: 359 conservative packages, 347 exact feature memberships, 12 null conservative-only memberships, 735 original notice texts, 510 header records, three embedded dependency assets and 557 unchanged supplemental files. Current raw collector findings remain separate from their existing exact evidence-backed resolutions.",
+      "Alpha.25 full source-content applicability boundary contains 2262 records, with 18 additions, 28 changed records and no removals relative to alpha.24. These include the bounded Swift visibility and version source migrations, retained history, regression tests and preparation documentation. The staged comparison covers all 1321 actual file records, including the independently bound new executable; all other staged changes are only the four declared source/review records and 22 notice directory names. No new aircraft, external asset or native redistributable is admitted.",
+      "Alpha.25 development limits remain in docs/qa/swift-forward-view-2026-10-19.md and docs/qa/alpha25-release-preparation-2026-10-19.md. The historical failed pre-admission run, terrain issue 6, physical-GPU qualification and appearance residuals are not closed by this review. Exact final-source authorization, a fresh final-source Windows run, same-build archive integrity, extracted Light Single/Swift smoke and unchanged component-term UI checks remain independent mandatory delivery gates."
     ],
     "native_runtime_coverage_complete": true,
-    "reason": "The existing conservative complete source-family and notice method is retained with exact genuine alpha.24 facts. All 359 package records match the prepared dependency review on every shared source/licence/feature/provenance field; their original notice lists and all 1320 non-executable staged files match the current source and notice assembly. The package and 1264-edge graph section differences are exactly eleven project version identities and 22 notice-directory names; every notice byte remains exact. All 818 selected source records match the actual bootstrap, with ten changed and two new selected paths: four version/documentation files and the separately reviewed six replacement plus two added project-authored procedural cockpit files. No reference photograph, third-party cockpit mesh, new font, dependency or feature is added. The complete 2244-file applicability source boundary also binds the documented source-admission witnesses, tests and CI-only timeout correction. Seven other complete sections are byte-content equivalent to the preceding conditions: headers, embedded assets, build-script requests, platform, Rust runtime, final-link and query outcomes. The complete Microsoft section differs only at visual_studio_candidates[0].version, from 18.10.12217.157 to 18.10.12224.181. All six linker observations, 24 runtime-library observations, 15 SDK-library observations, vswhere, default-toolset hint and redist.txt records, including hashes, sizes, statuses and file/product versions, remain exact. This is an installation-inventory label change, not a newly observed binary or changed agreement. The official VS2026 agreement is byte-identical to the previously reviewed 67523-byte document, and the exact official stable runner-image record corroborates the new Enterprise product label. The retained licensed-copy and eligible-redistribution conditions and approved component terms/UI remain applicable on their existing conditional basis; no new agreement is accepted and no new entitlement or assent is inferred. Installed candidates remain non-exhaustive; selected linker, toolset/SDK, static members, dynamic module closure, entitlement and applicable terms acceptance remain not established. The final-link command remains not_established/no_matching_command. The conservative source-family/notice route does not assert an exact member map or reconstruct unexported redist.txt text. This coverage is conditional licensing applicability, not Windows dialog execution, runtime or appearance acceptance, recipient assent, physical-GPU qualification or publication. All eleven future native sections must match the actual bootstrap conditions exactly.",
+    "reason": "The existing conservative complete source-family and notice coverage method is retained with exact genuine alpha.25 facts. All 359 package records match the prepared dependency review on every shared source/licence/feature/provenance field; their original notices and all 1320 non-executable staged files match actual current source bytes. Direct comparison with the genuine final alpha.24 packet shows package and 1264-edge graph differences of exactly eleven local project version identities and 22 project notice destinations, with unchanged notice text/order and dependency features. The 818 selected source records have exactly seven changed paths and no additions/removals: Cargo.toml, Cargo.lock, README.md, CHANGELOG.md and the three Swift visibility source files. The production change is limited to the existing Sport centered angle and translation of existing procedural stick assemblies in two render files; the app file adds regression tests only. No new third-party source, asset, font, dependency, physics/replay runtime change or component term is introduced. The complete 2262-file applicability boundary separately binds the source-admission witnesses, tests and documentation. All eight other complete native sections exactly match actual alpha.24 facts: headers, embedded assets, build-script requests, platform, Rust runtime, Microsoft runtime candidates, final-link and query outcomes. In particular, the Enterprise installation label 18.10.12224.181, all six linker records, 24 runtime-library records, 15 SDK-library records, vswhere, default-toolset hint, redist.txt candidate and all known-unknown fields remain identical. Previously reviewed Microsoft component terms/UI and the retained licensed-copy/eligible-file conditions are unchanged. No new agreement is accepted, and hosted entitlement or recipient assent is not inferred. Candidate presence remains non-exhaustive; selected linker/SDK, static contribution/membership, dynamic module closure and applicable terms acceptance remain not established. The final-link command remains not_established/no_matching_command; no exact member map or unexported notice text is invented. This is conditional licensing applicability, not Windows dialog execution, runtime/appearance acceptance, physical-GPU qualification or publication. All eleven future native sections must match these exact bootstrap conditions.",
     "source_provenance_complete": true,
     "unresolved_conditions": []
   },
   "dependency_review": {
-    "bytes": 1122191,
-    "sha256": "fb29e32699f2956b46f92255c94f7402ffa8817ade72c5936f62d79d29acafdd"
+    "bytes": 1133331,
+    "sha256": "29184319f57bcd4f227a76c9eb571fdd8e6c598c499358fdc1af885f3da46c9c"
   },
   "inventory_policy": {
     "allow_encoding_change": true,
@@ -67,28 +75,31 @@
       "All source/native projectors, comparison gates, stage rules and component terms remain byte-identical to the bootstrap. No comparison normalizer, supplier wildcard or source-admission exception was introduced.",
       "Alpha.24 actual ordinary bootstrap https://github.com/Xenoah/flightsim-rust/actions/runs/39225763586/job/117971608065; source de2e4d35ef21cd35c4445d7c6eb8a12bed48fed7; artifact 12177741448 ZIP 417688 bytes SHA256 0f488b08990bb71844f60c0af08c4efc5137054400758a541f0562bf8150bd0c; original one-member native JSON 2995095 bytes SHA256 7270411b3f86998928d4c16f18d8338910526c7522634c09ed44bcbc4016fff7.",
       "Alpha.24 original inventory 407610 bytes SHA256 59d3385ecd3912e87a3eff21362acf870afc37483437fee5b2db1299d0a0c573; original metadata SHA256 64b63da56455bdaed5a3d6e040d13ec9dfc096f6fc479ee00b935b73473c0d65. Captured inventory 407610 bytes SHA256 0a8e710cca51fa441094985f70fbaa80bdb35675437c1035ad55ce66c62eba57; captured metadata SHA256 2f312a43a002f301e644956f016cb7c493d0803a45ea415f430820cca7a2c52e; different_fields is exactly [metadata_sha256], all_other_fields_equal is true, raw_bytes_equal is false, and metadata_difference_cause remains not_established.",
-      "Alpha.24 all 359 original package notice lists and 1320 non-executable staged files match current inventory/repository bytes exactly. All 1264 ordered normal/build edges equal the independently collected alpha.24 source graph. The genuine exported content_view was recomputed with the unmodified projector; no raw facts, approval flags, original inventory or private build evidence were rewritten."
+      "Alpha.24 all 359 original package notice lists and 1320 non-executable staged files match current inventory/repository bytes exactly. All 1264 ordered normal/build edges equal the independently collected alpha.24 source graph. The genuine exported content_view was recomputed with the unmodified projector; no raw facts, approval flags, original inventory or private build evidence were rewritten.",
+      "Alpha.25 actual ordinary bootstrap https://github.com/Xenoah/flightsim-rust/actions/runs/39357521387/job/118415693412; source 0ea01f227dfd552c2d547b2d83949fc06f7c19cd; artifact 12237524222 ZIP 417700 bytes SHA256 7b10721ebbccb4593e5f587a4c133152c150a34e6824b02d04a9af3d2fb129f7; its sole native JSON member is 2995101 bytes SHA256 c69983de4a4ad7f078cb5fb2d54f773049166690f61534f8d95da3becc16273e.",
+      "Alpha.25 original inventory 407610 bytes SHA256 f5d6ddd9ef0827544135912ae46d3a6901d8de3911039f7cfb835947c9eec735; original metadata SHA256 8fbc9a2952e57830c09671ca22e32c6cdd0e11c5bc8d44ffcd6e95fd3b9deb0e. Captured inventory 407610 bytes SHA256 e316ba541063804957dd8e394dc229622c0d2b07681ebf101811b200fa3e63e2; captured metadata SHA256 d2c9ef9a89b46a8d16019f7daa39d73936fe3827724f5e1315d95f34a7e819da. different_fields is exactly [metadata_sha256], all_other_fields_equal is true, raw_bytes_equal is false, and metadata_difference_cause is not_established.",
+      "Alpha.25 all 359 original package notice lists and all 1320 non-executable staged records match actual source/notice bytes. Direct comparison of both genuine native packets preserves the entire shipped path set after the 22 project notice-directory substitutions. Only README.md, CHANGELOG.md, the dependency review, the original inventory and the genuine changed executable records differ; all original/supplemental notice texts and component terms remain exact. Both exported content views were independently recomputed using the unchanged projector."
     ],
-    "rationale": "Retain the existing bounded inventory policy and unchanged compare_inventories/compare_notices gates. Actual alpha.24 Windows original and captured inventories are each 407610 bytes and differ semantically only in metadata_sha256; all_other_fields_equal is true and metadata_difference_cause remains not_established. No host-path or other cause is inferred from this packet. A future raw-byte or metadata digest difference is permitted only when every other complete semantic field, all exact original notices and every independently projected native/source/runtime condition match this separately reviewed record. No additional comparison exception is introduced."
+    "rationale": "Retain the bounded inventory policy and unchanged compare_inventories/compare_notices gates. Actual alpha.25 Windows original and captured inventories are each 407610 bytes and differ semantically only in metadata_sha256; all_other_fields_equal is true and metadata_difference_cause remains not_established. No host-path or other cause is inferred from this packet. A future raw-byte or metadata digest difference is permitted only when every other complete semantic field, exact original notice and independently projected native/source/runtime condition matches this separately reviewed record. No additional exception is introduced."
   },
   "kind": "ordinary_full_content_applicability_review_v1",
   "native_content_sha256": {
     "build_script_link_requests": "3db73479a1de2392f7251cd52e3bac6f315ed51e7dfb8b4d001c65c04b0c7aea",
     "embedded_assets": "3c823a7b2a6a5f76e4a920d193a8a728014ada3653737aff3963125baadc09f2",
-    "graph": "07dafb54dd542d8a3ff2c204b534e79b2a093e500fbaf6c4aae8c09e2380c7aa",
+    "graph": "81700731e7182d73dfd54113082324521d3da5a2be3e5013428c9bbfc297eaae",
     "headers": "54aaffc8f90605821ecd8fc7c31014cdc0078e476eb14f290951b57c5640a129",
-    "packages": "5dbcefa14f85c873c0562b82cd11b9091a9863b70c41bddea98e624df4f09739",
+    "packages": "4d5208b624ad4832ad51460e0848457d08de166ec0882725aec12d0f791337f4",
     "platform": "2157b535feb765816189abab97314dc2feee7ffe069bdcc746f6c6ede737ebea",
     "runtime_final_link": "94899dd1bed2e7383fa4b501bb4f7c4b10c3118bac53ae85e284a988a3df1d97",
     "runtime_microsoft": "7842eb969fd3335e743242458762456cce166658f69f47f514161231b7f338e0",
     "runtime_query_outcomes": "e03f8eed69168d57f9f765ec39661fd067c8652bb416274328ec5c672d8be0fb",
     "runtime_rust": "f886a1927b6b10e2731c880f5e4870d496d9d776455769ade98e7cdcce3ec431",
-    "source": "7e53dd5a9677ee2ea587cef4a82e4c6d0d7610ae8b504ef50fbfa86a77989eaa"
+    "source": "cf42b13f8d1f4752879b73829296e70499a0a32d440da3e017c681c120fb45ca"
   },
-  "reviewed_at": "2026-10-19T09:53:00Z",
-  "reviewed_by": "OpenAI assistant; substantive bounded alpha.24 source, native-content and exact Microsoft installation-label applicability review",
+  "reviewed_at": "2026-10-20T03:14:00Z",
+  "reviewed_by": "OpenAI assistant; substantive bounded alpha.25 source/native comparison against actual final alpha.24 facts and unchanged supplier conditions",
   "schema_version": 1,
-  "scope": "Exact alpha.24 source/native conditions from genuine ordinary Windows Release run 39225763586, job 117971608065, source de2e4d35ef21cd35c4445d7c6eb8a12bed48fed7 and tree e539130259ec717f1b3cf92605e6bf827e823942. All eleven complete native sections are compared with the preceding reviewed conditions, which are independently corroborated by the published alpha.23 ordinary release evidence. The unavailable historical raw native packet is not reconstructed as an observation; strict inverse comparison witnesses establish only the bounded current differences. Every future native section must match the exact new observations; there is no prospective source substitution, new normalizer or supplier wildcard. Historical evidence entries retain their original referents. This is conditional source/notice/licensing applicability, not runtime or appearance acceptance, legal assent, hosted-product entitlement, archive verification or publication authority.",
+  "scope": "Exact alpha.25 source/native conditions from genuine ordinary Windows Release run 39357521387, job 118415693412, source 0ea01f227dfd552c2d547b2d83949fc06f7c19cd and tree de45083263e31c9cb3093e033f34503736720918. All eleven complete sections are compared directly against the original final alpha.24 native packet from Release run 39249808180. Eight sections match exactly; the complete source/package/graph differences are limited to the separately reviewed Swift visibility and alpha.25 source amendment. All future sections must match the exact new conditions; no normalizer, supplier wildcard or prospective source substitution is added. Historical evidence entries keep their original referents. This is conditional source/notice/licensing applicability, not legal assent, hosted-product entitlement, runtime or appearance acceptance, archive verification or publication authority.",
   "source_content_files": [
     {
       "bytes": 3012,
@@ -181,9 +192,9 @@
       "sha256": "d578ebc07ab6d70dd42811f550426f1cb9959078bd83719b22df64480f3617ab"
     },
     {
-      "bytes": 45629,
+      "bytes": 45944,
       "path": "ARCHITECTURE.md",
-      "sha256": "3ceb9a6da56d71d10da582b3cc903ef54c497f10e80d0e9e9fcf3f470ccd6b19"
+      "sha256": "22613184d05b9786f16d43f8819801f46e467c44589fac33c3c92920d3a40a26"
     },
     {
       "bytes": 15009,
@@ -191,9 +202,9 @@
       "sha256": "30991a2bb5b8fb907302be18cfe10f1e645505c1029a58ddb610d67f3629cd4d"
     },
     {
-      "bytes": 99180,
+      "bytes": 100315,
       "path": "CHANGELOG.md",
-      "sha256": "3a4edec1055468776e246a42d3196421332e06c3908b3d4635ade1e41d9024f0"
+      "sha256": "964e2559041a4fb9af10292d9142c4bc747720cd10cd621daef7824a1a369b99"
     },
     {
       "bytes": 6368,
@@ -203,12 +214,12 @@
     {
       "bytes": 154591,
       "path": "Cargo.lock",
-      "sha256": "020ffeba85f07d14d69bbaad8bba2a8e6be943fde97dd559524ca72937a54359"
+      "sha256": "f2d1cb82a6a292afa0f6289fbcf235f492ab1579a50246ed99323e9994cfcab1"
     },
     {
       "bytes": 5018,
       "path": "Cargo.toml",
-      "sha256": "dab096b8af04872a32fe59c2875b791790ed947ab38fd4ddee763dc071417172"
+      "sha256": "d73e043a71ed4bccaae07dbbd0e7b4573392e70b05ef09a4a04a6e5f3e4b71ab"
     },
     {
       "bytes": 11359,
@@ -223,7 +234,7 @@
     {
       "bytes": 31541,
       "path": "README.md",
-      "sha256": "034934441e4a705d960c2454513bb16cf1d2f3c833445e4ef32be33843c4b9e6"
+      "sha256": "21b55d0e091717f0ba788ba50bc942f6c36f9f7330a26f5fac9dfee2078e7de7"
     },
     {
       "bytes": 115,
@@ -361,9 +372,9 @@
       "sha256": "f6c4a90ba9041aecb5deedd855826690789e85fc8e3caddf40f5659e181418af"
     },
     {
-      "bytes": 42039,
+      "bytes": 46754,
       "path": "crates/flightsim-app/src/cockpit_runtime.rs",
-      "sha256": "f88145f0f12a197d25d9daf9f881b48d1f98ddfdc9e4a167ef0958548e470546"
+      "sha256": "b2deef28dc41a9fac0a9530fcfa18097ec5498c6f7e736b11116db0883b7acf6"
     },
     {
       "bytes": 20585,
@@ -1181,9 +1192,9 @@
       "sha256": "42d85141ba4a9a6686120a2c49a4d87e637cd6aa131db5a773de73e7be62096c"
     },
     {
-      "bytes": 41155,
+      "bytes": 41502,
       "path": "crates/flightsim-render/src/cockpit.rs",
-      "sha256": "f3876b27ddfb9ca4195fa6d34436346ca0bd41a3aa361855030c9c8badccffab"
+      "sha256": "6388e9158f46e70d99a5f97dae6ac455044ce46faf2e4eb80bd8295c38c36a32"
     },
     {
       "bytes": 21905,
@@ -1191,9 +1202,9 @@
       "sha256": "8ebd457e898a5d6f5cbf0002b3ca418d276101a7386928f293d6337630749668"
     },
     {
-      "bytes": 9789,
+      "bytes": 13760,
       "path": "crates/flightsim-render/src/cockpit/variants.rs",
-      "sha256": "8a9576b7e129529c15e602ff52fcc98b57c62b9a0d999d6fb7954f4a51c3544d"
+      "sha256": "5ae63c905bd09adba5f3dc564086b4dd1f513292a1cef3cd8bf57d75fb1b585f"
     },
     {
       "bytes": 29300,
@@ -2801,9 +2812,9 @@
       "sha256": "77115cd0fae6cd372254c4a14bc6390673c041103cb93c4c9b0653016bb1fa5f"
     },
     {
-      "bytes": 15528,
+      "bytes": 15823,
       "path": "docs/ROADMAP.md",
-      "sha256": "e15e86657cba833630e4a76689c84dde62b8a74381f123e335c18ac15902bbdb"
+      "sha256": "d06c1d50b48eefe272c20c58097eccb61940101cfd7f32bd5ab322d02544bf8e"
     },
     {
       "bytes": 3552,
@@ -2976,9 +2987,9 @@
       "sha256": "59887ad224929fc49a3c392d7780bf4c2713a57ac5a139efa45bb1a5b09b50b1"
     },
     {
-      "bytes": 6023,
+      "bytes": 6169,
       "path": "docs/aircraft-cockpit-layouts.md",
-      "sha256": "6489414206b0ebbae00fd8fefa5dd5ebe8d929f2e633c1b3854a3982224fe114"
+      "sha256": "b321fffbb1b2cf80d3c82e9a246766d5843dbf52a7e756bfc600e827601fccfa"
     },
     {
       "bytes": 12171,
@@ -3324,6 +3335,16 @@
       "bytes": 7531,
       "path": "docs/qa/alpha24-dependency-notice-review-2026-10-19.md",
       "sha256": "a2fa1cfc3dee81571de3f68227a95910c7e6d8e05928b4c9983ef9faebda01d0"
+    },
+    {
+      "bytes": 7681,
+      "path": "docs/qa/alpha25-dependency-notice-review-2026-10-19.md",
+      "sha256": "044867537ec7c180e56bfd1dcfaa9a929d5c161790c3f2cadca4f5cce93d620d"
+    },
+    {
+      "bytes": 4257,
+      "path": "docs/qa/alpha25-release-preparation-2026-10-19.md",
+      "sha256": "c1d705bead086af17363f6981004b2b81a64f0d6b452429fa41bb307e6edf11e"
     },
     {
       "bytes": 8031,
@@ -3986,6 +4007,11 @@
       "sha256": "417401b7e86ea201a642250a9b50012fc99ec04e64552eb7b391ae3f604e5b6f"
     },
     {
+      "bytes": 9445,
+      "path": "docs/qa/swift-forward-view-2026-10-19.md",
+      "sha256": "22c1ba3672bf73b2df1dbe9f45f7f021a447839c5b0dd8605e7594deba650189"
+    },
+    {
       "bytes": 3479,
       "path": "docs/qa/terrain-centroid-source-bindings-2026-10-09.md",
       "sha256": "674a0545ab263cb981374e0b1aa82838daa78bdc845582ace47d8956f41e5cf7"
@@ -4241,9 +4267,9 @@
       "sha256": "f81530196892e82b9181cbe9f09ed54b46db0a0a20d9f348ecd5583f4fe41613"
     },
     {
-      "bytes": 21543,
+      "bytes": 27999,
       "path": "docs/release/full-two-aircraft-source-admission.md",
-      "sha256": "92bf6dba88f0f70df4a58b5601a561bc8b2151b76734fc2d95013aa9e5364806"
+      "sha256": "0517a73c75b1b7a7685b547b2dde20c9e88240d1bfca865f28bad1400e459262"
     },
     {
       "bytes": 6564,
@@ -8786,9 +8812,9 @@
       "sha256": "3d75c3a1adab0b8837cc2414f427e0b221c6da2c35d514f017f3e408937a4246"
     },
     {
-      "bytes": 5007,
+      "bytes": 5224,
       "path": "docs/release/windows-component-release-notes.md",
-      "sha256": "8982c8ca8cfc873e27032b1ae953b851786f42816aaa96b6132925aef19d44e6"
+      "sha256": "2f55964cc5387f680c9a86a9f7e1db364240ea9def4671056aceb8dc6ca23ead"
     },
     {
       "bytes": 20798,
@@ -8921,14 +8947,19 @@
       "sha256": "f1e143dbc9d4bc1083c7e1cd8b9dc0828ae998b2564338081f2c6ffc74b7a6fb"
     },
     {
-      "bytes": 1245,
-      "path": "scripts/analytical-swift-capture-contract.json",
-      "sha256": "e66a41ae72795d2f59cfd9f1b86415f72ea489adf52d9dbd4c0680f149f27b2a"
+      "bytes": 1586,
+      "path": "scripts/alpha25-version-source-migration.json",
+      "sha256": "c91eb21cb2cea615deee5116aabf82229274f56127f189564923fb4055dc80e4"
     },
     {
-      "bytes": 7702,
+      "bytes": 1242,
+      "path": "scripts/analytical-swift-capture-contract.json",
+      "sha256": "6555feec0f4eee029663225f539e966b930cc3b3ee63bba8a802bc5825918e3f"
+    },
+    {
+      "bytes": 7968,
       "path": "scripts/analytical-swift-source-contract.json",
-      "sha256": "b4d36a1a19dbad3409c277b403f7acc3aeea615f8ef7f14323298cbcfa901c8b"
+      "sha256": "ce0cbf66aa5786f6617d66490641d0247c095d3d7553ff1dc6d2364d44579832"
     },
     {
       "bytes": 12884,
@@ -8941,9 +8972,9 @@
       "sha256": "55c672930407d8c232ae2ceb7400573116ce0d589e5068b087be9a638d4d86a2"
     },
     {
-      "bytes": 35683,
+      "bytes": 35680,
       "path": "scripts/capture-analytical-swift-msvc.py",
-      "sha256": "b3a2d0ac4e838a75a972ec0d7b9ab86d4622c73713465e290406e74b6547568c"
+      "sha256": "d8687b66f00567d1b5cd8b086fde75109b8035b69012d0a1967b522605177057"
     },
     {
       "bytes": 29338,
@@ -8956,9 +8987,9 @@
       "sha256": "03160d04cb0f1bb112b13eddb1173da51b397ddb4b06c70b8f4ecb18a8582f60"
     },
     {
-      "bytes": 35782,
+      "bytes": 41780,
       "path": "scripts/check-analytical-swift-recipe.py",
-      "sha256": "1f3dff44e842ad01def7895af02f1fc36838d3da4e20566770f83afac896e667"
+      "sha256": "ab50e31762145c666e0a5eebdae46c1bac69cd3527e20376dc6db56beb516145"
     },
     {
       "bytes": 9256,
@@ -8991,9 +9022,9 @@
       "sha256": "2571dd7f952d45d18f22859d118738604c8beec9aae04cba78f277c8e0940b41"
     },
     {
-      "bytes": 218070,
+      "bytes": 236857,
       "path": "scripts/check-swift-windows-candidate.py",
-      "sha256": "02a32cf141050224db82eb60d079b1afb5fbce8941623de79bd9f14825e08c43"
+      "sha256": "56e3bcd0e11912bf13c38016cef0c0eb8f5ba2a132b604dd6ae6c8b300961d2b"
     },
     {
       "bytes": 29248,
@@ -9081,6 +9112,36 @@
       "sha256": "160cc900acbb0029452c4175fee9ba24bc26611ce41faaa57a97a8426b97811a"
     },
     {
+      "bytes": 1245,
+      "path": "scripts/history/4f385e1-analytical-swift-capture-contract.json",
+      "sha256": "e66a41ae72795d2f59cfd9f1b86415f72ea489adf52d9dbd4c0680f149f27b2a"
+    },
+    {
+      "bytes": 7702,
+      "path": "scripts/history/4f385e1-analytical-swift-source-contract.json",
+      "sha256": "b4d36a1a19dbad3409c277b403f7acc3aeea615f8ef7f14323298cbcfa901c8b"
+    },
+    {
+      "bytes": 9789,
+      "path": "scripts/history/4f385e1-cockpit-variants.rs",
+      "sha256": "8a9576b7e129529c15e602ff52fcc98b57c62b9a0d999d6fb7954f4a51c3544d"
+    },
+    {
+      "bytes": 41155,
+      "path": "scripts/history/4f385e1-cockpit.rs",
+      "sha256": "f3876b27ddfb9ca4195fa6d34436346ca0bd41a3aa361855030c9c8badccffab"
+    },
+    {
+      "bytes": 42039,
+      "path": "scripts/history/4f385e1-cockpit_runtime.rs",
+      "sha256": "f88145f0f12a197d25d9daf9f881b48d1f98ddfdc9e4a167ef0958548e470546"
+    },
+    {
+      "bytes": 122544,
+      "path": "scripts/history/4f385e1-replay-candidate-contract.json",
+      "sha256": "6af285ec28f56a8e1065c2918cd2751643121bbfb416145633aa2c3aea132e2f"
+    },
+    {
       "bytes": 116933,
       "path": "scripts/history/5eaaff3-replay-candidate-contract.json",
       "sha256": "1b72efcc010124b0a02708f0c4b75c07c79a272e352ac697b71934fc9aa20869"
@@ -9094,6 +9155,31 @@
       "bytes": 30342,
       "path": "scripts/history/5eaaff3-terrain_seam_geometry.rs",
       "sha256": "a88108b3c2e7dedb5d483d4578101d7e37f90b3d6cab0ec71e18aa51f2be929f"
+    },
+    {
+      "bytes": 154591,
+      "path": "scripts/history/754bad8-Cargo.lock",
+      "sha256": "020ffeba85f07d14d69bbaad8bba2a8e6be943fde97dd559524ca72937a54359"
+    },
+    {
+      "bytes": 5018,
+      "path": "scripts/history/754bad8-Cargo.toml",
+      "sha256": "dab096b8af04872a32fe59c2875b791790ed947ab38fd4ddee763dc071417172"
+    },
+    {
+      "bytes": 1245,
+      "path": "scripts/history/754bad8-analytical-swift-capture-contract.json",
+      "sha256": "4e8d797086bf34920ca9e8ae26c85ecdd532ec1308c32cca221afd748d6aba97"
+    },
+    {
+      "bytes": 7841,
+      "path": "scripts/history/754bad8-analytical-swift-source-contract.json",
+      "sha256": "6fb835000bf14e78362f273a683ad4ed7af2983415ff20021beff3d9b8dcc302"
+    },
+    {
+      "bytes": 123435,
+      "path": "scripts/history/754bad8-replay-candidate-contract.json",
+      "sha256": "5a969193079991cb94250995e69fb0428afff950d3f5a8971412f681ae1f025c"
     },
     {
       "bytes": 154591,
@@ -9316,14 +9402,19 @@
       "sha256": "f263d8b13f7311edf398b8c0b96f6090fdde5a705e996c2cbcdb553633710ac2"
     },
     {
-      "bytes": 122544,
+      "bytes": 124172,
       "path": "scripts/replay-candidate-contract.json",
-      "sha256": "6af285ec28f56a8e1065c2918cd2751643121bbfb416145633aa2c3aea132e2f"
+      "sha256": "ffd668f2694693bad555cf56761b3a60be751469bfd2228551f523bcd4bcabaa"
     },
     {
       "bytes": 14432,
       "path": "scripts/stage-commercial-candidate.py",
       "sha256": "376c506e37e2004624fe7e5b02eddae7881b6b2a884081ebf110d6c57cbf532d"
+    },
+    {
+      "bytes": 2167,
+      "path": "scripts/swift-forward-visibility-source-migration.json",
+      "sha256": "6bf34c0ddc0e9bf76f8a9717092e51c16d7f168379682dcfef6b40364a5d401d"
     },
     {
       "bytes": 2303,
@@ -9363,12 +9454,17 @@
     {
       "bytes": 11918,
       "path": "scripts/tests/test_alpha23_version_source_admission.py",
-      "sha256": "ad87cd7d3c00bd87d16340905e8b8c30d89bdf67c2d0a5e76e5f38fe82fefe30"
+      "sha256": "ed22cab21b07192123d89d7c5b67856b1ebd9169c3630d817b9104906a236c99"
     },
     {
-      "bytes": 11737,
+      "bytes": 11985,
       "path": "scripts/tests/test_alpha24_version_source_admission.py",
-      "sha256": "125461f5bb0e6cd44d307e5c7826097237c626bfcafd69ec58c327bebc7d54d9"
+      "sha256": "17632cc550858a9de299acf892cf1b1d506c240f9bf448c8cb88b210a2774e7d"
+    },
+    {
+      "bytes": 14573,
+      "path": "scripts/tests/test_alpha25_version_source_admission.py",
+      "sha256": "90324d5bb63db5e324dcb58ca3a083c164e748ef871110a884a163d86d94728c"
     },
     {
       "bytes": 31660,
@@ -9403,7 +9499,7 @@
     {
       "bytes": 31135,
       "path": "scripts/tests/test_analytical_swift_recipe.py",
-      "sha256": "b6d2f28590928950f5f2e0fc3b1f2897c5bc2f3a5d84a5c1eb63eefc79dd0288"
+      "sha256": "7a8c8d57240e2769c64482088f970eb23f3fc0b545d6ee4be42c9a0dd1e5daeb"
     },
     {
       "bytes": 3489,
@@ -9431,9 +9527,9 @@
       "sha256": "a4e27e562b2a0d328d7465cd72daddc9d20f38f0529aabbd18a647f6b131350e"
     },
     {
-      "bytes": 9159,
+      "bytes": 9274,
       "path": "scripts/tests/test_ci_timeout_source_admission.py",
-      "sha256": "cd52bc7fe0a0b76c9e78488ab0e27dac15e2aa6b1fd7ea29c98d8bdf8647c8a4"
+      "sha256": "06d5b721e4931ab62c1d73fa275679e3ffb653241ea897dde3fc352c0283ef93"
     },
     {
       "bytes": 15996,
@@ -9443,12 +9539,12 @@
     {
       "bytes": 13442,
       "path": "scripts/tests/test_cockpit_source_admission.py",
-      "sha256": "d6f567f068fa6d7343b4c29cb845547da26900211423bc2fee27e82765b25753"
+      "sha256": "f9d9c02b52fb6755f80c24ae8b417342cbe4357640da5c4530aa5e1bff5f2ec6"
     },
     {
-      "bytes": 25708,
+      "bytes": 25940,
       "path": "scripts/tests/test_cockpit_variant_source_admission.py",
-      "sha256": "651472a46207580c2e95d23b19450afc0cdd3a98d8aef449fdd110a4215a9151"
+      "sha256": "4ce9e2b5375a733e13033a03561df3a73b57f0215ed3ac6c5bc4342a7721e126"
     },
     {
       "bytes": 21918,
@@ -9461,9 +9557,9 @@
       "sha256": "242abde499c7a53be617a8cf56d35312e782ea7005a5482d2af93002803c9a86"
     },
     {
-      "bytes": 10362,
+      "bytes": 10356,
       "path": "scripts/tests/test_component_terms_source_admission.py",
-      "sha256": "2a991028471604f420ef75ea4a398b7dac5e363179cf9c523ada7fc612a2cf2a"
+      "sha256": "fa907aab92a850db4a94e68b1c28e6f573a79af81c123df7013edfc9feff33e2"
     },
     {
       "bytes": 6156,
@@ -9478,7 +9574,7 @@
     {
       "bytes": 14571,
       "path": "scripts/tests/test_full_source_admission.py",
-      "sha256": "13c536e9a1adc899abc45b6de1675c89eae8099e299ce62523ec9792b0dc7373"
+      "sha256": "9c52524a192b6bfb43c771200a6ed0aa0a6b25f0f7fb921e50837019db2e9e78"
     },
     {
       "bytes": 5645,
@@ -9536,9 +9632,14 @@
       "sha256": "5ced2abb592958b82e3941d658e073bce4fcb0853ad0fea421405212975d6ecd"
     },
     {
-      "bytes": 228680,
+      "bytes": 14336,
+      "path": "scripts/tests/test_swift_forward_visibility_source_admission.py",
+      "sha256": "dfb65de5dd70fe1b9719edd55a8cd49f65ae5b1c4c207e6acd545360de6d3eb5"
+    },
+    {
+      "bytes": 228752,
       "path": "scripts/tests/test_swift_windows_candidate.py",
-      "sha256": "08d2e07e3653f1e352fd611555e432904fe333d314a1e707ef38bbc4e7827e89"
+      "sha256": "0eb7e8b87a6e0c403099115cd7563444fdd0e7ca94e742772693397e16014b93"
     },
     {
       "bytes": 8879,
@@ -9548,7 +9649,7 @@
     {
       "bytes": 9696,
       "path": "scripts/tests/test_terrain_stitch_source_admission.py",
-      "sha256": "d572df3bdcdbbca6d50ba1de0ae7d0b572d6d55242d000fbb669f5c9f800e840"
+      "sha256": "a755c5f6551889d32403f2799cdd90710ae6b8da05e289f0303a418692b0900b"
     },
     {
       "bytes": 38135,
