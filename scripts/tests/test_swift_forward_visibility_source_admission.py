@@ -61,7 +61,7 @@ class SwiftForwardVisibilitySourceAdmissionTests(unittest.TestCase):
         for path, expected in previous['source_sha256'].items():
             historical = RELOCATIONS.get(path, path)
             self.assertEqual(current['source_sha256'][historical], expected, path)
-            self.assertEqual(candidate.digest(ROOT / candidate.ALPHA25_HISTORICAL_RELOCATIONS.get(historical, historical)), expected, path)
+            self.assertEqual(candidate.digest(ROOT / candidate.CHASE_HUD_HISTORICAL_RELOCATIONS.get(historical, candidate.ALPHA25_HISTORICAL_RELOCATIONS.get(historical, historical))), expected, path)
         for path in CHANGED:
             self.assertEqual(candidate.SWIFT_FORWARD_CURRENT_SHA256[path], candidate.digest(ROOT / path))
         self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 499)
@@ -69,9 +69,9 @@ class SwiftForwardVisibilitySourceAdmissionTests(unittest.TestCase):
         frozen = json.loads((ROOT / candidate.PRESERVED_RUNTIME_PATH).read_text())['source_sha256']
         self.assertEqual(len(frozen), 497)
         for path, expected in frozen.items():
-            historical = candidate.CURRENT_HISTORICAL_RUNTIME_RELOCATIONS.get(path, path)
+            historical = candidate.ALPHA25_HISTORICAL_RUNTIME_RELOCATIONS.get(path, path)
             self.assertEqual(current['source_sha256'][historical], expected)
-        self.assertEqual(len(check.SOURCE_PATHS), 63)
+        self.assertEqual(len(check.SOURCE_PATHS), 64)
         self.assertEqual(len(capture.BOUND_FILES), 4)
         self.assertIs(current['release_authorized'], False)
 

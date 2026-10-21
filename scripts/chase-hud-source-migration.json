@@ -1,0 +1,42 @@
+{
+  "added_source_sha256": {},
+  "base_contract_sha256": {
+    "scripts/history/5082b772-analytical-swift-capture-contract.json": "6555feec0f4eee029663225f539e966b930cc3b3ee63bba8a802bc5825918e3f",
+    "scripts/history/5082b772-analytical-swift-source-contract.json": "ce0cbf66aa5786f6617d66490641d0247c095d3d7553ff1dc6d2364d44579832",
+    "scripts/history/5082b772-replay-candidate-contract.json": "ffd668f2694693bad555cf56761b3a60be751469bfd2228551f523bcd4bcabaa"
+  },
+  "base_source": "5082b772c6f2d220377c1031aaa91a0e96c5aec1",
+  "base_source_kind": "published-commit",
+  "base_source_status": "released-alpha25-parent",
+  "base_tree": "3ae086914700566031427f45be0f4d17acc619c1",
+  "historical_relocations": {
+    "crates/flightsim-ui/src/lib.rs": "scripts/history/5082b772-ui-lib.rs",
+    "crates/flightsim-ui/src/pause.rs": "scripts/history/5082b772-ui-pause.rs",
+    "crates/flightsim-ui/src/top_layout_tests.rs": "scripts/history/5082b772-ui-top_layout_tests.rs",
+    "crates/flightsim-ui/src/traffic.rs": "scripts/history/5082b772-ui-traffic.rs"
+  },
+  "identity": "full-two-aircraft-chase-hud-source-migration-v1",
+  "preserved_runtime_sha256": "c9b71ddad46396b3b6ba8961a17f8323a28788f3c641e51f5c47098846653667",
+  "previous_source_migration_sha256": "c91eb21cb2cea615deee5116aabf82229274f56127f189564923fb4055dc80e4",
+  "release_authorized": false,
+  "replaced_source_sha256": {
+    "crates/flightsim-ui/src/lib.rs": {
+      "previous_sha256": "407dcde6c93239ec7ef85e293fbb7b88244756b905d93fb66e4b4ec2b6927855",
+      "sha256": "5564400d5782f38cc814a40efbd0ee590b0ae578dbfce8311167d8e34914823d"
+    },
+    "crates/flightsim-ui/src/pause.rs": {
+      "previous_sha256": "26c1e49134f49b4d3fb96fc936027732d4891440bbbf588c961d384e499c5f84",
+      "sha256": "9c9a524039ed8fe8e405994ab6b7b9377448ac309c2484307c61a22b7c38480f"
+    },
+    "crates/flightsim-ui/src/top_layout_tests.rs": {
+      "previous_sha256": "76bca4fb6db1747775076dafdb9e20cdd1f0e7b25376b43a3e4519c22c6d7199",
+      "sha256": "cd981c5f1f2703600f5de0f0f4aab8d4485a821e950049ab8873db21079aa57d"
+    },
+    "crates/flightsim-ui/src/traffic.rs": {
+      "previous_sha256": "d609a78fe452c41c70a7f45037a697c322c3cdf98e36815c3339175dadde9167",
+      "sha256": "076e2d85c295305774a5f64a8d613bda7d4a35a52c5fc3cee2c9809c115c15d6"
+    }
+  },
+  "schema_version": 1,
+  "scope": "source-only; native, whole-target and publication gates remain unqualified"
+}

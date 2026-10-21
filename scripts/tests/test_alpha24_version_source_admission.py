@@ -58,7 +58,7 @@ class Alpha24VersionSourceAdmissionTests(unittest.TestCase):
         for path, expected in base['source_sha256'].items():
             historical = RELOCATIONS.get(path, path)
             self.assertEqual(contract['source_sha256'][historical], expected, path)
-            self.assertEqual(candidate.digest(ROOT / candidate.SWIFT_FORWARD_HISTORICAL_RELOCATIONS.get(historical, historical)), expected, path)
+            self.assertEqual(candidate.digest(ROOT / candidate.CHASE_HUD_HISTORICAL_RELOCATIONS.get(historical, candidate.SWIFT_FORWARD_HISTORICAL_RELOCATIONS.get(historical, historical))), expected, path)
         for path, expected in candidate.ALPHA24_BASE_CONTRACT_HASHES.items():
             self.assertEqual(candidate.digest(ROOT / path), expected)
         for path in CHANGED:
@@ -71,7 +71,7 @@ class Alpha24VersionSourceAdmissionTests(unittest.TestCase):
         self.assertEqual(len(candidate.ALPHA24_SOURCE_PATHS), 6)
         self.assertEqual(len(candidate.ALPHA24_WORKSPACE_PACKAGES), 13)
         self.assertEqual(candidate.ALPHA24_WORKSPACE_PACKAGES, candidate.ALPHA23_WORKSPACE_PACKAGES)
-        self.assertEqual(len(capture.check.SOURCE_PATHS), 63)
+        self.assertEqual(len(capture.check.SOURCE_PATHS), 64)
         self.assertEqual(len(capture.BOUND_FILES), 4)
         self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 499)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)

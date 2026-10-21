@@ -36,7 +36,8 @@ class Alpha25VersionSourceAdmissionTests(unittest.TestCase):
                 {path: (ROOT / path).read_bytes() for path in CHANGED})
 
     def test_exact_two_file_transition_preserves_all_981_prior_pins(self):
-        contract = candidate.load_replay_contract(ROOT)
+        contract = json.loads((ROOT / candidate.CHASE_HUD_BASE_CONTRACT_PATH).read_text())
+        candidate.validate_alpha25_replay_contract(contract)
         base = json.loads((ROOT / candidate.ALPHA25_BASE_CONTRACT_PATH).read_text())
         migration = json.loads((ROOT / candidate.ALPHA25_MIGRATION_PATH).read_text())
         self.assertEqual(candidate.ALPHA25_SOURCE_PATHS, ADDED)
@@ -57,7 +58,7 @@ class Alpha25VersionSourceAdmissionTests(unittest.TestCase):
         for path, expected in base['source_sha256'].items():
             historical = RELOCATIONS.get(path, path)
             self.assertEqual(contract['source_sha256'][historical], expected, path)
-            self.assertEqual(candidate.digest(ROOT / historical), expected, path)
+            self.assertEqual(candidate.digest(ROOT / candidate.CHASE_HUD_HISTORICAL_RELOCATIONS.get(historical, historical)), expected, path)
         for path, expected in candidate.ALPHA25_BASE_CONTRACT_HASHES.items():
             self.assertEqual(candidate.digest(ROOT / path), expected)
         for path in CHANGED:
@@ -70,7 +71,7 @@ class Alpha25VersionSourceAdmissionTests(unittest.TestCase):
         self.assertEqual(len(candidate.ALPHA25_SOURCE_PATHS), 6)
         self.assertEqual(len(candidate.ALPHA25_WORKSPACE_PACKAGES), 13)
         self.assertEqual(candidate.ALPHA25_WORKSPACE_PACKAGES, candidate.ALPHA24_WORKSPACE_PACKAGES)
-        self.assertEqual(len(capture.check.SOURCE_PATHS), 63)
+        self.assertEqual(len(capture.check.SOURCE_PATHS), 64)
         self.assertEqual(len(capture.BOUND_FILES), 4)
         self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 499)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)
@@ -197,7 +198,7 @@ class Alpha25VersionSourceAdmissionTests(unittest.TestCase):
     def test_analytical_successor_preserves_frozen_62_input_proof(self):
         check = capture.check
         previous = json.loads((ROOT / check.ALPHA25_BASE_CONTRACT_PATH).read_text())
-        current = json.loads((ROOT / check.CONTRACT).read_text())
+        current = json.loads((ROOT / check.CHASE_HUD_BASE_CONTRACT_PATH).read_text())
         check.validate_swift_forward_admission(ROOT, previous['source_sha256'])
         check.validate_alpha25_admission(ROOT, current['source_sha256'])
         self.assertEqual(len(previous['source_sha256']), 62)

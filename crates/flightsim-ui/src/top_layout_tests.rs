@@ -56,10 +56,13 @@ fn layout_app(size: UVec2, state: HudState, status: ReplayStatus) -> App {
     .init_resource::<TutorialVisibility>()
     .init_resource::<Paused>()
     .init_resource::<CrashNotice>()
+    .init_resource::<TrafficPanel>()
+    .init_resource::<InputDiagnosticsPanel>()
     .add_systems(
         Startup,
         (
             spawn_hud,
+            traffic::spawn_traffic_panel,
             replay::spawn_replay_banner,
             spawn_tutorial_prompt,
             pause::spawn_pause_overlay,
@@ -70,6 +73,11 @@ fn layout_app(size: UVec2, state: HudState, status: ReplayStatus) -> App {
         Update,
         (
             update_hud,
+            traffic::update_traffic_panel
+                .in_set(FlightDisplaySystems)
+                .before(update_help_for_replay)
+                .before(update_flight_log_display)
+                .before(pause::update_pause_reference),
             replay::update_replay_banner,
             update_help_for_replay,
             update_flight_log_display,
@@ -918,5 +926,490 @@ fn paused_overlay_reserves_wrapped_attribution_during_resize_in_the_same_update(
                 assert!((footer_rect.max.y - (size.as_vec2().y - 12.0)).abs() < 1.0);
             }
         }
+    }
+}
+
+fn traffic_fixture(line_count: usize, error: bool) -> String {
+    let mut lines = vec!["LAN CONNECTED | F12 leave".to_owned()];
+    for index in 1..line_count - usize::from(error) {
+        lines.push(format!("TRAFFIC{index:02} BRG090 2.0km +500m HDG180 STALE"));
+    }
+    if error {
+        lines.push("ERROR: connection lost; retry remains manual".into());
+    }
+    lines.join("\n")
+}
+
+fn visible_traffic(world: &mut World) -> Option<(Entity, Entity)> {
+    let roots: Vec<_> = world
+        .query_filtered::<(Entity, &Node), With<traffic::TrafficRoot>>()
+        .iter(world)
+        .filter(|(_, node)| node.display != Display::None)
+        .map(|(entity, _)| entity)
+        .collect();
+    assert!(
+        roots.len() <= 1,
+        "inline and fallback traffic must not duplicate"
+    );
+    roots.first().map(|root| {
+        assert_ne!(world.get::<Visibility>(*root), Some(&Visibility::Hidden));
+        let text = world
+            .query_filtered::<(Entity, &ChildOf), With<traffic::TrafficDisplay>>()
+            .iter(world)
+            .find(|(_, parent)| parent.parent() == *root)
+            .expect("visible root has traffic text")
+            .0;
+        (*root, text)
+    })
+}
+
+fn assert_traffic_measured_clear(app: &mut App, size: UVec2, scale: f32) {
+    let world = app.world_mut();
+    let (root, text) = visible_traffic(world).expect("traffic is visible");
+    let bounds = rect(world, root);
+    let text_bounds = rect(world, text);
+    assert!(
+        bounds.min.x >= 11.0 * scale
+            && bounds.max.x <= size.as_vec2().x - 11.0 * scale
+            && bounds.min.y >= 11.0 * scale
+            && bounds.max.y <= size.as_vec2().y - 11.0 * scale,
+        "traffic leaves viewport {size:?} at scale {scale}: {bounds:?}"
+    );
+    let mut panels = vec![
+        ("instruments", entity::<HudText>(world)),
+        ("help", entity::<HudHelp>(world)),
+        ("log", entity::<HudLog>(world)),
+        ("credit", entity::<DataAttributionDisplay>(world)),
+    ];
+    for (name, panel) in [
+        ("notice", entity::<replay::ReplayBannerPanel>(world)),
+        ("tutorial", entity::<TutorialPrompt>(world)),
+    ] {
+        if world.get::<Node>(panel).unwrap().display != Display::None {
+            panels.push((name, panel));
+        }
+    }
+    for (name, panel) in panels {
+        assert!(
+            bounds.intersect(rect(world, panel)).is_empty(),
+            "traffic covers {name} at {size:?}: {bounds:?}, {:?}",
+            rect(world, panel)
+        );
+    }
+    assert!(text_bounds.min.x >= bounds.min.x - 1.0);
+    assert!(text_bounds.max.x <= bounds.max.x + 1.0);
+    assert!(text_bounds.min.y >= bounds.min.y - 1.0);
+    assert!(text_bounds.max.y <= bounds.max.y + 1.0);
+    let measured = world.get::<TextLayoutInfo>(text).unwrap();
+    assert!(
+        !measured.glyphs.is_empty(),
+        "traffic must use real font layout"
+    );
+    assert!(measured.size.x <= text_bounds.width() + 1.0);
+    assert!(measured.size.y <= text_bounds.height() + 1.0);
+    for (line_index, line) in world.get::<Text>(text).unwrap().lines().enumerate() {
+        for (index, _) in line
+            .bytes()
+            .enumerate()
+            .filter(|(_, byte)| !byte.is_ascii_whitespace())
+        {
+            assert!(
+                measured
+                    .glyphs
+                    .iter()
+                    .any(|glyph| glyph.line_index == line_index
+                        && (glyph.byte_index..glyph.byte_index + glyph.byte_length)
+                            .contains(&index)),
+                "traffic byte {index} on line {line_index} was not laid out"
+            );
+        }
+    }
+    assert!((world.get::<TextFont>(text).unwrap().font_size - 13.0).abs() < f32::EPSILON);
+}
+
+#[test]
+fn chase_traffic_and_flight_guide_share_measured_space() {
+    for size in [
+        UVec2::new(1280, 720),
+        UVec2::new(1180, 812),
+        UVec2::new(1000, 720),
+        UVec2::new(999, 720),
+        UVec2::new(900, 600),
+        UVec2::new(899, 600),
+        UVec2::new(640, 480),
+    ] {
+        for line_count in [8, 9, 14, 30] {
+            let mut app = layout_app(size, flight_hud(false), ReplayStatus::default());
+            app.world_mut()
+                .resource_mut::<DataAttribution>()
+                .set(FULL_CREDIT);
+            let source = traffic_fixture(line_count, true);
+            *app.world_mut().resource_mut::<TrafficPanel>() = TrafficPanel {
+                visible: true,
+                text: source.clone(),
+            };
+            app.update();
+            assert_complete_hud_clear(&mut app, size);
+            assert_traffic_measured_clear(&mut app, size, 1.0);
+            let world = app.world_mut();
+            let (_, text) = visible_traffic(world).unwrap();
+            let displayed = world.get::<Text>(text).unwrap();
+            assert!(displayed.contains("ERROR"), "error must survive truncation");
+            assert!(displayed.lines().count() <= 8);
+            if line_count > 8 || size.x < 1000 || size.y < 720 {
+                assert!(
+                    displayed.contains("Esc"),
+                    "omitted lines need a real escape route"
+                );
+            }
+            assert_eq!(world.resource::<TrafficPanel>().text, source);
+            let help = entity::<HudHelp>(world);
+            assert_eq!(
+                world.get::<Text>(help).unwrap().as_str(),
+                compact_help_text()
+            );
+        }
+    }
+}
+
+#[test]
+fn chase_traffic_reserves_notice_and_custom_guidance_space() {
+    for size in [
+        UVec2::new(1280, 720),
+        UVec2::new(900, 600),
+        UVec2::new(640, 480),
+    ] {
+        let mut app = layout_app(
+            size,
+            flight_hud(true),
+            ReplayStatus {
+                notice: Some(TURBOPROP_NOTICE.into()),
+                ..default()
+            },
+        );
+        app.world_mut()
+            .resource_mut::<DataAttribution>()
+            .set(FULL_CREDIT);
+        app.insert_resource(FlightGuidance {
+            live_help: Some(format!("FULL TURBOPROP CONTROLS\n{TURBOPROP_COMPACT}")),
+            compact_live_help: Some(TURBOPROP_COMPACT.into()),
+            tutorial_enabled: false,
+        });
+        *app.world_mut().resource_mut::<TrafficPanel>() = TrafficPanel {
+            visible: true,
+            text: traffic_fixture(30, true),
+        };
+        app.update();
+        assert_complete_hud_clear(&mut app, size);
+        assert_traffic_measured_clear(&mut app, size, 1.0);
+    }
+}
+
+#[test]
+fn traffic_pause_reference_keeps_long_and_late_information_scrollable() {
+    use bevy::input::mouse::{MouseScrollUnit, MouseWheel};
+    let size = UVec2::new(640, 480);
+    let mut app = layout_app(size, flight_hud(false), ReplayStatus::default());
+    let source = format!(
+        "{}\nLONG DETAIL {}\nERROR: final detail must be reachable",
+        traffic_fixture(30, false),
+        "A".repeat(120)
+    );
+    *app.world_mut().resource_mut::<TrafficPanel>() = TrafficPanel {
+        visible: true,
+        text: source.clone(),
+    };
+    app.world_mut()
+        .resource_mut::<DataAttribution>()
+        .set(FULL_CREDIT);
+    app.world_mut().resource_mut::<Paused>().0 = true;
+    app.update();
+    let world = app.world_mut();
+    let panel = entity::<PauseOverlay>(world);
+    let reference = entity::<pause::PauseReference>(world);
+    let scroll = entity::<pause::PauseReferenceScroll>(world);
+    let footer = entity::<DataAttributionDisplay>(world);
+    assert_eq!(world.get::<Visibility>(panel), Some(&Visibility::Visible));
+    assert!(rect(world, panel).max.y < rect(world, footer).min.y);
+    let text = world.get::<Text>(reference).unwrap();
+    assert!(text.contains("TRAFFIC REFERENCE"));
+    assert!(
+        text.ends_with(&source),
+        "pause must preserve every omitted traffic line and byte"
+    );
+    assert!(
+        world.get::<TextLayoutInfo>(reference).unwrap().size.x
+            <= rect(world, reference).width() + 1.0
+    );
+    let viewport = rect(world, scroll);
+    assert!(rect(world, reference).height() > viewport.height());
+    world.write_message(MouseWheel {
+        unit: MouseScrollUnit::Line,
+        x: 0.0,
+        y: -1000.0,
+        window: Entity::PLACEHOLDER,
+    });
+    app.update();
+    let world = app.world_mut();
+    assert!(world.get::<ScrollPosition>(scroll).unwrap().y > 0.0);
+    assert!(
+        rect(world, reference).max.y <= viewport.max.y + 1.0,
+        "last traffic line must be reachable by scrolling"
+    );
+    assert!(
+        rect(world, reference).max.y >= viewport.min.y,
+        "scrolling must not skip past the last line"
+    );
+    world.resource_mut::<Paused>().0 = false;
+    app.update();
+    assert!(app.world().get::<ScrollPosition>(scroll).unwrap().y.abs() < f32::EPSILON);
+}
+
+#[test]
+fn chase_traffic_resize_and_ui_scale_settle_in_one_update() {
+    let mut app = layout_app(
+        UVec2::new(1280, 720),
+        flight_hud(false),
+        ReplayStatus::default(),
+    );
+    app.world_mut()
+        .resource_mut::<DataAttribution>()
+        .set(FULL_CREDIT);
+    *app.world_mut().resource_mut::<TrafficPanel>() = TrafficPanel {
+        visible: true,
+        text: traffic_fixture(30, true),
+    };
+    for (size, scale) in [
+        (UVec2::new(1280, 720), 1.0),
+        (UVec2::new(640, 480), 1.0),
+        (UVec2::new(1280, 960), 2.0),
+        (UVec2::new(1180, 812), 1.0),
+        (UVec2::new(1280, 720), 1.0),
+    ] {
+        let world = app.world_mut();
+        for mut camera in world.query::<&mut Camera>().iter_mut(world) {
+            camera.computed.target_info.as_mut().unwrap().physical_size = size;
+            camera.viewport.as_mut().unwrap().physical_size = size;
+        }
+        world.resource_mut::<bevy::ui::UiScale>().0 = scale;
+        app.update();
+        assert_traffic_measured_clear(&mut app, size, scale);
+        let world = app.world_mut();
+        let (_, text) = visible_traffic(world).unwrap();
+        if size.as_vec2().x / scale < 1000.0 || size.as_vec2().y / scale < 720.0 {
+            assert_eq!(world.get::<Text>(text).unwrap().lines().count(), 1);
+        } else {
+            assert_eq!(world.get::<Text>(text).unwrap().lines().count(), 8);
+        }
+    }
+}
+
+#[test]
+fn traffic_context_transitions_restore_legacy_display_in_one_update() {
+    let mut app = layout_app(
+        UVec2::new(1280, 720),
+        flight_hud(false),
+        ReplayStatus::default(),
+    );
+    let source = traffic_fixture(14, true);
+    *app.world_mut().resource_mut::<TrafficPanel>() = TrafficPanel {
+        visible: true,
+        text: source.clone(),
+    };
+    // Exercise both directions; no reparenting or second Update is required.
+    for (view, replay, crash, diagnostic, presented) in [
+        ("CHASE", false, false, false, true),
+        ("COCKPIT", false, false, false, true),
+        ("CHASE", false, false, false, true),
+        ("CHASE", true, false, false, true),
+        ("CHASE", false, false, false, true),
+        ("CHASE", false, true, false, true),
+        ("CHASE", false, false, false, true),
+        ("CHASE", false, false, true, true),
+        ("CHASE", false, false, false, true),
+        ("CHASE", false, false, false, false),
+        ("CHASE", false, false, false, true),
+    ] {
+        let world = app.world_mut();
+        world.resource_mut::<HudState>().view_mode = view;
+        world.resource_mut::<ReplayStatus>().active = replay;
+        if crash {
+            world.resource_mut::<CrashNotice>().set("CRASHED");
+        } else {
+            world.resource_mut::<CrashNotice>().clear();
+        }
+        world.resource_mut::<InputDiagnosticsPanel>().visible = diagnostic;
+        world.resource_mut::<TrafficPanel>().visible = presented;
+        app.update();
+        let world = app.world_mut();
+        let inline = view == "CHASE" && !replay && !crash;
+        let visible = visible_traffic(world);
+        assert_eq!(visible.is_some(), presented && !diagnostic);
+        if let Some((root, text)) = visible {
+            assert_eq!(world.get::<ChildOf>(root).is_some(), inline);
+            if !inline {
+                assert_eq!(
+                    world.get::<Text>(text).unwrap().as_str(),
+                    traffic::traffic_display_text(&source)
+                );
+            }
+        }
+        let reference = entity::<pause::PauseReference>(world);
+        assert_eq!(
+            world
+                .get::<Text>(reference)
+                .unwrap()
+                .contains("TRAFFIC REFERENCE"),
+            inline && presented && !diagnostic
+        );
+        assert_eq!(world.resource::<TrafficPanel>().text, source);
+    }
+}
+
+#[test]
+fn missing_pause_reference_or_host_state_never_hides_or_compacts_traffic() {
+    for missing in 0..8 {
+        let mut app = layout_app(
+            UVec2::new(1280, 720),
+            flight_hud(false),
+            ReplayStatus::default(),
+        );
+        let source = traffic_fixture(14, true);
+        *app.world_mut().resource_mut::<TrafficPanel>() = TrafficPanel {
+            visible: true,
+            text: source.clone(),
+        };
+        let world = app.world_mut();
+        match missing {
+            0 => {
+                world.remove_resource::<CrashNotice>();
+            }
+            1 => {
+                world.remove_resource::<HudState>();
+            }
+            2 => {
+                world.remove_resource::<ReplayStatus>();
+            }
+            3 => {
+                let reference = entity::<pause::PauseReference>(world);
+                world.despawn(reference);
+            }
+            4 => {
+                let reference = entity::<HudReference>(world);
+                world.entity_mut(reference).remove::<HudReference>();
+            }
+            5 => {
+                let help = entity::<HudHelp>(world);
+                world.entity_mut(help).remove::<HudHelp>();
+            }
+            6 => {
+                world.remove_resource::<Paused>();
+            }
+            _ => {
+                let inline = world
+                    .query_filtered::<Entity, (With<traffic::TrafficRoot>, With<ChildOf>)>()
+                    .single(world)
+                    .unwrap();
+                world.despawn(inline);
+            }
+        }
+        // Other host UI systems require these resources; exercise this public
+        // traffic system alone to verify its missing-context fallback contract.
+        world
+            .run_system_once(traffic::update_traffic_panel)
+            .unwrap();
+        let (root, text) = visible_traffic(world).expect("legacy traffic remains accessible");
+        assert!(world.get::<ChildOf>(root).is_none());
+        assert_eq!(
+            world.get::<Text>(text).unwrap().as_str(),
+            traffic::traffic_display_text(&source)
+        );
+    }
+}
+
+#[test]
+fn standalone_traffic_has_no_pause_dependency() {
+    let mut app = App::new();
+    app.init_resource::<TrafficPanel>()
+        .add_systems(Startup, traffic::spawn_traffic_panel)
+        .add_systems(Update, traffic::update_traffic_panel);
+    let source = traffic_fixture(14, true);
+    *app.world_mut().resource_mut::<TrafficPanel>() = TrafficPanel {
+        visible: true,
+        text: source.clone(),
+    };
+    app.update();
+    let world = app.world_mut();
+    let (root, text) = visible_traffic(world).expect("standalone traffic is visible");
+    assert!(world.get::<ChildOf>(root).is_none());
+    assert_eq!(
+        world.get::<Text>(text).unwrap().as_str(),
+        traffic::traffic_display_text(&source)
+    );
+}
+
+#[test]
+fn traffic_spawned_before_hud_keeps_its_standalone_fallback() {
+    let mut app = App::new();
+    app.init_resource::<TrafficPanel>()
+        .add_systems(Startup, traffic::spawn_traffic_panel)
+        .add_systems(Update, traffic::update_traffic_panel);
+    let source = traffic_fixture(14, true);
+    *app.world_mut().resource_mut::<TrafficPanel>() = TrafficPanel {
+        visible: true,
+        text: source.clone(),
+    };
+    app.update();
+    let world = app.world_mut();
+    world.insert_resource(flight_hud(false));
+    world.init_resource::<ReplayStatus>();
+    world.init_resource::<CrashNotice>();
+    world.init_resource::<Paused>();
+    world.run_system_once(spawn_hud).unwrap();
+    world.run_system_once(pause::spawn_pause_overlay).unwrap();
+    app.update();
+    let world = app.world_mut();
+    let (root, text) = visible_traffic(world).expect("late HUD must not hide standalone traffic");
+    assert!(world.get::<ChildOf>(root).is_none());
+    assert_eq!(
+        world.get::<Text>(text).unwrap().as_str(),
+        traffic::traffic_display_text(&source)
+    );
+}
+
+#[test]
+fn ambiguous_host_markers_keep_traffic_in_the_legacy_fallback() {
+    for duplicate in 0..3 {
+        let mut app = layout_app(
+            UVec2::new(1280, 720),
+            flight_hud(false),
+            ReplayStatus::default(),
+        );
+        let source = traffic_fixture(14, true);
+        *app.world_mut().resource_mut::<TrafficPanel>() = TrafficPanel {
+            visible: true,
+            text: source.clone(),
+        };
+        let world = app.world_mut();
+        match duplicate {
+            0 => {
+                world.spawn((Node::default(), HudReference));
+            }
+            1 => {
+                world.spawn((Node::default(), Text::default(), HudHelp));
+            }
+            _ => {
+                world.spawn((Node::default(), Text::default(), pause::PauseReference));
+            }
+        }
+        world
+            .run_system_once(traffic::update_traffic_panel)
+            .unwrap();
+        let (root, text) = visible_traffic(world).expect("ambiguous host must not hide traffic");
+        assert!(world.get::<ChildOf>(root).is_none());
+        assert_eq!(
+            world.get::<Text>(text).unwrap().as_str(),
+            traffic::traffic_display_text(&source)
+        );
     }
 }

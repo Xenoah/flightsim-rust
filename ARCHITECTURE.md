@@ -531,6 +531,13 @@ compact reference, with complete aircraft guidance available in the existing
 paused state. Instrument, notice and help font sizes remain unchanged. See
 [ADR-0021](docs/adr/0021-measured-flight-help-layout.md).
 
+Ordinary live CHASE traffic joins that measured reference column instead of
+using a separate fixed screen offset. Its bounded summary retains an error
+indicator and points to the complete, scrollable traffic text in the existing
+Esc pause reference. Cockpit, replay, crash and incomplete standalone hosts keep
+the legacy traffic presentation; input diagnostics retain priority. This is a
+four-file UI source change, not a physics, cloud-rendering or release change.
+
 雲描画は独立した Off / Light / High / Ultra 設定を持つ（F3、Shift+F3 で Light）。
 Light は従来の 2 枚の PBR 平面・256² マスク・雲中 fog を保ち、マスクの雲量を
 seed ごとに面積校正する。High/Ultra は同じ Earth-space 密度場と単一の曲面層を使い、
