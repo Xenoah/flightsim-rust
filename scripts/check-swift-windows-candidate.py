@@ -49,7 +49,8 @@ ALPHA23_REPLAY_CONTRACT_ID = "full-two-aircraft-alpha23-version-source-v1"
 COCKPIT_VARIANT_REPLAY_CONTRACT_ID = "full-two-aircraft-cockpit-variant-source-v1"
 ALPHA24_REPLAY_CONTRACT_ID = "full-two-aircraft-alpha24-version-source-v1"
 SWIFT_FORWARD_REPLAY_CONTRACT_ID = "full-two-aircraft-swift-forward-visibility-source-v1"
-REPLAY_CONTRACT_ID = "full-two-aircraft-alpha25-version-source-v1"
+ALPHA25_REPLAY_CONTRACT_ID = "full-two-aircraft-alpha25-version-source-v1"
+REPLAY_CONTRACT_ID = "full-two-aircraft-chase-hud-source-v1"
 REVIEWED_RUNTIME_SOURCE = "960c3126e6a4bc22b8d4acc6e6737f8f2b473bef"
 REVIEWED_RUNTIME_TREE = "b3bbd57bc3819b1b1eda35ce4f8b476c52d1b24e"
 SOURCE_ADMISSION_SCOPE = "source-only; native, whole-target and publication gates remain unqualified"
@@ -269,12 +270,41 @@ ALPHA25_SOURCE_PATHS = frozenset({
     *ALPHA25_HISTORICAL_RELOCATIONS.values(),
 })
 ALPHA25_WORKSPACE_PACKAGES = ALPHA24_WORKSPACE_PACKAGES
+
+# Source-only HUD amendment; prior source and release observations stay historical.
+CHASE_HUD_MIGRATION_PATH = 'scripts/chase-hud-source-migration.json'
+CHASE_HUD_MIGRATION_SHA256 = '36e39f4c84f56b5dec93579726cc7ebbeef75a0764751649b33a1d9a5ff66032'
+CHASE_HUD_BASE_SOURCE = '5082b772c6f2d220377c1031aaa91a0e96c5aec1'
+CHASE_HUD_BASE_TREE = '3ae086914700566031427f45be0f4d17acc619c1'
+CHASE_HUD_BASE_CONTRACT_PATH = 'scripts/history/5082b772-replay-candidate-contract.json'
+CHASE_HUD_BASE_CONTRACT_HASHES = {'scripts/history/5082b772-analytical-swift-capture-contract.json': '6555feec0f4eee029663225f539e966b930cc3b3ee63bba8a802bc5825918e3f',
+ 'scripts/history/5082b772-analytical-swift-source-contract.json': 'ce0cbf66aa5786f6617d66490641d0247c095d3d7553ff1dc6d2364d44579832',
+ 'scripts/history/5082b772-replay-candidate-contract.json': 'ffd668f2694693bad555cf56761b3a60be751469bfd2228551f523bcd4bcabaa'}
+CHASE_HUD_HISTORICAL_RELOCATIONS = {'crates/flightsim-ui/src/lib.rs': 'scripts/history/5082b772-ui-lib.rs',
+ 'crates/flightsim-ui/src/pause.rs': 'scripts/history/5082b772-ui-pause.rs',
+ 'crates/flightsim-ui/src/top_layout_tests.rs': 'scripts/history/5082b772-ui-top_layout_tests.rs',
+ 'crates/flightsim-ui/src/traffic.rs': 'scripts/history/5082b772-ui-traffic.rs'}
+CHASE_HUD_PREVIOUS_SHA256 = {'crates/flightsim-ui/src/lib.rs': '407dcde6c93239ec7ef85e293fbb7b88244756b905d93fb66e4b4ec2b6927855',
+ 'crates/flightsim-ui/src/pause.rs': '26c1e49134f49b4d3fb96fc936027732d4891440bbbf588c961d384e499c5f84',
+ 'crates/flightsim-ui/src/top_layout_tests.rs': '76bca4fb6db1747775076dafdb9e20cdd1f0e7b25376b43a3e4519c22c6d7199',
+ 'crates/flightsim-ui/src/traffic.rs': 'd609a78fe452c41c70a7f45037a697c322c3cdf98e36815c3339175dadde9167'}
+CHASE_HUD_CURRENT_SHA256 = {'crates/flightsim-ui/src/lib.rs': '5564400d5782f38cc814a40efbd0ee590b0ae578dbfce8311167d8e34914823d',
+ 'crates/flightsim-ui/src/pause.rs': '9c9a524039ed8fe8e405994ab6b7b9377448ac309c2484307c61a22b7c38480f',
+ 'crates/flightsim-ui/src/top_layout_tests.rs': 'cd981c5f1f2703600f5de0f0f4aab8d4485a821e950049ab8873db21079aa57d',
+ 'crates/flightsim-ui/src/traffic.rs': '076e2d85c295305774a5f64a8d613bda7d4a35a52c5fc3cee2c9809c115c15d6'}
+CHASE_HUD_SOURCE_PATHS = frozenset({
+    CHASE_HUD_MIGRATION_PATH, *CHASE_HUD_BASE_CONTRACT_HASHES,
+    *CHASE_HUD_HISTORICAL_RELOCATIONS.values(),
+})
 # The oldest main.rs witness remains the component-terms witness. Other newly
 # replaced preserved files now have their own exact published-base witnesses.
-CURRENT_HISTORICAL_RUNTIME_RELOCATIONS = {
+ALPHA25_HISTORICAL_RUNTIME_RELOCATIONS = {
     **SWIFT_FORWARD_HISTORICAL_RELOCATIONS,
     **COCKPIT_VARIANT_HISTORICAL_RELOCATIONS,
     **COCKPIT_HISTORICAL_RELOCATIONS, **HISTORICAL_RUNTIME_RELOCATIONS,
+}
+CURRENT_HISTORICAL_RUNTIME_RELOCATIONS = {
+    **ALPHA25_HISTORICAL_RUNTIME_RELOCATIONS, **CHASE_HUD_HISTORICAL_RELOCATIONS,
 }
 # The reviewed additive jet/turboprop exports change this file, but no legacy FDM
 # body. Keep a literal full-file guard; the historical lib hash above never moves.
@@ -1340,6 +1370,8 @@ ALPHA24_REPLAY_CONTRACT_PATHS = frozenset(REPLAY_CONTRACT_PATHS)
 REPLAY_CONTRACT_PATHS |= SWIFT_FORWARD_SOURCE_PATHS
 SWIFT_FORWARD_REPLAY_CONTRACT_PATHS = frozenset(REPLAY_CONTRACT_PATHS)
 REPLAY_CONTRACT_PATHS |= ALPHA25_SOURCE_PATHS
+ALPHA25_REPLAY_CONTRACT_PATHS = frozenset(REPLAY_CONTRACT_PATHS)
+REPLAY_CONTRACT_PATHS |= CHASE_HUD_SOURCE_PATHS
 
 # Independent Python encoders and their existing bytes stay frozen separately
 # from the moving reviewed implementation. Never regenerate to satisfy a pin.
@@ -2405,13 +2437,13 @@ def validate_alpha25_version_delta(previous, current):
                 "alpha25 version bytes differ outside approved substitutions: " + path)
 
 
-def validate_replay_contract(contract):
+def validate_alpha25_replay_contract(contract):
     """Admit only alpha.24 to alpha.25 versions over the frozen Swift visibility proof."""
     require(isinstance(contract, dict) and set(contract) == {"schema_version", "contract",
             "base_reviewed_source", "base_reviewed_runtime_tree", "source_migration_sha256",
             "scope", "release_authorized", "source_sha256"}
             and type(contract.get("schema_version")) is int and contract["schema_version"] == 1
-            and contract.get("contract") == REPLAY_CONTRACT_ID,
+            and contract.get("contract") == ALPHA25_REPLAY_CONTRACT_ID,
             "invalid reviewed replay contract")
     require(contract.get("base_reviewed_source") == REVIEWED_RUNTIME_SOURCE
             and contract.get("base_reviewed_runtime_tree") == REVIEWED_RUNTIME_TREE
@@ -2420,7 +2452,7 @@ def validate_replay_contract(contract):
             and contract.get("release_authorized") is False,
             "source admission identity or scope changed")
     pins = contract.get("source_sha256")
-    require(isinstance(pins, dict) and set(pins) == REPLAY_CONTRACT_PATHS,
+    require(isinstance(pins, dict) and set(pins) == ALPHA25_REPLAY_CONTRACT_PATHS,
             "reviewed replay source boundary changed")
     require(all(isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value)
                 for value in pins.values()), "invalid reviewed replay source digest")
@@ -2440,7 +2472,7 @@ def validate_replay_contract(contract):
     validate_swift_forward_replay_contract(previous)
     previous_pins = previous["source_sha256"]
     require(len(previous_pins) == 981
-            and set(previous_pins) == REPLAY_CONTRACT_PATHS - ALPHA25_SOURCE_PATHS,
+            and set(previous_pins) == ALPHA25_REPLAY_CONTRACT_PATHS - ALPHA25_SOURCE_PATHS,
             "alpha25 prior source boundary changed")
     for path, expected in previous_pins.items():
         historical = ALPHA25_HISTORICAL_RELOCATIONS.get(path, path)
@@ -2484,6 +2516,91 @@ def validate_replay_contract(contract):
                 and pins[path] == current_digest, "alpha25 version replacement changed: " + path)
     validate_alpha25_version_delta(previous_bytes, current_bytes)
     return contract
+
+def validate_chase_hud_migration(migration, pins, previous_pins, root):
+    """Validate the bounded source descriptor; never admit a release or receipt."""
+    require(isinstance(migration, dict) and set(migration) == {
+            "schema_version", "identity", "base_source", "base_tree", "base_source_kind",
+            "base_source_status", "scope", "release_authorized", "base_contract_sha256",
+            "previous_source_migration_sha256", "preserved_runtime_sha256",
+            "historical_relocations", "replaced_source_sha256", "added_source_sha256"}
+            and type(migration["schema_version"]) is int and migration["schema_version"] == 1
+            and migration["identity"] == "full-two-aircraft-chase-hud-source-migration-v1"
+            and migration["base_source"] == CHASE_HUD_BASE_SOURCE
+            and migration["base_tree"] == CHASE_HUD_BASE_TREE
+            and migration["base_source_kind"] == "published-commit"
+            and migration["base_source_status"] == "released-alpha25-parent"
+            and migration["scope"] == SOURCE_ADMISSION_SCOPE
+            and migration["release_authorized"] is False
+            and migration["base_contract_sha256"] == CHASE_HUD_BASE_CONTRACT_HASHES
+            and migration["previous_source_migration_sha256"] == ALPHA25_MIGRATION_SHA256
+            and migration["preserved_runtime_sha256"] == PRESERVED_RUNTIME_SHA256
+            and migration["historical_relocations"] == CHASE_HUD_HISTORICAL_RELOCATIONS,
+            "invalid chase HUD source migration identity")
+    replacements = migration["replaced_source_sha256"]
+    require(isinstance(replacements, dict)
+            and set(replacements) == set(CHASE_HUD_PREVIOUS_SHA256),
+            "chase HUD replacement boundary changed")
+    for path, expected in CHASE_HUD_PREVIOUS_SHA256.items():
+        historical = CHASE_HUD_HISTORICAL_RELOCATIONS[path]
+        row = replacements[path]
+        require(isinstance(row, dict) and set(row) == {"previous_sha256", "sha256"}
+                and row["previous_sha256"] == expected == previous_pins[path]
+                and digest(root / historical) == expected == pins[historical]
+                and row["sha256"] == CHASE_HUD_CURRENT_SHA256[path]
+                and row["sha256"] != expected and pins[path] == row["sha256"],
+                "chase HUD replacement changed: " + path)
+    require(migration["added_source_sha256"] == {}, "chase HUD adds no runtime source")
+
+
+def validate_replay_contract(contract):
+    """Admit exactly four HUD-file replacements over frozen alpha.25."""
+    require(isinstance(contract, dict) and set(contract) == {"schema_version", "contract",
+            "base_reviewed_source", "base_reviewed_runtime_tree", "source_migration_sha256",
+            "scope", "release_authorized", "source_sha256"}
+            and type(contract.get("schema_version")) is int and contract["schema_version"] == 1
+            and contract.get("contract") == REPLAY_CONTRACT_ID,
+            "invalid reviewed replay contract")
+    require(contract.get("base_reviewed_source") == REVIEWED_RUNTIME_SOURCE
+            and contract.get("base_reviewed_runtime_tree") == REVIEWED_RUNTIME_TREE
+            and contract.get("source_migration_sha256") == CHASE_HUD_MIGRATION_SHA256
+            and contract.get("scope") == SOURCE_ADMISSION_SCOPE
+            and contract.get("release_authorized") is False,
+            "source admission identity or scope changed")
+    pins = contract.get("source_sha256")
+    require(isinstance(pins, dict) and set(pins) == REPLAY_CONTRACT_PATHS,
+            "reviewed replay source boundary changed")
+    require(all(isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value)
+                for value in pins.values()), "invalid reviewed replay source digest")
+    # Preserve the diagnostics and all independent anchors of every earlier layer.
+    for path in ("assets/aircraft/light_single.json", "crates/flightsim-fdm/src/aircraft.rs"):
+        require(pins[path] == LEGACY_SOURCE_HASHES[path], "frozen legacy input changed: " + path)
+    require(pins["crates/flightsim-fdm/src/lib.rs"] == REVIEWED_ADDITIVE_FDM_LIB_SHA256,
+            "frozen reviewed FDM module input changed")
+    root = Path(__file__).parent.parent
+    for path, expected in CHASE_HUD_BASE_CONTRACT_HASHES.items():
+        require(digest(root / path) == expected and pins[path] == expected,
+                "chase HUD historical contract changed: " + path)
+    previous = json.loads((root / CHASE_HUD_BASE_CONTRACT_PATH).read_text(encoding="utf-8"))
+    # Historical objects need not exist: exact checked-in witness bytes carry the
+    # complete original proof, including the frozen 987-path alpha.25 boundary.
+    validate_alpha25_replay_contract(previous)
+    previous_pins = previous["source_sha256"]
+    require(len(previous_pins) == 987
+            and set(previous_pins) == REPLAY_CONTRACT_PATHS - CHASE_HUD_SOURCE_PATHS,
+            "chase HUD prior source boundary changed")
+    for path, expected in previous_pins.items():
+        historical = CHASE_HUD_HISTORICAL_RELOCATIONS.get(path, path)
+        require(pins.get(historical) == expected,
+                "chase HUD prior source pins changed (preserved runtime/historical contract): " + path)
+    require(digest(root / CHASE_HUD_MIGRATION_PATH) == CHASE_HUD_MIGRATION_SHA256
+            and pins[CHASE_HUD_MIGRATION_PATH] == CHASE_HUD_MIGRATION_SHA256,
+            "chase HUD source migration changed")
+    migration = json.loads((root / CHASE_HUD_MIGRATION_PATH).read_text(encoding="utf-8"))
+    validate_chase_hud_migration(migration, pins, previous_pins, root)
+    return contract
+
+
 
 def load_replay_contract(repo):
     return validate_replay_contract(json.loads((repo / REPLAY_CONTRACT_PATH).read_text(encoding="utf-8")))

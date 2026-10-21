@@ -393,6 +393,8 @@ separate and unqualified by this migration.
 
 ## Alpha.25 version-only source amendment
 
+**Historical stage; superseded by the current chase-HUD outer boundary.**
+
 `scripts/alpha25-version-source-migration.json` is a closed, version-only
 successor to published Swift forward-visibility source
 `754bad886cbac8f564c6c46ebdb265c54bda275c`, tree
@@ -431,3 +433,40 @@ unchanged Light Single cockpit plus Swift Sport chase smoke. A Swift cockpit
 visual comparison is separately identified; the chase smoke does not establish
 that view's appearance. The approved component terms and all publication gates
 remain unchanged. See [alpha.25 preparation](../qa/alpha25-release-preparation-2026-10-19.md).
+
+
+## Chase traffic and flight-guide source amendment
+
+The source-only `scripts/chase-hud-source-migration.json` successor is based on
+published alpha.25 commit `5082b772c6f2d220377c1031aaa91a0e96c5aec1`, tree
+`3ae086914700566031427f45be0f4d17acc619c1`. It admits exactly four complete files
+under `crates/flightsim-ui/src`: `lib.rs`, `pause.rs`, `top_layout_tests.rs` and
+`traffic.rs`. The change shares measured space between ordinary live CHASE
+traffic and flight guidance, with the complete traffic reference retained in the
+paused view. No cloud, physics, replay, dependency, aircraft asset, package
+version, workflow or release gate is admitted by this amendment.
+
+Seven byte-exact `scripts/history/5082b772-*` witnesses preserve the three
+previous contracts and four previous UI files. The complete 987-pin alpha.25
+validator remains a frozen historical layer. Adding only the witnesses and the
+fixed descriptor reaches 995 replay pins. Every previous pin is preserved,
+relocating only the four replaced file identities. The 499-member crate boundary,
+497 original runtime identities and 102 independent replay anchors remain exact.
+Fixed descriptor and replacement hashes reject jointly resealed UI, migration
+and contract attacks; source checks compare canonical Git and checkout bytes.
+
+The analytical successor first validates the frozen 63-input alpha.25 contract
+and its complete earlier migration chain. Only the source auditors, replay
+contract, this guide and affected historical/current test assertions are rebound.
+One new mutation-test input brings the analytical boundary to 64. Capture retains
+four inputs and exact inherited contract hashes. Current identities are
+`full-two-aircraft-chase-hud-source-v1`,
+`analytical-swift-chase-hud-source-admission-v1` and
+`analytical-swift-chase-hud-capture-source-admission-v1`.
+
+The earlier unvalidated preservation branch and unavailable local validation
+receipts are not acceptance evidence for this reconstruction. Its final source
+requires fresh compilation, layout/image checks and CI. Existing alpha.25
+Windows, applicability and publication receipts remain evidence only for their
+original source. Native, whole-target rights, exact-inventory authorization and
+publication remain independent gates; no source migration creates approval.

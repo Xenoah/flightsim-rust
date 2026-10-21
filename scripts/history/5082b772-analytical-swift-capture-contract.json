@@ -1,0 +1,19 @@
+{
+  "base_reviewed_runtime_tree": "b3bbd57bc3819b1b1eda35ce4f8b476c52d1b24e",
+  "base_reviewed_source": "960c3126e6a4bc22b8d4acc6e6737f8f2b473bef",
+  "identity": "analytical-swift-msvc-build-capture-v1",
+  "inherited_contracts": {
+    "scripts/analytical-swift-source-contract.json": "ce0cbf66aa5786f6617d66490641d0247c095d3d7553ff1dc6d2364d44579832",
+    "scripts/replay-candidate-contract.json": "ffd668f2694693bad555cf56761b3a60be751469bfd2228551f523bcd4bcabaa"
+  },
+  "schema_version": 1,
+  "source_admission": "analytical-swift-alpha25-version-capture-source-admission-v1",
+  "source_migration_sha256": "c91eb21cb2cea615deee5116aabf82229274f56127f189564923fb4055dc80e4",
+  "source_recipe": "bevy-0.18.1-tony-filmic-source-v1",
+  "source_sha256": {
+    ".github/workflows/analytical-swift-msvc-build.yml": "d23c764b900f7d66f0b2ed0df77feb984323bdd038cc7451805b56a456b70976",
+    "docs/release/analytical-swift-msvc-capture.md": "a81f848e85ffe6210c7c4c3b30cd4e2f35f2f5a5b3e3e569a304ef4959f7993e",
+    "scripts/capture-analytical-swift-msvc.py": "d8687b66f00567d1b5cd8b086fde75109b8035b69012d0a1967b522605177057",
+    "scripts/tests/test_analytical_swift_capture.py": "746b02bc0440baf4676eac519481a9ecc5a4bf10887f760fb32e089d518d2629"
+  }
+}

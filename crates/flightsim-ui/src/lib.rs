@@ -350,6 +350,11 @@ pub struct HudBody;
 #[doc(hidden)]
 pub struct HudSide;
 
+/// Measured traffic and flight reference column; hidden traffic occupies no space.
+#[derive(Component, Debug)]
+#[doc(hidden)]
+pub struct HudReference;
+
 /// Final UI readers of committed flight state. Hosts order this set after
 /// their exclusive new-flight transaction and state publishers.
 #[derive(SystemSet, Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -368,8 +373,15 @@ impl Plugin for FlightsimUiPlugin {
             .init_resource::<DataAttribution>()
             .init_resource::<InputDiagnosticsPanel>()
             .init_resource::<TrafficPanel>()
-            .add_systems(Startup, traffic::spawn_traffic_panel)
-            .add_systems(Update, traffic::update_traffic_panel)
+            .add_systems(Startup, traffic::spawn_traffic_panel.after(spawn_hud))
+            .add_systems(
+                Update,
+                traffic::update_traffic_panel
+                    .in_set(FlightDisplaySystems)
+                    .before(update_help_for_replay)
+                    .before(update_flight_log_display)
+                    .before(pause::update_pause_reference),
+            )
             .add_systems(Startup, input_diagnostics::spawn_input_diagnostics)
             .add_systems(Update, input_diagnostics::update_input_diagnostics_panel)
             .add_systems(Startup, spawn_hud)
@@ -501,24 +513,33 @@ pub fn spawn_hud(mut commands: Commands) {
                 ))
                 .with_children(|side| {
                     side.spawn((
-                        Text::new(help_text()),
-                        TextFont {
-                            font_size: 14.0,
-                            ..default()
-                        },
-                        TextColor(Color::srgba(0.8, 0.85, 0.9, 0.9)),
                         Node {
                             grid_row: GridPlacement::start(3),
-                            align_self: AlignSelf::End,
-                            // Keep the content-sized block at the screen edge,
-                            // leaving the centered aircraft/flight scene clear.
-                            justify_self: JustifySelf::End,
-                            max_width: Val::Percent(100.0),
+                            flex_direction: FlexDirection::Column,
+                            justify_content: JustifyContent::FlexEnd,
+                            align_items: AlignItems::FlexEnd,
                             min_width: Val::Px(0.0),
                             ..default()
                         },
-                        HudHelp,
-                    ));
+                        HudReference,
+                    ))
+                    .with_children(|reference| {
+                        reference.spawn((
+                            Text::new(help_text()),
+                            TextFont {
+                                font_size: 14.0,
+                                ..default()
+                            },
+                            TextColor(Color::srgba(0.8, 0.85, 0.9, 0.9)),
+                            Node {
+                                max_width: Val::Percent(100.0),
+                                min_width: Val::Px(0.0),
+                                flex_shrink: 0.0,
+                                ..default()
+                            },
+                            HudHelp,
+                        ));
+                    });
                     side.spawn((
                         Text::new(""),
                         TextFont {
@@ -606,6 +627,7 @@ LANDINGS {:>6}",
 
 /// Keep live flight controls out of recorded playback guidance.
 pub fn update_help_for_replay(
+    traffic: traffic::TrafficLayoutContext,
     status: Res<ReplayStatus>,
     guidance: Option<Res<FlightGuidance>>,
     state: Option<Res<HudState>>,
@@ -613,7 +635,7 @@ pub fn update_help_for_replay(
     cameras: Query<&Camera>,
     mut help: Query<(&mut Text, &mut Node), With<HudHelp>>,
 ) {
-    let compact = compact_hud(&cameras);
+    let compact = compact_hud(&cameras) || traffic.active();
     let cockpit_replay = status.active
         && state
             .as_ref()
@@ -819,12 +841,13 @@ pub fn update_hud(
 
 /// 飛行記録の表示を更新する。
 pub fn update_flight_log_display(
+    traffic: traffic::TrafficLayoutContext,
     state: Res<HudState>,
     cameras: Query<&Camera>,
     mut query: Query<&mut Text, With<HudLog>>,
 ) {
     let mut log = format_flight_log(state.log);
-    if compact_hud(&cameras) {
+    if compact_hud(&cameras) || traffic.active() {
         // Preserve all four values and their units; use the side column's
         // width instead of spending four rows at a 480-pixel window height.
         let short = log

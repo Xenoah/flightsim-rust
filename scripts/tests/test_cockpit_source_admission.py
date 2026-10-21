@@ -71,6 +71,7 @@ class CockpitSourceAdmissionTests(unittest.TestCase):
             self.assertEqual(current['source_sha256'][historical], expected, path)
             checkout = candidate.ALPHA23_HISTORICAL_RELOCATIONS.get(historical, historical)
             checkout = candidate.COCKPIT_VARIANT_HISTORICAL_RELOCATIONS.get(checkout, checkout)
+            checkout = candidate.CHASE_HUD_HISTORICAL_RELOCATIONS.get(checkout, checkout)
             self.assertEqual(candidate.digest(ROOT / checkout), expected, path)
         for path in CHANGED:
             self.assertEqual(migration['replaced_source_sha256'][path], {
@@ -83,7 +84,7 @@ class CockpitSourceAdmissionTests(unittest.TestCase):
         self.assertEqual(len(candidate.HISTORICAL_REPLAY_CONTRACT_PATHS), 404)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)
         self.assertEqual(len(candidate.CORE_PIPELINE_SOURCE_PATHS), 55)
-        self.assertEqual(len(capture.check.SOURCE_PATHS), 63)
+        self.assertEqual(len(capture.check.SOURCE_PATHS), 64)
         self.assertEqual(len(capture.BOUND_FILES), 4)
         self.assertIs(current['release_authorized'], False)
 
@@ -132,7 +133,7 @@ class CockpitSourceAdmissionTests(unittest.TestCase):
         for path in paths:
             expected = base.get(path, candidate.INDEPENDENT_REPLAY_HASHES.get(path))
             historical = candidate.ALPHA23_HISTORICAL_RELOCATIONS.get(path, path)
-            self.assertEqual(candidate.digest(ROOT / historical), expected, path)
+            self.assertEqual(candidate.digest(ROOT / candidate.CHASE_HUD_HISTORICAL_RELOCATIONS.get(historical, historical)), expected, path)
             if path in base:
                 self.assertEqual(current[historical], expected, path)
 

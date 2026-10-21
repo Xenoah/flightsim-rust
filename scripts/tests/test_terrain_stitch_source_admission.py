@@ -58,6 +58,7 @@ class TerrainStitchSourceAdmissionTests(unittest.TestCase):
             checkout_path = candidate.ALPHA22_HISTORICAL_RELOCATIONS.get(historical_path, historical_path)
             checkout_path = candidate.COCKPIT_HISTORICAL_RELOCATIONS.get(checkout_path, checkout_path)
             checkout_path = candidate.COCKPIT_VARIANT_HISTORICAL_RELOCATIONS.get(checkout_path, checkout_path)
+            checkout_path = candidate.CHASE_HUD_HISTORICAL_RELOCATIONS.get(checkout_path, checkout_path)
             self.assertEqual(candidate.digest(ROOT / checkout_path), expected, path)
         for path in CHANGED:
             self.assertEqual(migration['replaced_source_sha256'][path], {
@@ -73,7 +74,7 @@ class TerrainStitchSourceAdmissionTests(unittest.TestCase):
         self.assertEqual(len(candidate.HISTORICAL_REPLAY_CONTRACT_PATHS), 404)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)
         self.assertEqual(len(candidate.CORE_PIPELINE_SOURCE_PATHS), 55)
-        self.assertEqual(len(capture.check.SOURCE_PATHS), 63)
+        self.assertEqual(len(capture.check.SOURCE_PATHS), 64)
         self.assertEqual(len(capture.BOUND_FILES), 4)
         self.assertIs(contract['release_authorized'], False)
 

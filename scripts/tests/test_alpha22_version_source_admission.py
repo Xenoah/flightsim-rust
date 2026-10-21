@@ -61,6 +61,7 @@ class Alpha22VersionSourceAdmissionTests(unittest.TestCase):
             self.assertEqual(contract['source_sha256'][historical], expected, path)
             checkout = candidate.COCKPIT_HISTORICAL_RELOCATIONS.get(historical, historical)
             checkout = candidate.COCKPIT_VARIANT_HISTORICAL_RELOCATIONS.get(checkout, checkout)
+            checkout = candidate.CHASE_HUD_HISTORICAL_RELOCATIONS.get(checkout, checkout)
             self.assertEqual(candidate.digest(ROOT / checkout), expected, path)
         for path, expected in candidate.ALPHA22_BASE_CONTRACT_HASHES.items():
             self.assertEqual(candidate.digest(ROOT / path), expected)

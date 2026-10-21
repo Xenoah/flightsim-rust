@@ -92,6 +92,7 @@ pub fn spawn_pause_overlay(mut commands: Commands, body: Query<Entity, With<crat
                         ..default()
                     },
                     TextColor(Color::WHITE),
+                    TextLayout::default().with_linebreak(bevy::text::LineBreak::WordOrCharacter),
                     Node {
                         width: Val::Percent(100.0),
                         flex_shrink: 0.0,
@@ -135,18 +136,13 @@ type ReferenceTexts<'w, 's> = Query<
 /// The complete aircraft-specific reference is available only while simulation
 /// is already paused. No flight keys are repurposed for reading or scrolling.
 pub(crate) fn update_pause_reference(
+    traffic: crate::traffic::TrafficLayoutContext,
     guidance: Option<Res<crate::FlightGuidance>>,
     status: Option<Res<crate::ReplayStatus>>,
     mut references: ReferenceTexts,
 ) {
-    if guidance.as_ref().is_some_and(|value| !value.is_changed())
-        && status.as_ref().is_none_or(|value| !value.is_changed())
-        && references.iter().all(|(text, _)| !text.is_empty())
-    {
-        return;
-    }
     let replay = status.as_ref().is_some_and(|value| value.active);
-    let full = if replay {
+    let mut full = if replay {
         format!(
             "{}\n\n{}\n\nDISPLAY SETTINGS\n{}",
             crate::replay_help_text(),
@@ -160,6 +156,10 @@ pub(crate) fn update_pause_reference(
             .map_or_else(crate::help_text, str::to_owned);
         format!("{flight}\n\n{}", pause_text())
     };
+    if let Some(reference) = traffic.full_reference() {
+        full.push_str("\n\nTRAFFIC REFERENCE\n");
+        full.push_str(&reference);
+    }
     let hint = if replay {
         "Mouse wheel: scroll reference | Replay transport: F5/F6/F7/F8"
     } else {

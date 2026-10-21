@@ -198,6 +198,9 @@ alpha.20 の実績を 2 機種へ広げない。実 GPU の代替ではない。
   **機体指紋の不一致は拒否する**。同一 build / terrain が前提、旧乱流記録は互換保証なし）
 - [x] 交通 source interface、決定論的合成交通、位置・向き・識別表示、stale / 欠損処理
   （[Issue #13](../../../issues/13) の最小受け入れ範囲）
+  - 通常 CHASE の交通表示と操作案内を同じ実測レイアウトに置く source 修正。
+    省略分は既存 Esc 一時停止の完全な交通一覧へ保持する。cockpit / replay / crash
+    の従来表示、入力診断の優先度は維持。実機・Windows 配布の受け入れとは別。
 - [x] version 1 UDP の local session 作成・参加・退出、補間・遅延/欠損・再接続と
   loopback 統合検査（[Issue #14](../../../issues/14)、[ADR-0010](adr/0010-local-traffic-sessions.md)）。
   最終 candidate の実 app 2 プロセスで接続・host 再起動・新 session 再参加・F12 退出も確認
