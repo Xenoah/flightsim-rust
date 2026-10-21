@@ -67,7 +67,7 @@
     "scripts/tests/test_historical_release_copy_plan.py": "c01b964e8ef448fa487679eb3d83900a588d895af9ffacbe37c15c8639591c9a",
     "scripts/tests/test_release_authorization.py": "523b3f0c6f3a9883c6ace59604204106aca30cc93a0bc2b7f12ba14d8712e561",
     "scripts/tests/test_swift_forward_visibility_source_admission.py": "aa8089bb8572e3028c6bbfb4004cc78f723c60ae59e3ec8761cbb42d47d765e9",
-    "scripts/tests/test_swift_windows_candidate.py": "ea68047ebb731e86552db97e6872723a68cfb119efcf2e68082ee312cd2cb56d",
+    "scripts/tests/test_swift_windows_candidate.py": "ae7997b3b19dc24e5594ea15a94e86839e7dc5c50bf5262682dbe9ffd08917bd",
     "scripts/tests/test_terrain_centroid_source_admission.py": "d089cd4699be7203263e03c513f0d710c606b8d413ef8c2108ea85e5a0fbf894",
     "scripts/tests/test_terrain_stitch_source_admission.py": "1da04caba96a2106cfb82c5660cc0b6755c9262bbea69dcf8e93afe64923c592",
     "scripts/tests/test_tonemapping_build.py": "58fe33b902160b2a3c3016ccecb09a39d2447bacdbbd6cc4c6bbc5f262aafaf1",

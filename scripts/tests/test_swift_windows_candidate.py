@@ -991,9 +991,10 @@ class CandidateAcceptanceTests(unittest.TestCase):
     def test_help_reference_cannot_lose_replay_authority_or_scroll_bounds(self):
         repo, _ = self.source_fixture()
         mutations = (
-            ("crates/flightsim-ui/src/pause.rs", b'let full = if replay {', b'let full = if false {'),
+            ("crates/flightsim-ui/src/pause.rs", b'let mut full = if replay {', b'let mut full = if false {'),
             ("crates/flightsim-ui/src/pause.rs",
-             b'&& status.as_ref().is_none_or(|value| !value.is_changed())', b'&& true'),
+             b'let replay = status.as_ref().is_some_and(|value| value.active);',
+             b'let replay = false;'),
             ("crates/flightsim-ui/src/pause.rs",
              b'if !paused.is_paused() {', b'if false {'),
             ("crates/flightsim-ui/src/pause.rs",
