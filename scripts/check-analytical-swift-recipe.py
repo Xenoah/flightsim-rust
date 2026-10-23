@@ -35,7 +35,7 @@ IDENTITY = tone.ANALYTICAL_SWIFT_RECIPE
 TARGET, TOOLCHAIN = candidate.TARGET, candidate.TOOLCHAIN
 FEATURES = ['analytic-tonemapping', 'commercial-staging']
 CONTRACT = 'scripts/analytical-swift-source-contract.json'
-SOURCE_ADMISSION = 'analytical-swift-alpha26-version-source-admission-v1'
+SOURCE_ADMISSION = 'analytical-swift-alpha26-ci60-source-admission-v1'
 SOURCE_RECIPE = tone.TWO_LUT_SOURCE
 SOURCE_PATHS = {
     'Cargo.toml', 'Cargo.lock', 'crates/flightsim-app/Cargo.toml',
@@ -193,6 +193,38 @@ ALPHA26_REBOUND_PATHS = frozenset({
     'scripts/tests/test_terrain_stitch_source_admission.py',
 })
 SOURCE_PATHS |= ALPHA26_SOURCE_PATHS
+ALPHA26_ADMISSION_SOURCE_PATHS = frozenset(SOURCE_PATHS)
+
+# Preserve the complete 65-input public alpha.26 proof. This outer tooling-only
+# layer changes one CI ceiling; it grants no runtime or publication acceptance.
+CI60_MIGRATION_PATH = 'scripts/ci60-source-migration.json'
+CI60_MIGRATION_SHA256 = '5b663e654ef105f768fbf96c5ff8f93281cc943a87f6d0367c484b557bfa9ab2'
+CI60_HISTORY_PATH = 'scripts/history/2eb36242-ci.yml'
+CI60_PREVIOUS_SHA256 = '19ff459cddeb90a060d3bb254f5346bb46b9c070d578f0e5973735304a35dd91'
+CI60_CURRENT_SHA256 = 'b99cc0a5a1fb8a102bd676c0638a37483ee0aab0511ab551133c2d7d4632587c'
+CI60_BASE_CONTRACT_PATH = 'scripts/history/2eb36242-analytical-swift-source-contract.json'
+CI60_BASE_CONTRACT_SHA256 = '35b23ccd283b86051ef84c9fc38ff6d448465e699b06d8f6bb5810bf01503ace'
+CI60_SOURCE_PATHS = frozenset({
+    CI60_MIGRATION_PATH, CI60_HISTORY_PATH, CI60_BASE_CONTRACT_PATH,
+    'scripts/tests/test_ci60_source_admission.py',
+})
+CI60_REBOUND_PATHS = frozenset({
+    CI_TIMEOUT_WORKFLOW_PATH, 'scripts/check-analytical-swift-recipe.py',
+    'docs/release/full-two-aircraft-source-admission.md',
+    'scripts/tests/test_alpha23_version_source_admission.py',
+    'scripts/tests/test_alpha24_version_source_admission.py',
+    'scripts/tests/test_alpha25_version_source_admission.py',
+    'scripts/tests/test_alpha26_version_source_admission.py',
+    'scripts/tests/test_analytical_swift_recipe.py',
+    'scripts/tests/test_chase_hud_source_admission.py',
+    'scripts/tests/test_ci_timeout_source_admission.py',
+    'scripts/tests/test_cockpit_source_admission.py',
+    'scripts/tests/test_cockpit_variant_source_admission.py',
+    'scripts/tests/test_component_terms_source_admission.py',
+    'scripts/tests/test_swift_forward_visibility_source_admission.py',
+    'scripts/tests/test_terrain_stitch_source_admission.py',
+})
+SOURCE_PATHS |= CI60_SOURCE_PATHS
 
 GATES = {
     'combined_feature_regressions': 'Combined release/MSVC app/render tests and Clippy; real render tonemapping_modes; ordinary controls and mixed/neither rejection',
@@ -265,7 +297,7 @@ def validate_ci_timeout_delta(previous, current):
 
 
 def validate_ci_timeout_admission(repo, pins):
-    """Keep the runtime proof and all unrelated analytical inputs unchanged."""
+    """Keep the exact historical 30-to-45 proof; the outer layer checks live CI."""
     require(digest(repo / CI_TIMEOUT_MIGRATION_PATH) == CI_TIMEOUT_MIGRATION_SHA256
             and pins.get(CI_TIMEOUT_MIGRATION_PATH) == CI_TIMEOUT_MIGRATION_SHA256,
             'CI timeout migration changed')
@@ -303,7 +335,7 @@ def validate_ci_timeout_admission(repo, pins):
         if path not in CI_TIMEOUT_REBOUND_PATHS:
             require(pins.get(path) == expected, 'CI timeout unrelated analytical source changed: ' + path)
     validate_ci_timeout_delta((repo / CI_TIMEOUT_HISTORY_PATH).read_bytes(),
-                              (repo / CI_TIMEOUT_WORKFLOW_PATH).read_bytes())
+                              (repo / CI60_HISTORY_PATH).read_bytes())
     require(pins.get(CI_TIMEOUT_HISTORY_PATH) == CI_TIMEOUT_PREVIOUS_SHA256
             and pins.get(CI_TIMEOUT_WORKFLOW_PATH) == CI_TIMEOUT_CURRENT_SHA256,
             'CI timeout workflow pins changed')
@@ -406,11 +438,85 @@ def validate_alpha26_admission(repo, pins):
             and set(previous['source_sha256']) == CHASE_HUD_ADMISSION_SOURCE_PATHS,
             'invalid alpha26 version historical analytical contract')
     validate_chase_hud_admission(repo, previous['source_sha256'])
-    require(isinstance(pins, dict) and set(pins) == SOURCE_PATHS,
+    require(isinstance(pins, dict) and set(pins) == ALPHA26_ADMISSION_SOURCE_PATHS,
             'alpha26 version analytical boundary changed')
     for path, expected in previous['source_sha256'].items():
         if path not in ALPHA26_REBOUND_PATHS:
             require(pins.get(path) == expected, 'unrelated analytical input changed: ' + path)
+
+
+def validate_ci60_delta(previous, current):
+    """Accept only the complete public workflow's single 45-to-60 job ceiling."""
+    require(isinstance(previous, bytes) and isinstance(current, bytes)
+            and 0 < len(previous) <= 1024 * 1024 and 0 < len(current) <= 1024 * 1024,
+            'CI60 workflow exceeds byte boundary')
+    import hashlib
+    require(hashlib.sha256(previous).hexdigest() == CI60_PREVIOUS_SHA256,
+            'CI60 historical workflow changed')
+    before = (b'  world_source_tools:\n'
+              b'    name: world source-tool boundaries\n'
+              b'    runs-on: ubuntu-latest\n'
+              b'    # Allow the full canonical-source mutation sweep and all schema/reference\n'
+              b'    # checks to finish despite hosted-runner variability.\n'
+              b'    timeout-minutes: 45\n')
+    after = before.replace(b'timeout-minutes: 45', b'timeout-minutes: 60')
+    require(previous.count(before) == 1 and current == previous.replace(before, after)
+            and hashlib.sha256(current).hexdigest() == CI60_CURRENT_SHA256,
+            'CI workflow changed outside exact world_source_tools 45-to-60 budget')
+
+
+def validate_ci60_admission(repo, pins):
+    """Preserve all 65 prior inputs and independently bind the complete live CI."""
+    require(isinstance(pins, dict) and set(pins) == SOURCE_PATHS,
+            'CI60 analytical boundary changed')
+    require(digest(repo / CI60_MIGRATION_PATH) == CI60_MIGRATION_SHA256
+            and pins[CI60_MIGRATION_PATH] == CI60_MIGRATION_SHA256,
+            'CI60 migration changed')
+    migration = json.loads((repo / CI60_MIGRATION_PATH).read_text(encoding='utf-8'))
+    expected = {
+        'schema_version': 1, 'identity': 'analytical-swift-alpha26-ci60-source-migration-v1',
+        'base_source': '2eb36242cde4ccd3492b0079d4de226ee26db15e',
+        'base_tree': 'f56e97232728aed82b66edb82beb7417e946c929',
+        'base_source_kind': 'public-pull-request-commit',
+        'scope': 'source-only CI job budget; no test, native, runtime, rights or publication gate change',
+        'release_authorized': False,
+        'runtime_source_migration_sha256': candidate.ALPHA26_MIGRATION_SHA256,
+        'previous_ci_migration_sha256': CI_TIMEOUT_MIGRATION_SHA256,
+        'base_analytical_contract': {'path': CI60_BASE_CONTRACT_PATH,
+                                     'sha256': CI60_BASE_CONTRACT_SHA256},
+        'workflow': {'path': CI_TIMEOUT_WORKFLOW_PATH, 'historical_path': CI60_HISTORY_PATH,
+                     'previous_sha256': CI60_PREVIOUS_SHA256,
+                     'sha256': CI60_CURRENT_SHA256, 'job': 'world_source_tools',
+                     'previous_timeout_minutes': 45, 'timeout_minutes': 60},
+    }
+    require(type(migration.get('schema_version')) is int
+            and migration.get('release_authorized') is False and migration == expected,
+            'invalid CI60 migration identity or scope')
+    require(digest(repo / CI60_BASE_CONTRACT_PATH) == CI60_BASE_CONTRACT_SHA256
+            and pins[CI60_BASE_CONTRACT_PATH] == CI60_BASE_CONTRACT_SHA256,
+            'CI60 historical analytical contract changed')
+    previous = json.loads((repo / CI60_BASE_CONTRACT_PATH).read_text(encoding='utf-8'))
+    require(set(previous) == {'schema_version', 'recipe', 'source_admission', 'source_recipe',
+            'base_reviewed_source', 'base_reviewed_runtime_tree', 'source_migration_sha256',
+            'release_authorized', 'source_sha256'}
+            and type(previous['schema_version']) is int and previous['schema_version'] == 1
+            and previous['recipe'] == IDENTITY and previous['source_recipe'] == SOURCE_RECIPE
+            and previous['source_admission'] == 'analytical-swift-alpha26-version-source-admission-v1'
+            and previous['base_reviewed_source'] == candidate.REVIEWED_RUNTIME_SOURCE
+            and previous['base_reviewed_runtime_tree'] == candidate.REVIEWED_RUNTIME_TREE
+            and previous['source_migration_sha256'] == candidate.ALPHA26_MIGRATION_SHA256
+            and previous['release_authorized'] is False
+            and set(previous['source_sha256']) == ALPHA26_ADMISSION_SOURCE_PATHS,
+            'invalid CI60 historical analytical contract')
+    validate_alpha26_admission(repo, previous['source_sha256'])
+    for path, prior in previous['source_sha256'].items():
+        if path not in CI60_REBOUND_PATHS:
+            require(pins[path] == prior, 'CI60 unrelated analytical source changed: ' + path)
+    require(pins[CI60_HISTORY_PATH] == CI60_PREVIOUS_SHA256
+            and pins[CI_TIMEOUT_WORKFLOW_PATH] == CI60_CURRENT_SHA256,
+            'CI60 workflow pins changed')
+    validate_ci60_delta((repo / CI60_HISTORY_PATH).read_bytes(),
+                       (repo / CI_TIMEOUT_WORKFLOW_PATH).read_bytes())
 
 
 def source_evidence(repo, expected):
@@ -431,7 +537,7 @@ def source_evidence(repo, expected):
             'invalid analytical source contract')
     pins = contract.get('source_sha256')
     require(isinstance(pins, dict) and set(pins) == SOURCE_PATHS, 'analytical source boundary changed')
-    validate_alpha26_admission(repo, pins)
+    validate_ci60_admission(repo, pins)
     files = {entry['path']: entry for entry in source['files']}
     require(CONTRACT in files, 'analytical source contract must be tracked')
     for relative in SOURCE_PATHS | {CONTRACT}:

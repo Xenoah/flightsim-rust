@@ -103,7 +103,7 @@ class CockpitVariantSourceAdmissionTests(unittest.TestCase):
         self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 499)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)
         self.assertEqual(len(candidate.CORE_PIPELINE_SOURCE_PATHS), 55)
-        self.assertEqual(len(capture.check.SOURCE_PATHS), 65)
+        self.assertEqual(len(capture.check.SOURCE_PATHS), 69)
         self.assertEqual(len(capture.BOUND_FILES), 4)
         self.assertEqual(current['contract'], 'full-two-aircraft-cockpit-variant-source-v1')
         self.assertEqual(current['scope'], candidate.SOURCE_ADMISSION_SCOPE)

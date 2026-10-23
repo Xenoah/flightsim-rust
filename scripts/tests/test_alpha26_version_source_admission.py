@@ -71,7 +71,7 @@ class Alpha26VersionSourceAdmissionTests(unittest.TestCase):
         self.assertEqual(len(candidate.ALPHA26_SOURCE_PATHS), 6)
         self.assertEqual(len(candidate.ALPHA26_WORKSPACE_PACKAGES), 13)
         self.assertEqual(candidate.ALPHA26_WORKSPACE_PACKAGES, candidate.ALPHA25_WORKSPACE_PACKAGES)
-        self.assertEqual(len(capture.check.SOURCE_PATHS), 65)
+        self.assertEqual(len(capture.check.SOURCE_PATHS), 69)
         self.assertEqual(len(capture.BOUND_FILES), 4)
         self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 499)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)
@@ -229,7 +229,7 @@ class Alpha26VersionSourceAdmissionTests(unittest.TestCase):
     def test_analytical_successor_preserves_frozen_64_input_proof(self):
         check = capture.check
         previous = json.loads((ROOT / check.ALPHA26_BASE_CONTRACT_PATH).read_text())
-        current = json.loads((ROOT / check.CONTRACT).read_text())
+        current = json.loads((ROOT / check.CI60_BASE_CONTRACT_PATH).read_text())
         check.validate_chase_hud_admission(ROOT, previous['source_sha256'])
         check.validate_alpha26_admission(ROOT, current['source_sha256'])
         self.assertEqual(len(previous['source_sha256']), 64)

@@ -497,10 +497,45 @@ auditors/contracts/guide/test assertions plus the Cargo pair. Its boundary is
 `analytical-swift-alpha26-version-source-admission-v1` and
 `analytical-swift-alpha26-version-capture-source-admission-v1`.
 
-No cloud rendering change is part of this preparation. The historical alpha.25
-publication receipt and native applicability record are not rebound here.
+No cloud rendering change is part of this preparation. This source migration
+does not rebind historical native applicability. A separately recorded alpha.26
+publication-permission receipt does not establish native qualification.
 Fresh final-source Windows capture, substantive native-content applicability,
 exact-inventory publication authority, same-build archive/extraction and both
 existing aircraft smokes remain required. The new source/notice comparison is
 not native evidence and does not accept a new agreement or recipient assent.
 See [alpha.26 preparation](../qa/alpha26-release-preparation-2026-10-22.md).
+
+## Alpha.26 source-tool CI budget successor
+
+PR #58 CI run [39944623925](https://github.com/Xenoah/flightsim-rust/actions/runs/39944623925)
+exhausted the source-tool job's 45-minute budget before the complete suite could
+finish. The retained log contains 751 successful test results and no assertion
+failure; the cancelled run is not a passing full-suite result.
+
+The source-only `scripts/ci60-source-migration.json` successor retains public
+preparation commit `2eb36242cde4ccd3492b0079d4de226ee26db15e`, tree
+`f56e97232728aed82b66edb82beb7417e946c929`, as exact Git-blob witnesses for the
+complete 45-minute workflow and its 65-input analytical contract. This base is
+a PR preparation commit, not a released or native-qualified binary.
+
+Only `world_source_tools.timeout-minutes` changes from 45 to 60. The entire
+workflow must equal that single literal replacement: all tests, commands,
+dependency versions, runners, triggers, permissions and other job budgets remain
+byte-exact. The older 30-to-45 descriptor and validator remain intact and consume
+the frozen 45-minute witness. The new outer layer independently validates the
+actual 60-minute workflow and rejects unrelated or jointly resealed changes.
+
+The replay contract remains the exact 1001-pin alpha.26 runtime contract. The
+analytical boundary grows from 65 to 69 only for the two witnesses, fixed
+descriptor and dedicated mutation tests; capture retains four inputs. Active
+analytical/capture identities are
+`analytical-swift-alpha26-ci60-source-admission-v1` and
+`analytical-swift-alpha26-ci60-capture-source-admission-v1`. All original
+historical pin, canonical-checkout and commit/export rejection checks remain.
+
+This budget change is not a test waiver, native observation, applicability
+review or release approval. Publication permission is rebound to exact changed
+source separately; genuine Windows capture, all eleven native-content sections,
+same-build archive/extraction and both aircraft smokes remain mandatory. The
+ordinary release workflow and its `windows-latest` runner are unchanged.

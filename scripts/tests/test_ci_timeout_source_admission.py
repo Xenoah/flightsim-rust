@@ -26,7 +26,7 @@ class CiTimeoutSourceAdmissionTests(unittest.TestCase):
 
     def workflow_bytes(self):
         return ((ROOT / check.CI_TIMEOUT_HISTORY_PATH).read_bytes(),
-                (ROOT / check.CI_TIMEOUT_WORKFLOW_PATH).read_bytes())
+                (ROOT / check.CI60_HISTORY_PATH).read_bytes())
 
     def test_exact_single_budget_change_preserves_all_tests_and_runtime_contracts(self):
         previous, current = self.workflow_bytes()
@@ -115,7 +115,7 @@ class CiTimeoutSourceAdmissionTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             repo = Path(temporary)
             paths = {check.CI_TIMEOUT_MIGRATION_PATH, check.CI_TIMEOUT_BASE_CONTRACT_PATH,
-                     check.CI_TIMEOUT_HISTORY_PATH, check.CI_TIMEOUT_WORKFLOW_PATH}
+                     check.CI_TIMEOUT_HISTORY_PATH, check.CI60_HISTORY_PATH}
             for path in paths:
                 destination = repo / path
                 destination.parent.mkdir(parents=True, exist_ok=True)
@@ -126,8 +126,9 @@ class CiTimeoutSourceAdmissionTests(unittest.TestCase):
                 original = (repo / path).read_bytes()
                 changed = original + b'\n'
                 (repo / path).write_bytes(changed)
+                pin = check.CI_TIMEOUT_WORKFLOW_PATH if path == check.CI60_HISTORY_PATH else path
                 with self.subTest(path=path), self.assertRaises(ValueError):
-                    check.validate_ci_timeout_admission(repo, {**pins, path: hashlib.sha256(changed).hexdigest()})
+                    check.validate_ci_timeout_admission(repo, {**pins, pin: hashlib.sha256(changed).hexdigest()})
                 (repo / path).write_bytes(original)
             original = json.loads((repo / check.CI_TIMEOUT_MIGRATION_PATH).read_text())
             for key, value in [('release_authorized', True), ('schema_version', True),
@@ -146,7 +147,8 @@ class CiTimeoutSourceAdmissionTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertEqual(source['analytical_contract']['source_admission'], check.SOURCE_ADMISSION)
         for relative in (check.CI_TIMEOUT_WORKFLOW_PATH, check.CI_TIMEOUT_MIGRATION_PATH,
-                         check.CI_TIMEOUT_HISTORY_PATH, check.CI_TIMEOUT_BASE_CONTRACT_PATH):
+                         check.CI_TIMEOUT_HISTORY_PATH, check.CI_TIMEOUT_BASE_CONTRACT_PATH,
+                         check.CI60_HISTORY_PATH):
             path = repo / relative
             original = path.read_bytes()
             path.write_bytes(original + b'\n')

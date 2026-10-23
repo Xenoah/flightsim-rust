@@ -4,15 +4,16 @@
   "evidence": [
     "docs/qa/alpha26-release-preparation-2026-10-22.md",
     "docs/qa/alpha26-dependency-notice-review-2026-10-22.md",
+    "docs/qa/alpha26-ci-budget-2026-10-23.md",
     "docs/release/full-two-aircraft-source-admission.md",
     "docs/release/windows-component-release-notes.md",
     "docs/release/components/MICROSOFT-COMPONENT-TERMS.txt",
     "Publication permission only. This receipt does not assert new legal assent, native runtime acceptance or distribution qualification. Genuine final-source native applicability, same-build archive verification and both extracted-aircraft smokes remain independent required gates."
   ],
-  "release_inventory_sha256": "60643930f765b67c8392a1000dd47ba11c0b8c1139e900355bc3edd7b45610d4",
+  "release_inventory_sha256": "58afb9eb7f344f4f3bf5b841240faf8434b160d4c6172f0ab9f88ea873e25b4b",
   "schema_version": 1,
   "scope": "github-windows-prerelease",
-  "source_inventory_sha256": "800e3f8ba8563d7a26dfff499ef2b4064446cca4f6fd1fc3ce3744e028d0c4bc",
+  "source_inventory_sha256": "a9dffb87081698669c6f9ea1060d23c65f1f6b7ac4489b3981c5c79ff201b61a",
   "status": "authorized",
   "target": "x86_64-pc-windows-msvc",
   "version": "0.6.0-alpha.26"

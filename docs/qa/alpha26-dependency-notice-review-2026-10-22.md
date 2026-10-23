@@ -81,8 +81,10 @@ binary. `appearance_accepted`, `runtime_accepted`, `distribution_qualified`
 and `release_authorized` remain false. Historical source amendments are retained
 without retelling their observations as current.
 
-The alpha.25 publication receipt and native applicability remain untouched and
-are intentionally not sufficient for this changed-source successor. Final-source
+This source/notice amendment initially left the alpha.25 publication receipt and
+native applicability untouched. A subsequent separate alpha.26 permission-only
+receipt records publication authority; native applicability remains historical
+and insufficient for this changed-source successor. Final-source
 Windows capture and all eleven native-content comparisons, actual publication
 authority, same-build archive/extraction and both aircraft smokes are still
 required. Linux source metadata, passing tests and an MSVC compile do not satisfy
