@@ -470,3 +470,72 @@ requires fresh compilation, layout/image checks and CI. Existing alpha.25
 Windows, applicability and publication receipts remain evidence only for their
 original source. Native, whole-target rights, exact-inventory authorization and
 publication remain independent gates; no source migration creates approval.
+
+## Alpha.26 HUD version preparation
+
+The source-only `scripts/alpha26-version-source-migration.json` successor is
+based on merged main `e2e23ce1e954fd34ea6dd90a102a17ca0a7d3f4b`, tree
+`1ea5182a0ca7ea9883ea6a5b18ba4db9ad032cda`. That base has successful source CI
+and separate MSVC build-only evidence; it is not a published HUD binary or a
+native/runtime qualification. The migration therefore calls it
+`merged-main-commit`, not `published-commit`.
+
+Only `0.6.0-alpha.25` to `0.6.0-alpha.26` changes are admitted: one workspace
+manifest field and thirteen local lockfile package versions. Every other Cargo
+byte, dependency, feature, crate and asset remains unchanged. Five byte-exact
+`e2e23ce-*` witnesses preserve both Cargo files and all three complete contracts.
+Together with the migration descriptor they extend the frozen 995-pin HUD proof
+to 1001 pins; all earlier validators and independent physics/replay anchors
+remain mandatory. Exact semantic and byte checks reject unrelated manifest,
+lock-order, dependency and jointly resealed descriptor changes.
+
+The analytical wrapper preserves the complete frozen 64-input HUD proof, adds
+one alpha.26 mutation-test input, and limits rebindings to its explicit source
+auditors/contracts/guide/test assertions plus the Cargo pair. Its boundary is
+65 inputs; capture still has four. The current identities are
+`full-two-aircraft-alpha26-version-source-v1`,
+`analytical-swift-alpha26-version-source-admission-v1` and
+`analytical-swift-alpha26-version-capture-source-admission-v1`.
+
+No cloud rendering change is part of this preparation. This source migration
+does not rebind historical native applicability. A separately recorded alpha.26
+publication-permission receipt does not establish native qualification.
+Fresh final-source Windows capture, substantive native-content applicability,
+exact-inventory publication authority, same-build archive/extraction and both
+existing aircraft smokes remain required. The new source/notice comparison is
+not native evidence and does not accept a new agreement or recipient assent.
+See [alpha.26 preparation](../qa/alpha26-release-preparation-2026-10-22.md).
+
+## Alpha.26 source-tool CI budget successor
+
+PR #58 CI run [39944623925](https://github.com/Xenoah/flightsim-rust/actions/runs/39944623925)
+exhausted the source-tool job's 45-minute budget before the complete suite could
+finish. The retained log contains 751 successful test results and no assertion
+failure; the cancelled run is not a passing full-suite result.
+
+The source-only `scripts/ci60-source-migration.json` successor retains public
+preparation commit `2eb36242cde4ccd3492b0079d4de226ee26db15e`, tree
+`f56e97232728aed82b66edb82beb7417e946c929`, as exact Git-blob witnesses for the
+complete 45-minute workflow and its 65-input analytical contract. This base is
+a PR preparation commit, not a released or native-qualified binary.
+
+Only `world_source_tools.timeout-minutes` changes from 45 to 60. The entire
+workflow must equal that single literal replacement: all tests, commands,
+dependency versions, runners, triggers, permissions and other job budgets remain
+byte-exact. The older 30-to-45 descriptor and validator remain intact and consume
+the frozen 45-minute witness. The new outer layer independently validates the
+actual 60-minute workflow and rejects unrelated or jointly resealed changes.
+
+The replay contract remains the exact 1001-pin alpha.26 runtime contract. The
+analytical boundary grows from 65 to 69 only for the two witnesses, fixed
+descriptor and dedicated mutation tests; capture retains four inputs. Active
+analytical/capture identities are
+`analytical-swift-alpha26-ci60-source-admission-v1` and
+`analytical-swift-alpha26-ci60-capture-source-admission-v1`. All original
+historical pin, canonical-checkout and commit/export rejection checks remain.
+
+This budget change is not a test waiver, native observation, applicability
+review or release approval. Publication permission is rebound to exact changed
+source separately; genuine Windows capture, all eleven native-content sections,
+same-build archive/extraction and both aircraft smokes remain mandatory. The
+ordinary release workflow and its `windows-latest` runner are unchanged.
