@@ -33,7 +33,7 @@ class Alpha25VersionSourceAdmissionTests(unittest.TestCase):
 
     def version_bytes(self):
         return ({path: (ROOT / historical).read_bytes() for path, historical in RELOCATIONS.items()},
-                {path: (ROOT / path).read_bytes() for path in CHANGED})
+                {path: (ROOT / candidate.ALPHA26_HISTORICAL_RELOCATIONS[path]).read_bytes() for path in CHANGED})
 
     def test_exact_two_file_transition_preserves_all_981_prior_pins(self):
         contract = json.loads((ROOT / candidate.CHASE_HUD_BASE_CONTRACT_PATH).read_text())
@@ -64,14 +64,14 @@ class Alpha25VersionSourceAdmissionTests(unittest.TestCase):
         for path in CHANGED:
             self.assertEqual(migration['replaced_source_sha256'][path], {
                 'previous_sha256': base['source_sha256'][path],
-                'sha256': candidate.digest(ROOT / path),
+                'sha256': candidate.digest(ROOT / candidate.ALPHA26_HISTORICAL_RELOCATIONS[path]),
             })
         candidate.validate_alpha25_version_delta(*self.version_bytes())
         self.assertEqual(len(candidate.SWIFT_FORWARD_REPLAY_CONTRACT_PATHS), 981)
         self.assertEqual(len(candidate.ALPHA25_SOURCE_PATHS), 6)
         self.assertEqual(len(candidate.ALPHA25_WORKSPACE_PACKAGES), 13)
         self.assertEqual(candidate.ALPHA25_WORKSPACE_PACKAGES, candidate.ALPHA24_WORKSPACE_PACKAGES)
-        self.assertEqual(len(capture.check.SOURCE_PATHS), 64)
+        self.assertEqual(len(capture.check.SOURCE_PATHS), 65)
         self.assertEqual(len(capture.BOUND_FILES), 4)
         self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 499)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)
@@ -224,7 +224,7 @@ class Alpha25VersionSourceAdmissionTests(unittest.TestCase):
     def test_resealed_cargo_and_descriptor_cannot_authorize_themselves(self):
         repo, _ = self.fixture()
         path = repo / 'Cargo.toml'
-        path.write_bytes(path.read_bytes().replace(b'0.6.0-alpha.25', b'0.6.0-alpha.26'))
+        path.write_bytes(path.read_bytes().replace(b'0.6.0-alpha.26', b'0.6.0-alpha.27'))
         migration = json.loads((repo / candidate.ALPHA25_MIGRATION_PATH).read_text())
         migration['replaced_source_sha256']['Cargo.toml']['sha256'] = candidate.digest(path)
         capture.write_json(repo / candidate.ALPHA25_MIGRATION_PATH, migration)

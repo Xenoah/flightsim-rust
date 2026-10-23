@@ -71,7 +71,7 @@ class SwiftForwardVisibilitySourceAdmissionTests(unittest.TestCase):
         for path, expected in frozen.items():
             historical = candidate.ALPHA25_HISTORICAL_RUNTIME_RELOCATIONS.get(path, path)
             self.assertEqual(current['source_sha256'][historical], expected)
-        self.assertEqual(len(check.SOURCE_PATHS), 64)
+        self.assertEqual(len(check.SOURCE_PATHS), 65)
         self.assertEqual(len(capture.BOUND_FILES), 4)
         self.assertIs(current['release_authorized'], False)
 

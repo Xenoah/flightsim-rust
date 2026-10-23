@@ -1,0 +1,31 @@
+{
+  "added_source_sha256": {},
+  "base_contract_sha256": {
+    "scripts/history/e2e23ce-analytical-swift-capture-contract.json": "2527995055fca44fe17ee10b0f108ec05331d58841b8ffcbbebad79ad772afcc",
+    "scripts/history/e2e23ce-analytical-swift-source-contract.json": "3e695abc2bc2fdaf539bcc509173fa4132b906b6319bf8bead8cc15552f3663e",
+    "scripts/history/e2e23ce-replay-candidate-contract.json": "4a9516808ed6ecf06ea0a2e061feb01becf7551e471acb4e739e4d7d129400c2"
+  },
+  "base_source": "e2e23ce1e954fd34ea6dd90a102a17ca0a7d3f4b",
+  "base_source_kind": "merged-main-commit",
+  "base_tree": "1ea5182a0ca7ea9883ea6a5b18ba4db9ad032cda",
+  "historical_relocations": {
+    "Cargo.lock": "scripts/history/e2e23ce-Cargo.lock",
+    "Cargo.toml": "scripts/history/e2e23ce-Cargo.toml"
+  },
+  "identity": "full-two-aircraft-alpha26-version-source-migration-v1",
+  "preserved_runtime_sha256": "c9b71ddad46396b3b6ba8961a17f8323a28788f3c641e51f5c47098846653667",
+  "previous_source_migration_sha256": "36e39f4c84f56b5dec93579726cc7ebbeef75a0764751649b33a1d9a5ff66032",
+  "previous_version": "0.6.0-alpha.25",
+  "replaced_source_sha256": {
+    "Cargo.lock": {
+      "previous_sha256": "f2d1cb82a6a292afa0f6289fbcf235f492ab1579a50246ed99323e9994cfcab1",
+      "sha256": "a4be7f2a769d9c0d5b33369334fe8dafb5c356f052208d4cb739700616c9fcda"
+    },
+    "Cargo.toml": {
+      "previous_sha256": "d73e043a71ed4bccaae07dbbd0e7b4573392e70b05ef09a4a04a6e5f3e4b71ab",
+      "sha256": "10d186ef64ce442c6815319ce4258129a57d6a2025942e969af6c658b2cb7929"
+    }
+  },
+  "schema_version": 1,
+  "version": "0.6.0-alpha.26"
+}

@@ -1,24 +1,19 @@
 {
-  "authorized_at": "2026-10-19T03:33:47.676937Z",
+  "authorized_at": "2026-10-22T12:04:48Z",
   "authorized_by": "Xenoah (repository owner; recorded by authorized development assistant)",
   "evidence": [
-    "The repository owner explicitly authorized autonomous fixes, reporting, pushes and releases on 2026-10-19T03:33:47.676937Z after the proposed alpha.24 continuation was identified; the confirmation is retained privately.",
-    "The repository owner approved the exact bundled Microsoft CRT component terms and assent presentation on 2026-10-09T06:47:12Z; that prior approval is retained privately. This receipt does not assert a new legal agreement or change the approved terms.",
-    "docs/release/components/MICROSOFT-COMPONENT-TERMS.txt",
-    "docs/release/windows-component-release-notes.md",
-    "This receipt binds the current publication instruction to the exact alpha.24 version, source and release inventory; it does not attest native success. Changed-source applicability, same-build archive verification and extracted two-aircraft smoke remain independent required gates.",
+    "docs/qa/alpha26-release-preparation-2026-10-22.md",
+    "docs/qa/alpha26-dependency-notice-review-2026-10-22.md",
     "docs/release/full-two-aircraft-source-admission.md",
-    "docs/qa/alpha24-dependency-notice-review-2026-10-19.md",
-    "The exact source also includes the bounded CI source-tool job ceiling amendment from 30 to 45 minutes. Test content, individual process deadlines, native qualification and publication gates are unchanged; this is not a waiver of any failed or incomplete test.",
-    "docs/release/full-review-applicability.json binds genuine ordinary Windows Release run 39225763586 and its independently revalidated native facts. This authorization preserves the existing supplier terms and does not replace final-source capture, archive verification or extracted-bundle smoke.",
-    "The same repository-owner autonomous development, push and release instruction now binds the alpha.25 Swift forward-view successor. docs/qa/alpha25-release-preparation-2026-10-19.md and docs/qa/alpha25-dependency-notice-review-2026-10-19.md describe its bounded source-only preparation. The preceding alpha.24 native applicability remains historical and must be re-reviewed from genuine successor Windows facts; no existing runtime success or legal assent is transferred by this receipt.",
-    "docs/release/full-review-applicability.json now binds genuine alpha.25 ordinary Windows Release run 39357521387 and independently revalidated original native facts. Eight unchanged native sections and bounded source/package/graph changes were substantively reviewed. Existing supplier terms and assent remain unchanged; final-source capture, same-build archive and extracted smoke remain mandatory."
+    "docs/release/windows-component-release-notes.md",
+    "docs/release/components/MICROSOFT-COMPONENT-TERMS.txt",
+    "Publication permission only. This receipt does not assert new legal assent, native runtime acceptance or distribution qualification. Genuine final-source native applicability, same-build archive verification and both extracted-aircraft smokes remain independent required gates."
   ],
-  "release_inventory_sha256": "90883d5779ff29280c364db7fc376cfad4739de4fa6fd8c7eee9a6b7f554873a",
+  "release_inventory_sha256": "60643930f765b67c8392a1000dd47ba11c0b8c1139e900355bc3edd7b45610d4",
   "schema_version": 1,
   "scope": "github-windows-prerelease",
-  "source_inventory_sha256": "c1ebc5bc072dc9def034c913880062b846cd22fb92fec6e19eed921ef56ed8fd",
+  "source_inventory_sha256": "800e3f8ba8563d7a26dfff499ef2b4064446cca4f6fd1fc3ce3744e028d0c4bc",
   "status": "authorized",
   "target": "x86_64-pc-windows-msvc",
-  "version": "0.6.0-alpha.25"
+  "version": "0.6.0-alpha.26"
 }

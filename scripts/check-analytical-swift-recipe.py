@@ -35,7 +35,7 @@ IDENTITY = tone.ANALYTICAL_SWIFT_RECIPE
 TARGET, TOOLCHAIN = candidate.TARGET, candidate.TOOLCHAIN
 FEATURES = ['analytic-tonemapping', 'commercial-staging']
 CONTRACT = 'scripts/analytical-swift-source-contract.json'
-SOURCE_ADMISSION = 'analytical-swift-chase-hud-source-admission-v1'
+SOURCE_ADMISSION = 'analytical-swift-alpha26-version-source-admission-v1'
 SOURCE_RECIPE = tone.TWO_LUT_SOURCE
 SOURCE_PATHS = {
     'Cargo.toml', 'Cargo.lock', 'crates/flightsim-app/Cargo.toml',
@@ -167,6 +167,32 @@ CHASE_HUD_REBOUND_PATHS = frozenset({'docs/release/full-two-aircraft-source-admi
  'scripts/tests/test_swift_windows_candidate.py',
  'scripts/tests/test_terrain_stitch_source_admission.py'})
 SOURCE_PATHS |= CHASE_HUD_SOURCE_PATHS
+CHASE_HUD_ADMISSION_SOURCE_PATHS = frozenset(SOURCE_PATHS)
+
+# Keep the merged HUD proof intact. This successor changes only the workspace
+# version and the bounded source-auditor/documentation/test bindings below.
+ALPHA26_BASE_CONTRACT_PATH = 'scripts/history/e2e23ce-analytical-swift-source-contract.json'
+ALPHA26_SOURCE_PATHS = frozenset({'scripts/tests/test_alpha26_version_source_admission.py'})
+ALPHA26_REBOUND_PATHS = frozenset({
+    'Cargo.toml', 'Cargo.lock',
+    'docs/release/full-two-aircraft-source-admission.md',
+    'scripts/check-analytical-swift-recipe.py',
+    'scripts/check-swift-windows-candidate.py',
+    'scripts/replay-candidate-contract.json',
+    'scripts/tests/test_alpha23_version_source_admission.py',
+    'scripts/tests/test_alpha24_version_source_admission.py',
+    'scripts/tests/test_alpha25_version_source_admission.py',
+    'scripts/tests/test_analytical_swift_recipe.py',
+    'scripts/tests/test_chase_hud_source_admission.py',
+    'scripts/tests/test_cockpit_source_admission.py',
+    'scripts/tests/test_cockpit_variant_source_admission.py',
+    'scripts/tests/test_component_terms_source_admission.py',
+    'scripts/tests/test_full_source_admission.py',
+    'scripts/tests/test_swift_forward_visibility_source_admission.py',
+    'scripts/tests/test_swift_windows_candidate.py',
+    'scripts/tests/test_terrain_stitch_source_admission.py',
+})
+SOURCE_PATHS |= ALPHA26_SOURCE_PATHS
 
 GATES = {
     'combined_feature_regressions': 'Combined release/MSVC app/render tests and Clippy; real render tonemapping_modes; ordinary controls and mixed/neither rejection',
@@ -354,10 +380,36 @@ def validate_chase_hud_admission(repo, pins):
             and set(previous['source_sha256']) == ALPHA25_ADMISSION_SOURCE_PATHS,
             'invalid chase HUD historical analytical contract')
     validate_alpha25_admission(repo, previous['source_sha256'])
-    require(isinstance(pins, dict) and set(pins) == SOURCE_PATHS,
+    require(isinstance(pins, dict) and set(pins) == CHASE_HUD_ADMISSION_SOURCE_PATHS,
             'chase HUD analytical boundary changed')
     for path, expected in previous['source_sha256'].items():
         if path not in CHASE_HUD_REBOUND_PATHS:
+            require(pins.get(path) == expected, 'unrelated analytical input changed: ' + path)
+
+
+def validate_alpha26_admission(repo, pins):
+    """Retain the exact merged 64-input HUD proof beneath the version successor."""
+    path = ALPHA26_BASE_CONTRACT_PATH
+    require(digest(repo / path) == candidate.ALPHA26_BASE_CONTRACT_HASHES[path],
+            'alpha26 version historical analytical contract changed')
+    previous = json.loads((repo / path).read_text(encoding='utf-8'))
+    require(set(previous) == {'schema_version', 'recipe', 'source_admission', 'source_recipe',
+            'base_reviewed_source', 'base_reviewed_runtime_tree', 'source_migration_sha256',
+            'release_authorized', 'source_sha256'}
+            and type(previous['schema_version']) is int and previous['schema_version'] == 1
+            and previous['recipe'] == IDENTITY and previous['source_recipe'] == SOURCE_RECIPE
+            and previous['source_admission'] == 'analytical-swift-chase-hud-source-admission-v1'
+            and previous['base_reviewed_source'] == candidate.REVIEWED_RUNTIME_SOURCE
+            and previous['base_reviewed_runtime_tree'] == candidate.REVIEWED_RUNTIME_TREE
+            and previous['source_migration_sha256'] == candidate.CHASE_HUD_MIGRATION_SHA256
+            and previous['release_authorized'] is False
+            and set(previous['source_sha256']) == CHASE_HUD_ADMISSION_SOURCE_PATHS,
+            'invalid alpha26 version historical analytical contract')
+    validate_chase_hud_admission(repo, previous['source_sha256'])
+    require(isinstance(pins, dict) and set(pins) == SOURCE_PATHS,
+            'alpha26 version analytical boundary changed')
+    for path, expected in previous['source_sha256'].items():
+        if path not in ALPHA26_REBOUND_PATHS:
             require(pins.get(path) == expected, 'unrelated analytical input changed: ' + path)
 
 
@@ -372,14 +424,14 @@ def source_evidence(repo, expected):
             and contract.get('schema_version') == 1 and contract.get('recipe') == IDENTITY
             and contract.get('base_reviewed_source') == candidate.REVIEWED_RUNTIME_SOURCE
             and contract.get('base_reviewed_runtime_tree') == candidate.REVIEWED_RUNTIME_TREE
-            and contract.get('source_migration_sha256') == candidate.CHASE_HUD_MIGRATION_SHA256
+            and contract.get('source_migration_sha256') == candidate.ALPHA26_MIGRATION_SHA256
             and contract.get('source_admission') == SOURCE_ADMISSION
             and contract.get('source_recipe') == SOURCE_RECIPE
             and contract.get('release_authorized') is False,
             'invalid analytical source contract')
     pins = contract.get('source_sha256')
     require(isinstance(pins, dict) and set(pins) == SOURCE_PATHS, 'analytical source boundary changed')
-    validate_chase_hud_admission(repo, pins)
+    validate_alpha26_admission(repo, pins)
     files = {entry['path']: entry for entry in source['files']}
     require(CONTRACT in files, 'analytical source contract must be tracked')
     for relative in SOURCE_PATHS | {CONTRACT}:

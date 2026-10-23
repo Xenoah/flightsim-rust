@@ -470,3 +470,37 @@ requires fresh compilation, layout/image checks and CI. Existing alpha.25
 Windows, applicability and publication receipts remain evidence only for their
 original source. Native, whole-target rights, exact-inventory authorization and
 publication remain independent gates; no source migration creates approval.
+
+## Alpha.26 HUD version preparation
+
+The source-only `scripts/alpha26-version-source-migration.json` successor is
+based on merged main `e2e23ce1e954fd34ea6dd90a102a17ca0a7d3f4b`, tree
+`1ea5182a0ca7ea9883ea6a5b18ba4db9ad032cda`. That base has successful source CI
+and separate MSVC build-only evidence; it is not a published HUD binary or a
+native/runtime qualification. The migration therefore calls it
+`merged-main-commit`, not `published-commit`.
+
+Only `0.6.0-alpha.25` to `0.6.0-alpha.26` changes are admitted: one workspace
+manifest field and thirteen local lockfile package versions. Every other Cargo
+byte, dependency, feature, crate and asset remains unchanged. Five byte-exact
+`e2e23ce-*` witnesses preserve both Cargo files and all three complete contracts.
+Together with the migration descriptor they extend the frozen 995-pin HUD proof
+to 1001 pins; all earlier validators and independent physics/replay anchors
+remain mandatory. Exact semantic and byte checks reject unrelated manifest,
+lock-order, dependency and jointly resealed descriptor changes.
+
+The analytical wrapper preserves the complete frozen 64-input HUD proof, adds
+one alpha.26 mutation-test input, and limits rebindings to its explicit source
+auditors/contracts/guide/test assertions plus the Cargo pair. Its boundary is
+65 inputs; capture still has four. The current identities are
+`full-two-aircraft-alpha26-version-source-v1`,
+`analytical-swift-alpha26-version-source-admission-v1` and
+`analytical-swift-alpha26-version-capture-source-admission-v1`.
+
+No cloud rendering change is part of this preparation. The historical alpha.25
+publication receipt and native applicability record are not rebound here.
+Fresh final-source Windows capture, substantive native-content applicability,
+exact-inventory publication authority, same-build archive/extraction and both
+existing aircraft smokes remain required. The new source/notice comparison is
+not native evidence and does not accept a new agreement or recipient assent.
+See [alpha.26 preparation](../qa/alpha26-release-preparation-2026-10-22.md).
