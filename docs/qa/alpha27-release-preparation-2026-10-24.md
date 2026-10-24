@@ -7,6 +7,15 @@ Date: 2026-10-24. Base is merged PR #60 main
 alpha.27 or Windows runtime observation. The unavailable desktop changes were
 not recovered or imported. The cloud rendering candidate is separate.
 
+The repository owner requested the next release on 2026-10-24 at 10:22:53 UTC,
+following the explicit proposal to mark PR #60 ready, merge normally, verify the
+Windows distribution and publish the next version. PR #60 was then normally
+merged to the source above. This authorizes that release work; it does not record
+acceptance of component terms, a new supplier grant or a successful native test.
+The separate publication receipt binds only the reviewed current source and
+payload inventory. Any subsequent source change requires that binding to be
+reviewed again. Existing alpha.26 assets and tags are not to be overwritten.
+
 The urban implementation uses real, coarse historical Natural Earth coverage
 with invented buildings, streets and heights. Generation is offline, capped at
 2,048 buildings and 256 streets, uses distance LOD, prioritizes loaded regional
