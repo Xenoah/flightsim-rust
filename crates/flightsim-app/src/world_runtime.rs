@@ -823,9 +823,9 @@ pub(super) fn commit_world_map_flight(world: &mut World, prepared: PreparedWorld
     scenery_runtime::clear(world);
     if source_changed {
         region_runtime::clear_airport(world);
-        if let Some(mut scenery) = world.get_resource_mut::<scenery_runtime::SceneryRuntime>() {
-            scenery.suppress_after_source_change();
-        }
+    }
+    if let Some(mut scenery) = world.get_resource_mut::<scenery_runtime::SceneryRuntime>() {
+        scenery.refresh_after_relocation(&startup, source_changed);
     }
     let mut tiles = world.remove_resource::<TerrainTiles>().unwrap_or_default();
     // Cancel an in-flight stitching transaction too: it owns hidden bridges

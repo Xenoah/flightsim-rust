@@ -73,6 +73,7 @@ pub mod seams;
 pub mod streaming;
 pub mod terrain;
 pub mod tile;
+pub mod urban;
 
 pub use airport::io::{
     AirportApron, AirportDatabase, AirportDatabaseError, AirportGroundFeatures, AirportGroundLight,

@@ -1,0 +1,14 @@
+{
+  "source_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/10m_cultural/ne_10m_urban_areas.shp",
+  "source_sha256": "76b8c5786af5df4fa18ae615e594347fb464525347038b15f9df15d1396cb7de",
+  "source_release": "Natural Earth vector v5.1.2",
+  "dataset": "10m urban areas (MODIS 2002-2003 derived)",
+  "license": "Public domain",
+  "terms": "https://www.naturalearthdata.com/about/terms-of-use/",
+  "method": "even-odd polygon cell-centre raster, merged half-open row spans; 1/120 degree",
+  "source_polygons": 11878,
+  "occupied_cells": 1590358,
+  "bytes": 925730,
+  "output_sha256": "3632a0b9993e173a483756535e3175497fa355828d58070013bd8045e48b5db8",
+  "limits": "Coarse historical urban extent only; no real building footprints, heights or roads. Runtime land/water and airport masks remain mandatory."
+}

@@ -1566,3 +1566,113 @@ fn repeated_distance_changes_keep_only_one_cancelled_inflight_worker() {
         assert!(runtime.prepared.is_empty() && runtime.staged.is_empty());
     }
 }
+
+#[test]
+fn default_scenery_has_offline_urban_fallback_without_a_regional_file() {
+    let runtime = SceneryRuntime::new(&Startup::default()).unwrap();
+    assert!(runtime.database.is_none());
+    assert!(runtime.urban.is_some());
+    assert!(runtime.build_config.is_some());
+    assert!(runtime.attribution().unwrap().contains("fictional"));
+    assert!(SceneryRuntime::new(&startup()).unwrap().urban.is_none());
+}
+
+#[test]
+fn urban_fallback_cpu_meshes_obey_existing_scene_budgets_in_six_regions() {
+    let atlas = flightsim_world::urban::UrbanAtlas::bundled().unwrap();
+    let config = SceneryBuildConfig::new(&Startup::default());
+    for (name, lat, lon) in [
+        ("Tokyo", 35.68, 139.76),
+        ("London", 51.51, -0.12),
+        ("New York", 40.75, -73.98),
+        ("Sydney inland", -33.87, 151.05),
+        ("Sao Paulo", -23.55, -46.63),
+        ("Cairo", 30.04, 31.24),
+    ] {
+        let result = build_available_scene_config(
+            None,
+            Some(&atlas),
+            &config,
+            Geodetic::from_degrees(lat, lon, 900.0),
+            &AtomicBool::new(false),
+            DrawDistancePolicy::default(),
+        );
+        assert!(result.statistics.buildings > 0, "{name}");
+        assert!(result.statistics.buildings <= flightsim_world::urban::MAX_URBAN_BUILDINGS);
+        assert!(result.statistics.vertices <= MAX_VERTICES);
+        assert!(result.statistics.ground_vertices <= MAX_GROUND_VERTICES);
+        assert!(result.meshes.len() <= MAX_BATCHES);
+    }
+}
+
+#[test]
+fn urban_airport_mask_clears_whole_footprints_and_survives_relocation() {
+    let mut startup = Startup::default();
+    let start = Geodetic::from_degrees(51.51, -0.12, 0.0);
+    startup.runway = Runway::new(
+        start,
+        Radians::ZERO,
+        Meters(2_000.0),
+        Meters(40.0),
+        Meters::ZERO,
+    );
+    let config = SceneryBuildConfig::new(&startup);
+    let atlas = flightsim_world::urban::UrbanAtlas::bundled().unwrap();
+    let scene = atlas
+        .generate(
+            start,
+            Meters(4_500.0),
+            config.global.as_ref().unwrap(),
+            &|p, _| config.urban_exclusions.contains(p),
+            &AtomicBool::new(false),
+        )
+        .unwrap();
+    let database = scene.database.unwrap();
+    assert!(!database.buildings().is_empty());
+    for point in database.buildings().iter().flat_map(|b| &b.footprint) {
+        let offset = startup.runway.offsets(*point);
+        assert!(
+            offset.longitudinal.get() < -60.0
+                || offset.longitudinal.get() > 2_060.0
+                || offset.lateral.get().abs() >= 55.0
+        );
+    }
+    let mut runtime = SceneryRuntime::new(&startup).unwrap();
+    startup.runway = Runway::synthetic();
+    runtime.refresh_after_relocation(&startup, true);
+    assert!(runtime.urban.is_some());
+    assert!(
+        !runtime
+            .build_config
+            .as_ref()
+            .unwrap()
+            .urban_exclusions
+            .contains(start)
+    );
+}
+
+#[test]
+fn regional_coverage_has_priority_over_generated_urban_features() {
+    let start = Geodetic::from_degrees(51.51, -0.12, 0.0);
+    let mut building = building(0);
+    building.footprint = [
+        (-6_000.0, -6_000.0),
+        (-6_000.0, 6_000.0),
+        (6_000.0, 6_000.0),
+        (6_000.0, -6_000.0),
+    ]
+    .map(|(n, e)| start.offset_by(Meters(n), Meters(e)))
+    .to_vec();
+    let database = database(vec![building]);
+    let config = SceneryBuildConfig::new(&Startup::default());
+    let atlas = flightsim_world::urban::UrbanAtlas::bundled().unwrap();
+    let result = build_available_scene_config(
+        Some(&database),
+        Some(&atlas),
+        &config,
+        start,
+        &AtomicBool::new(false),
+        DrawDistancePolicy::default(),
+    );
+    assert_eq!(result.statistics.selected, 1);
+}

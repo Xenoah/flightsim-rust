@@ -43,6 +43,7 @@ const MAX_BROAD_EXCLUSIONS: usize = 512;
 #[derive(Resource)]
 pub(super) struct SceneryRuntime {
     database: Option<Arc<SceneryDatabase>>,
+    urban: Option<Arc<flightsim_world::urban::UrbanAtlas>>,
     build_config: Option<Arc<SceneryBuildConfig>>,
     material: Option<Handle<StandardMaterial>>,
     selected_at: Option<Geodetic>,
@@ -79,6 +80,8 @@ struct PendingBuild {
 #[derive(Debug, Default, Clone, Copy)]
 struct BuildStatistics {
     selected: usize,
+    urban_candidates: usize,
+    urban_excluded: usize,
     batches: usize,
     vertices: usize,
     ground_vertices: usize,
@@ -197,10 +200,17 @@ impl SceneryRuntime {
                     .map_err(|error| format!("{}: {error}", path.display()))
             })
             .transpose()?;
+        let urban = startup
+            .world
+            .global_terrain
+            .then(flightsim_world::urban::UrbanAtlas::bundled)
+            .transpose()
+            .map_err(|error| error.to_string())?
+            .map(Arc::new);
         let mut runtime = Self {
-            build_config: database
-                .as_ref()
-                .map(|_| Arc::new(SceneryBuildConfig::new(startup))),
+            build_config: (database.is_some() || urban.is_some())
+                .then(|| Arc::new(SceneryBuildConfig::new(startup))),
+            urban,
             database,
             material: None,
             selected_at: None,
@@ -226,19 +236,37 @@ impl SceneryRuntime {
 
     /// A regional free flight does not retain depiction built with the old
     /// terrain or airport exclusions. No stale worker can upload after clear.
-    pub(super) fn suppress_after_source_change(&mut self) {
-        self.database = None;
-        self.build_config = None;
-        self.pending = None;
+    pub(super) fn refresh_after_relocation(&mut self, startup: &Startup, source_changed: bool) {
+        if source_changed {
+            self.database = None;
+        }
+        self.build_config = (self.database.is_some() || self.urban.is_some())
+            .then(|| Arc::new(SceneryBuildConfig::new(startup)));
+        // clear() already cancelled the old worker; retain it until it finishes
+        // to preserve the single-worker bound even across rapid map relocations.
     }
 
     pub fn attribution(&self) -> Option<&'static str> {
+        if self.urban.is_some() {
+            return Some(
+                if self
+                    .database
+                    .as_ref()
+                    .is_some_and(|db| db.source().kind == ScenerySourceKind::OpenStreetMap)
+                {
+                    "OSM / ODbL: openstreetmap.org/copyright; Natural Earth urban areas; fictional fallback buildings/streets/heights"
+                } else {
+                    flightsim_world::urban::URBAN_ATTRIBUTION
+                },
+            );
+        }
         self.database
             .as_ref()
             .map(|database| match database.source().kind {
                 ScenerySourceKind::OpenStreetMap => {
                     "(c) OpenStreetMap contributors / ODbL: openstreetmap.org/copyright; procedural heights/trees"
                 }
+                ScenerySourceKind::ProceduralUrban => flightsim_world::urban::URBAN_ATTRIBUTION,
                 ScenerySourceKind::Synthetic => {
                     "Scenery: synthetic test fixture; procedural depiction"
                 }
@@ -318,7 +346,7 @@ pub(super) fn stream(
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
     let runtime = &mut *runtime;
-    if runtime.database.is_none() {
+    if runtime.database.is_none() && runtime.urban.is_none() {
         return;
     }
     if runtime.reset_revision != reset.0 || runtime.distance_dirty {
@@ -466,7 +494,8 @@ pub(super) fn stream(
     runtime.generation = runtime.generation.wrapping_add(1);
     let cancel = Arc::new(AtomicBool::new(false));
     let job_cancel = Arc::clone(&cancel);
-    let database = Arc::clone(runtime.database.as_ref().expect("loaded database"));
+    let database = runtime.database.clone();
+    let urban = runtime.urban.clone();
     let config = Arc::clone(
         runtime
             .build_config
@@ -476,7 +505,14 @@ pub(super) fn stream(
     let observer = camera.0;
     let draw_distance = runtime.draw_distance;
     let task = AsyncComputeTaskPool::get().spawn(async move {
-        build_scene_config(&database, &config, observer, &job_cancel, draw_distance)
+        build_available_scene_config(
+            database.as_deref(),
+            urban.as_deref(),
+            &config,
+            observer,
+            &job_cancel,
+            draw_distance,
+        )
     });
     runtime.pending = Some(PendingBuild {
         generation: runtime.generation,
@@ -496,7 +532,7 @@ fn commit_scene(commands: &mut Commands, meshes: &mut Assets<Mesh>, runtime: &mu
     runtime.visible = std::mem::take(&mut runtime.staged);
     let s = runtime.prepared_stats;
     info!(
-        "scenery prepared: {} batches, {} selected features, {} roads, {} buildings, {} land polygons, {} procedural trees, {} vertices; skipped {}, truncated {}; CPU preparation {:.1} ms; visual-only regional data",
+        "scenery prepared: {} batches, {} selected features, {} roads, {} buildings, {} land polygons, {} procedural trees, {} vertices; skipped {}, truncated {}; CPU preparation {:.1} ms; urban candidates {}, excluded {}; visual-only scenery (fallback buildings/streets/heights are fictional)",
         runtime.visible.len() + runtime.visible_ground.len(),
         s.selected,
         s.roads,
@@ -506,7 +542,9 @@ fn commit_scene(commands: &mut Commands, meshes: &mut Assets<Mesh>, runtime: &mu
         s.vertices,
         s.skipped_features,
         s.truncated,
-        s.cpu_ms
+        s.cpu_ms,
+        s.urban_candidates,
+        s.urban_excluded
     );
 }
 
@@ -559,6 +597,8 @@ struct SceneryBuildConfig {
     source: Startup,
     airport_exclusions: Exclusions,
     ground_exclusions: flightsim_render::scenery_exclusions::GroundSceneryExclusions,
+    urban_exclusions: Exclusions,
+    global: Option<flightsim_world::global::GlobalTerrain>,
 }
 impl SceneryBuildConfig {
     fn new(startup: &Startup) -> Self {
@@ -598,7 +638,34 @@ impl SceneryBuildConfig {
                 break;
             }
         }
+        let mut urban_exclusions = Exclusions::new(&[], startup);
+        // Every generated footprint/short street fits within 200m of its centre.
+        // Expand and rebuild the spatial index once; generation stays bounded.
+        // Include every runway in a supplied airport DB, not only the selected
+        // landing runway. An unreadable DB must not imply checked empty ground.
+        if let Some(path) = &startup.airports {
+            match AirportDatabase::read_from_path(path) {
+                Ok(database) => {
+                    for entry in database.runways() {
+                        let runway = entry.runway;
+                        urban_exclusions.add_line(
+                            &[runway.threshold, runway.opposite_threshold()],
+                            runway.width.get() * 0.5 + 60.0,
+                        );
+                        if urban_exclusions.suppress_all {
+                            break;
+                        }
+                    }
+                }
+                Err(_) => urban_exclusions.suppress_all = true,
+            }
+        }
+        urban_exclusions.expand(Meters(200.0));
         Self {
+            global: startup.world.global_terrain.then(|| {
+                flightsim_world::global::GlobalTerrain::bundled().expect("validated global atlas")
+            }),
+            urban_exclusions,
             source,
             airport_exclusions: Exclusions::new(&[], startup),
             ground_exclusions,
@@ -622,6 +689,7 @@ fn build_scene(
     )
 }
 
+#[cfg(test)]
 fn build_scene_config(
     database: &SceneryDatabase,
     config: &SceneryBuildConfig,
@@ -629,10 +697,57 @@ fn build_scene_config(
     cancel: &AtomicBool,
     draw_distance: DrawDistancePolicy,
 ) -> BuildResult {
+    build_available_scene_config(
+        Some(database),
+        None,
+        config,
+        observer,
+        cancel,
+        draw_distance,
+    )
+}
+
+fn build_available_scene_config(
+    database: Option<&SceneryDatabase>,
+    urban: Option<&flightsim_world::urban::UrbanAtlas>,
+    config: &SceneryBuildConfig,
+    observer: Geodetic,
+    cancel: &AtomicBool,
+    draw_distance: DrawDistancePolicy,
+) -> BuildResult {
     let startup = &config.source;
     let start = std::time::Instant::now();
-    let selected = database.query_near(observer, draw_distance.scenery_radius(), MAX_SELECTED);
-    let tree_neighbours = database.query_near(observer, TREE_EXCLUSION_RADIUS, MAX_SELECTED);
+    let generated = urban.zip(config.global.as_ref()).and_then(|(atlas, land)| {
+        match atlas.generate(
+            observer,
+            draw_distance.scenery_radius(),
+            land,
+            &|point, padding| {
+                config.urban_exclusions.contains(point)
+                    || database.is_some_and(|db| db.bounds().intersects(point, padding))
+            },
+            cancel,
+        ) {
+            Ok(scene) => Some(scene),
+            Err(error) => {
+                warn!("urban fallback omitted: {error}");
+                None
+            }
+        }
+    });
+    let mut selected = database.map_or_else(Vec::new, |db| {
+        db.query_near(observer, draw_distance.scenery_radius(), MAX_SELECTED)
+    });
+    if let Some(db) = generated.as_ref().and_then(|scene| scene.database.as_ref()) {
+        selected.extend(db.query_near(
+            observer,
+            draw_distance.scenery_radius(),
+            MAX_SELECTED - selected.len(),
+        ));
+    }
+    let tree_neighbours = database.map_or_else(Vec::new, |db| {
+        db.query_near(observer, TREE_EXCLUSION_RADIUS, MAX_SELECTED)
+    });
     let mut exclusions = Exclusions::new(&tree_neighbours, startup);
     // Truncation may omit a road, building or water exclusion. Suppress trees
     // rather than claim their placement was checked against absent features.
@@ -660,8 +775,17 @@ fn build_scene_config(
     });
     let mut statistics = BuildStatistics {
         selected: selected.len(),
+        urban_candidates: generated
+            .as_ref()
+            .map_or(0, |scene| scene.statistics.candidates),
+        urban_excluded: generated
+            .as_ref()
+            .map_or(0, |scene| scene.statistics.excluded),
         truncated: selected.len() == MAX_SELECTED
-            || batches.len() > MAX_BATCHES - MAX_GROUND_BATCHES,
+            || batches.len() > MAX_BATCHES - MAX_GROUND_BATCHES
+            || generated
+                .as_ref()
+                .is_some_and(|scene| scene.statistics.truncated),
         ..Default::default()
     };
     let mut output = VecDeque::new();
@@ -864,6 +988,7 @@ fn merge_ground(
 /// than silently placing them over an unchecked road or taxiway.
 struct Exclusions {
     runway: Runway,
+    runway_padding: f64,
     segments: Vec<(bevy::math::DVec3, bevy::math::DVec3, f64)>,
     spheres: Vec<(bevy::math::DVec3, f64)>,
     index: BTreeMap<Cell, Vec<ExclusionRef>>,
@@ -894,6 +1019,7 @@ impl Exclusions {
     fn new(features: &[SceneryFeatureRef<'_>], startup: &Startup) -> Self {
         let mut result = Self {
             runway: startup.runway,
+            runway_padding: 0.0,
             segments: Vec::new(),
             spheres: Vec::new(),
             index: BTreeMap::new(),
@@ -922,6 +1048,33 @@ impl Exclusions {
             }
         }
         result
+    }
+    /// Uniform conservative padding for the complete generated feature extent.
+    fn expand(&mut self, padding: Meters) {
+        self.runway_padding = padding.get();
+        self.index.clear();
+        self.broad.clear();
+        self.index_refs = 0;
+        for i in 0..self.segments.len() {
+            let (a, b, r2) = self.segments[i];
+            let r = r2.sqrt() + padding.get();
+            self.segments[i].2 = r * r;
+            self.insert_bounds(
+                a.min(b) - bevy::math::DVec3::splat(r),
+                a.max(b) + bevy::math::DVec3::splat(r),
+                ExclusionRef::Segment(i),
+            );
+        }
+        for i in 0..self.spheres.len() {
+            let (center, r2) = self.spheres[i];
+            let r = r2.sqrt() + padding.get();
+            self.spheres[i].1 = r * r;
+            self.insert_bounds(
+                center - bevy::math::DVec3::splat(r),
+                center + bevy::math::DVec3::splat(r),
+                ExclusionRef::Sphere(i),
+            );
+        }
     }
     fn add_line(&mut self, points: &[Geodetic], width: f64) {
         for pair in points.windows(2) {
@@ -1042,8 +1195,10 @@ impl Exclusions {
         }
         if self.runway.is_same_hemisphere(point) {
             let offset = self.runway.offsets(point);
-            if (-60.0..=self.runway.length.get() + 60.0).contains(&offset.longitudinal.get())
-                && offset.lateral.get().abs() < self.runway.width.get() * 0.5 + 35.0
+            if (-60.0 - self.runway_padding..=self.runway.length.get() + 60.0 + self.runway_padding)
+                .contains(&offset.longitudinal.get())
+                && offset.lateral.get().abs()
+                    < self.runway.width.get() * 0.5 + 35.0 + self.runway_padding
             {
                 return true;
             }
