@@ -134,7 +134,14 @@ class Ci60SourceAdmissionTests(unittest.TestCase):
         contract['source_sha256'][check.CI_TIMEOUT_WORKFLOW_PATH] = candidate.digest(path)
         contract['source_sha256'][check.CI60_MIGRATION_PATH] = candidate.digest(repo / check.CI60_MIGRATION_PATH)
         capture.write_json(repo / check.CONTRACT, contract)
+        # The retained historical validator still rejects its own resealed
+        # descriptor. The newer version-only wrapper rejects the workflow
+        # replacement earlier, because it is outside that successor's scope.
         with self.assertRaisesRegex(ValueError, 'CI60 migration changed'):
+            check.validate_ci60_admission(repo, {**self.pins(),
+                check.CI_TIMEOUT_WORKFLOW_PATH: candidate.digest(path),
+                check.CI60_MIGRATION_PATH: candidate.digest(repo / check.CI60_MIGRATION_PATH)})
+        with self.assertRaisesRegex(ValueError, 'alpha27 unrelated analytical source changed'):
             capture.source_evidence(repo, self.commit(repo))
 
     def test_descriptor_retains_source_only_scope_and_rejects_resealed_claims(self):

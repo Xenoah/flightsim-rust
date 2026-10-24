@@ -150,8 +150,30 @@ class ComponentTermsContentTests(unittest.TestCase):
         self.assertIn("without starting the simulator", release)
         self.assertIn("local acceptance bound to the exact terms", release)
         self.assertIn("No account, telemetry", release)
-        self.assertEqual(release.count("/blob/@SOURCE_SHA@/"), 3)
+        source_links = re.findall(r"/blob/@SOURCE_SHA@/([^\s)]+)", release)
+        self.assertCountEqual(source_links, COMPONENT_FILES)
+        self.assertIn("/blob/c2b177d32a209b4d4a43044b53ea6d39d2ade308/docs/global-urban-scenery.md", release)
         self.assertNotIn("/blob/main/", release)
+
+    def test_actual_release_notes_satisfy_closed_publication_template(self):
+        spec = importlib.util.spec_from_file_location(
+            "component_real_publication_notes", ROOT / "scripts/prepare-ordinary-full-release.py"
+        )
+        ordinary = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(ordinary)
+        fixture = fixture_module.ReleaseAuthorizationTests()
+        self.addCleanup(fixture.doCleanups)
+        fixture.setUp()
+        fixture.write(ordinary.NOTES_TEMPLATE,
+                      (ROOT / ordinary.NOTES_TEMPLATE).read_text(encoding="utf-8"))
+        fixture.commit()
+        # A synthetic source ID exercises substitution, not native qualification.
+        source = "a" * 40
+        result = ordinary.publication_notes(fixture.repo, source).decode("utf-8")
+        self.assertNotIn("@SOURCE_SHA@", result)
+        resolved = re.findall(r"/blob/" + source + r"/([^\s)]+)", result)
+        self.assertCountEqual(resolved, COMPONENT_FILES)
+        self.assertIn("/blob/c2b177d32a209b4d4a43044b53ea6d39d2ade308/docs/global-urban-scenery.md", result)
 
 
 class ComponentTermsCopyPlanTests(unittest.TestCase):

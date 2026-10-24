@@ -1,20 +1,20 @@
 {
-  "authorized_at": "2026-10-22T12:04:48Z",
+  "authorized_at": "2026-10-24T10:22:53Z",
   "authorized_by": "Xenoah (repository owner; recorded by authorized development assistant)",
   "evidence": [
-    "docs/qa/alpha26-release-preparation-2026-10-22.md",
-    "docs/qa/alpha26-dependency-notice-review-2026-10-22.md",
-    "docs/qa/alpha26-ci-budget-2026-10-23.md",
+    "docs/qa/alpha27-release-preparation-2026-10-24.md",
+    "docs/qa/alpha27-dependency-notice-review-2026-10-24.md",
+    "docs/qa/urban-source-admission-2026-10-24.md",
     "docs/release/full-two-aircraft-source-admission.md",
     "docs/release/windows-component-release-notes.md",
     "docs/release/components/MICROSOFT-COMPONENT-TERMS.txt",
     "Publication permission only. This receipt does not assert new legal assent, native runtime acceptance or distribution qualification. Genuine final-source native applicability, same-build archive verification and both extracted-aircraft smokes remain independent required gates."
   ],
-  "release_inventory_sha256": "6592f65d5eae71544292abb250fc636f00cf0aa57309bcf0afba2a5536089376",
+  "release_inventory_sha256": "cea3ad445c48d662ff8804f8fbb582f026cf1f1906c608573ab2a55f359e56c0",
   "schema_version": 1,
   "scope": "github-windows-prerelease",
-  "source_inventory_sha256": "ad1be3efc930788d7a91d6e666e95cdc1cd7f242ab96ca09832f8f10ec2b593a",
+  "source_inventory_sha256": "8afcf20799d1845fe92dd293f1afd78d9ed30201e36fdddcbd624a76d7f5d892",
   "status": "authorized",
   "target": "x86_64-pc-windows-msvc",
-  "version": "0.6.0-alpha.26"
+  "version": "0.6.0-alpha.27"
 }

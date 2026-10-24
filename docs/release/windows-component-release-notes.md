@@ -1,6 +1,26 @@
-## alpha.25 Swift Sport forward visibility
+## alpha.27 — offline world urban scenery
 
-Swift Sport now starts with a 15-degree centered look pitch instead of 24 degrees,
+Default global terrain now includes bounded fictional buildings and short streets
+inside bundled Natural Earth urban extents. Urban locations are coarse historical
+source data; individual buildings, roads and heights are invented. The 925,730-byte
+index works offline without an API key. Generation caps at 2,048 buildings and
+256 streets, uses distance LOD and existing rendering budgets, prioritizes loaded
+regional scenery and discards old generation on map relocation.
+
+Coarse land/water checks and known-airport/runway exclusions suppress placement.
+The roughly 20 km water mask cannot resolve small waterways and conservatively
+omits central Sydney. Unknown real airports remain a limitation. Precise worldwide
+building tiles are not implemented. Existing CHASE HUD spacing is retained; the
+separate unpublished cloud-rendering candidate is not included.
+
+See the [urban scenery guide](https://github.com/Xenoah/flightsim-rust/blob/c2b177d32a209b4d4a43044b53ea6d39d2ade308/docs/global-urban-scenery.md)
+for provenance, controls and approximation limits. Source tests and software
+rendering do not establish physical GPU performance, controller or audio acceptance.
+The ordinary Windows bundle continues to contain Light Single and Swift Sport.
+
+## Retained flight and cockpit behavior
+
+Swift Sport retains its 15-degree centered look pitch,
 keeping the horizon and approach runway in view. Both sticks, animation pivots
 and interaction bounds move forward together by 0.10 m. Its original primary
 flight display, dual center sticks and low canopy framing remain unchanged. Light Single retains its analog trainer panel and dual yokes.
