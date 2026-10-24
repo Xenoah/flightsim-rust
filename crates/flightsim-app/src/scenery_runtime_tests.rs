@@ -1597,7 +1597,11 @@ fn urban_fallback_cpu_meshes_obey_existing_scene_budgets_in_six_regions() {
             &AtomicBool::new(false),
             DrawDistancePolicy::default(),
         );
-        assert!(result.statistics.buildings > 0, "{name}");
+        assert!(
+            result.statistics.buildings > 1_500,
+            "{name}: {} buildings",
+            result.statistics.buildings
+        );
         assert!(result.statistics.buildings <= flightsim_world::urban::MAX_URBAN_BUILDINGS);
         assert!(result.statistics.vertices <= MAX_VERTICES);
         assert!(result.statistics.ground_vertices <= MAX_GROUND_VERTICES);

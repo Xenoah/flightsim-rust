@@ -822,7 +822,12 @@ fn build_available_scene_config(
         options.cancellation = Some(cancel);
         options.airport_ground_exclusions = Some(&config.ground_exclusions);
         options.vegetation = !exclusions.suppress_all && !config.airport_exclusions.suppress_all;
-        options.facades = anchor.great_circle_distance(observer).get() < 2_400.0;
+        let distance = anchor.great_circle_distance(observer).get();
+        // Regional geometry keeps its existing facade range. Procedural city
+        // windows are useful only very close: spending the whole scene budget
+        // on their panes would hide the surrounding skyline at normal altitude.
+        let regional = database.is_some_and(|db| db.bounds().intersects(anchor, Meters::ZERO));
+        options.facades = distance < 2_400.0 && (regional || distance < 350.0);
         let batch = flightsim_render::scenery::scenery_mesh(
             &features,
             anchor,

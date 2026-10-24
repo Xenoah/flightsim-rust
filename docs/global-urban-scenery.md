@@ -44,7 +44,8 @@ reject this new kind rather than mislabel it as OSM. Kinds 1 and 2 are unchanged
 Each background request examines at most 32,768 candidate urban cells, retains
 at most 2,048 nearby cells, and tests at most 32,768 building parcels. Output is
 at most 2,048 buildings and 256 short streets. Far parcels use stable subsets
-beyond 2 km and 4 km; existing facade LOD and scenery vertex/batch/upload caps
+beyond 2 km and 4 km; generated window/facade detail is limited to 350 m
+(regional facade detail retains 2.4 km). Existing scenery vertex/batch/upload caps
 still apply. Overflow is reported as `truncated` and does not expand budgets.
 Geometry is anchored to global parcel IDs; surviving features keep the same
 shape and height during movement, distance changes and revisits.

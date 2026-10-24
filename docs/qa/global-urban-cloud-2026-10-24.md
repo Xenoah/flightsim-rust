@@ -23,14 +23,31 @@ not reused. Source locations are approximate historical mapped urban extent;
 individual buildings/streets/heights are invented. Precise world building tiles
 remain unimplemented.
 
-## Verification in progress
+## Verification (last checkpoint; render work still running)
 
-- Initial world tests passed at six city locations, plus deterministic revisits,
-  invalid/polar/date-line queries, LOD overlap and spatial exclusions.
+- Pure-Rust aggregate: 1,395 tests passed (105 test binaries; `--all-targets`,
+  core/fdm/world/sim/tilegen/assetgen/net/content with content downloads). Zero failures.
+- Pure-Rust Clippy `--all-targets -- -D warnings` and dependency architecture check passed.
+- World urban tests: 8 passed, including six cities, deterministic revisits,
+  invalid/polar/date-line queries, LOD overlap, spatial exclusions, coastal
+  suppression and source-kind roundtrip. Baker hole/hash/interval tests: 2 passed.
+- Criterion (`--profile dev`, Rust 1.93.0, shared cloud runner): London 4.5 km,
+  cap 2,048 buildings, 6.198–6.429 ms (quick estimate). This is CPU source generation,
+  not mesh preparation, GPU time or a general frame-time guarantee.
 - Coastal Sydney centre (-33.87, 151.21) was completely suppressed by the existing
   coarse water mask. The positive Sydney case is inland (-33.87, 151.05).
-- Runtime CPU/ECS tests, aggregate Rust checks and Linux software Vulkan screenshots
-  are pending completion. Do not interpret this checkpoint as a passing report.
+- First Linux software Vulkan capture pass completed in all six regions (exit 0).
+  It exposed excessive generated facade detail: London used 599,982 vertices for
+  only 572 buildings, leaving most surrounding city blocks omitted. A development
+  follow-up limits generated facades to 350 m while retaining regional 2.4 km detail.
+  The final CPU test requires >1,500 rendered buildings in each positive region.
+  Rebuilt screenshots and render aggregate validation are still pending.
+- Python source/release aggregate completed: 829 tests, 15 failures, 92 errors,
+  1 skipped (721 passed). Failures are exact reviewed-source hashes/closure admissions.
+  Isolated reproduction: `test_alpha22_version_source_admission` rejects changed
+  `.gitattributes` canonical SHA-256; the same test PASSES on pristine fc2ca797.
+  Existing admission pins and approvals are deliberately unchanged. These failures
+  are release/source-admission blockers, not a claim that all CI has passed.
 - Development toolchain: official Rust 1.93.0, crates.io locked dependencies;
   Debian-signed packages extracted locally under `/workspace/flightsim-deps`.
   No system authentication, security setting or package policy was changed.
