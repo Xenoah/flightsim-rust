@@ -150,7 +150,8 @@ class ComponentTermsContentTests(unittest.TestCase):
         self.assertIn("without starting the simulator", release)
         self.assertIn("local acceptance bound to the exact terms", release)
         self.assertIn("No account, telemetry", release)
-        self.assertEqual(release.count("/blob/@SOURCE_SHA@/"), 3)
+        source_links = re.findall(r"/blob/@SOURCE_SHA@/([^\s)]+)", release)
+        self.assertCountEqual(source_links, [*COMPONENT_FILES, "docs/global-urban-scenery.md"])
         self.assertNotIn("/blob/main/", release)
 
 

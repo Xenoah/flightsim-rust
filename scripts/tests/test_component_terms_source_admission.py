@@ -95,9 +95,9 @@ class ComponentTermsSourceAdmissionTests(unittest.TestCase):
         replay = candidate.load_replay_contract(ROOT)
         analytical = json.loads((ROOT / capture.check.CONTRACT).read_text())
         captured = json.loads((ROOT / capture.CONTRACT).read_text())
-        self.assertEqual(replay['contract'], 'full-two-aircraft-offline-urban-source-v1')
-        self.assertEqual(analytical['source_admission'], 'analytical-swift-offline-urban-source-admission-v1')
-        self.assertEqual(captured['source_admission'], 'analytical-swift-offline-urban-capture-source-admission-v1')
+        self.assertEqual(replay['contract'], 'full-two-aircraft-alpha27-version-source-v1')
+        self.assertEqual(analytical['source_admission'], 'analytical-swift-alpha27-version-source-admission-v1')
+        self.assertEqual(captured['source_admission'], 'analytical-swift-alpha27-version-capture-source-admission-v1')
         for contract in (replay, analytical, captured):
             self.assertNotIn('reviewed_source', contract)
             self.assertNotIn('reviewed_runtime_tree', contract)
