@@ -65,7 +65,7 @@
     "scripts/tests/test_ci_tonemapping.py": "5c88d3756750b7c431508b42315d6fb6fa4e083d5d8165b274ddf491155f9037",
     "scripts/tests/test_cockpit_source_admission.py": "0c1f93df6895f5c70df534a4f343501c42dac94e1303cc4a9e75a94aafd57b5a",
     "scripts/tests/test_cockpit_variant_source_admission.py": "6c987230028f75dba7f1015aa7e00d210205e233180baaa098201d426d142101",
-    "scripts/tests/test_component_terms_source_admission.py": "382e44c9f045e650459372aff3855566ecc3169cf412a440367cbea2ce96d765",
+    "scripts/tests/test_component_terms_source_admission.py": "6390fbbc1b8de2b86cf7a6f616501cc1e044f9bde7d5cba835773083f1b287ed",
     "scripts/tests/test_dependency_notice_ordering.py": "fbeb61f47679104debf73abd31a1e5a7239aa03f3d52b7266073f15169277992",
     "scripts/tests/test_filmic_asset_integration.py": "c5832634d306608bdc671ac3eeaecafce68db61d1933605dcd858aa3d4b4f226",
     "scripts/tests/test_full_source_admission.py": "ffa17e7cc4c0cbd27c6b361860fec047f5a4a681f8f475d0d0f73124d3f8744d",
