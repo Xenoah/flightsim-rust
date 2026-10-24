@@ -62,16 +62,16 @@ class Alpha22VersionSourceAdmissionTests(unittest.TestCase):
             checkout = candidate.COCKPIT_HISTORICAL_RELOCATIONS.get(historical, historical)
             checkout = candidate.COCKPIT_VARIANT_HISTORICAL_RELOCATIONS.get(checkout, checkout)
             checkout = candidate.CHASE_HUD_HISTORICAL_RELOCATIONS.get(checkout, checkout)
-            self.assertEqual(candidate.digest(ROOT / checkout), expected, path)
+            self.assertEqual(candidate.digest(ROOT / candidate.URBAN_HISTORICAL_RELOCATIONS.get(checkout, checkout)), expected, path)
         for path, expected in candidate.ALPHA22_BASE_CONTRACT_HASHES.items():
-            self.assertEqual(candidate.digest(ROOT / path), expected)
+            self.assertEqual(candidate.digest(ROOT / candidate.URBAN_HISTORICAL_RELOCATIONS.get(path, path)), expected)
         for path in CHANGED:
             self.assertEqual(migration['replaced_source_sha256'][path], {
                 'previous_sha256': base['source_sha256'][path],
                 'sha256': candidate.digest(ROOT / candidate.ALPHA23_HISTORICAL_RELOCATIONS[path]),
             })
         candidate.validate_alpha22_version_delta(*self.version_bytes())
-        self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 499)
+        self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 503)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)
         self.assertEqual(len(json.loads((ROOT / candidate.PRESERVED_RUNTIME_PATH).read_text())['source_sha256']), 497)
         self.assertIs(contract['release_authorized'], False)

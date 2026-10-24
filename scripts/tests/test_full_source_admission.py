@@ -22,7 +22,7 @@ candidate = load('source_admission_candidate', 'check-swift-windows-candidate.py
 class FullSourceAdmissionTests(unittest.TestCase):
     def test_new_identity_preserves_historical_contracts_and_runtime(self):
         contract = candidate.load_replay_contract(ROOT)
-        self.assertEqual(contract['contract'], 'full-two-aircraft-alpha26-version-source-v1')
+        self.assertEqual(contract['contract'], 'full-two-aircraft-offline-urban-source-v1')
         self.assertEqual(contract['base_reviewed_source'], '960c3126e6a4bc22b8d4acc6e6737f8f2b473bef')
         self.assertEqual(contract['base_reviewed_runtime_tree'], 'b3bbd57bc3819b1b1eda35ce4f8b476c52d1b24e')
         self.assertIs(contract['release_authorized'], False)
@@ -39,7 +39,7 @@ class FullSourceAdmissionTests(unittest.TestCase):
         for path, expected in preserved.items():
             self.assertEqual(candidate.digest(ROOT / relocations.get(path, path)), expected, path)
         for path, expected in candidate.INDEPENDENT_REPLAY_HASHES.items():
-            self.assertEqual(candidate.digest(ROOT / path), expected, path)
+            self.assertEqual(candidate.digest(ROOT / candidate.URBAN_HISTORICAL_RELOCATIONS.get(path, path)), expected, path)
         self.assertEqual(len(candidate.CORE_PIPELINE_SOURCE_PATHS), 55)
         self.assertTrue(candidate.CORE_PIPELINE_SOURCE_PATHS <= set(contract['source_sha256']))
 
@@ -87,8 +87,8 @@ class AutoDiscoveredCrateInputTests(unittest.TestCase):
         self.assertEqual(candidate.CURRENT_CRATE_SOURCE_PATHS,
                          expected | candidate.COMPONENT_TERMS_RUNTIME_PATHS
                          | candidate.TERRAIN_CENTROID_RUNTIME_PATHS | candidate.COCKPIT_RUNTIME_PATHS
-                         | candidate.COCKPIT_VARIANT_RUNTIME_PATHS)
-        self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 499)
+                         | candidate.COCKPIT_VARIANT_RUNTIME_PATHS | candidate.URBAN_RUNTIME_PATHS)
+        self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 503)
         candidate.validate_modified_source_boundaries(set(candidate.REPLAY_CONTRACT_PATHS))
 
     def test_committed_auto_discovered_targets_aliases_and_omission_are_rejected(self):

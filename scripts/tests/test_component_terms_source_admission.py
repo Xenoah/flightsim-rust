@@ -83,7 +83,7 @@ class ComponentTermsSourceAdmissionTests(unittest.TestCase):
         self.assertEqual(len(candidate.HISTORICAL_REPLAY_CONTRACT_PATHS), 404)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)
         self.assertEqual(len(candidate.CORE_PIPELINE_SOURCE_PATHS), 55)
-        self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 499)
+        self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 503)
         for relative, expected in frozen.items():
             actual_path = candidate.CURRENT_HISTORICAL_RUNTIME_RELOCATIONS.get(relative, relative)
             self.assertEqual(contract['source_sha256'][actual_path], expected, relative)
@@ -95,9 +95,9 @@ class ComponentTermsSourceAdmissionTests(unittest.TestCase):
         replay = candidate.load_replay_contract(ROOT)
         analytical = json.loads((ROOT / capture.check.CONTRACT).read_text())
         captured = json.loads((ROOT / capture.CONTRACT).read_text())
-        self.assertEqual(replay['contract'], 'full-two-aircraft-alpha26-version-source-v1')
-        self.assertEqual(analytical['source_admission'], 'analytical-swift-alpha26-ci60-source-admission-v1')
-        self.assertEqual(captured['source_admission'], 'analytical-swift-alpha26-ci60-capture-source-admission-v1')
+        self.assertEqual(replay['contract'], 'full-two-aircraft-offline-urban-source-v1')
+        self.assertEqual(analytical['source_admission'], 'analytical-swift-offline-urban-source-admission-v1')
+        self.assertEqual(captured['source_admission'], 'analytical-swift-offline-urban-capture-source-admission-v1')
         for contract in (replay, analytical, captured):
             self.assertNotIn('reviewed_source', contract)
             self.assertNotIn('reviewed_runtime_tree', contract)

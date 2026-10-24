@@ -539,3 +539,25 @@ review or release approval. Publication permission is rebound to exact changed
 source separately; genuine Windows capture, all eleven native-content sections,
 same-build archive/extraction and both aircraft smokes remain mandatory. The
 ordinary release workflow and its `windows-latest` runner are unchanged.
+
+## Offline urban scenery source-only successor
+
+The successor preserves published alpha.26 `fc2ca797` and all three complete
+contracts as exact checked-in witnesses. Its 1,001 replay pins remain mandatory
+through the unchanged alpha.26 validator. Nine replaced inputs keep their prior
+bytes at explicit historical paths; eight reviewed additions, those witnesses,
+the three contracts and a closed descriptor extend the boundary to 1,022 pins.
+The live crate boundary grows from 499 to 503 only for the urban generator, its
+tests, index and provenance. The original 497 runtime identities and 102 independent
+replay/physics anchors are preserved. See the
+[substantive bounded review](../qa/urban-source-admission-2026-10-24.md).
+
+The analytical successor retains the complete 69-input CI60 proof, adds one
+adversarial urban-source suite and permits only explicitly listed source-tool,
+contract, guide and historical/current test rebindings. Capture retains four
+inputs and its native commands are unchanged. New source identities describe
+offline urban source admission only; `release_authorized` remains false.
+Ordinary code checks, genuine Linux visual evidence and source admission do not
+create Windows assent, native qualification, rights applicability, same-build
+archive acceptance or exact-inventory publication authority. Existing release
+receipts and all release/consent gates remain byte-exact and independently required.

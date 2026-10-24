@@ -1,0 +1,40 @@
+# 既定はテキストの自動検出と LF 正規化。
+* text=auto
+
+# シェルスクリプトは必ず LF。
+# CRLF に変換されると shebang が `/usr/bin/env bash\r` と解釈され、
+# 「bad interpreter」で実行できなくなる。CI は Linux で走るのでそちらは
+# 問題ないが、Windows で新規クローンした開発者が踏む。
+*.sh text eol=lf
+
+# YAML も LF に固定しておく。GitHub Actions のランナーによっては
+# CRLF が混ざると読みづらい差分になる。
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Compact baked world atlases are binary; never normalize their bytes.
+*.fsgt binary
+*.fsclim binary
+
+# Source ledgers are checksum-pinned; Windows checkouts must preserve LF bytes.
+docs/data/global-surface-corrections.json text eol=lf linguist-generated=true
+crates/flightsim-world/data/*.json text eol=lf linguist-generated=true
+docs/data/copernicus-glo90-license.pdf binary
+
+# The current Light Single path contains the exact project-original high-wing
+# replacement. The old Meshy payload remains forbidden by content hash.
+# Source archives require the explicit original-highwing-v1 checker policy.
+# Historical exclusion and provenance: docs/release/history/mesh-and-lut-boundary-d918943.json
+/assets/aircraft/light_single.glb binary
+
+# Reviewed upstream and modified-source bytes are exact evidence, including
+# notices and binary textures. Do not apply checkout newline conversion.
+/vendor/zune-jpeg/** -text
+/vendor/bevy_pbr/** -text
+/docs/release/modified-source-patches/*.patch -text
+/docs/release/analytical-modified-source-provenance.json text eol=lf
+/docs/release/analytical-source-header-evidence.json text eol=lf
+/vendor/bevy_core_pipeline/** -text
+
+# Original high-wing provenance and reviewed adapter snapshots are exact bytes.
+/tools/original-highwing/** -text

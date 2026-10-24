@@ -45,7 +45,7 @@ class TerrainCentroidSourceAdmissionTests(unittest.TestCase):
             row = migration['replaced_source_sha256'][path]
             self.assertEqual(row['previous_sha256'], candidate.TERRAIN_CENTROID_PREVIOUS_SHA256[path])
             self.assertNotEqual(row['previous_sha256'], row['sha256'])
-            self.assertEqual(row['sha256'], candidate.digest(ROOT / path))
+            self.assertEqual(row['sha256'], candidate.digest(ROOT / candidate.URBAN_HISTORICAL_RELOCATIONS.get(path, path)))
         self.assertEqual(candidate.digest(ROOT / candidate.COMPONENT_TERMS_MIGRATION_PATH),
                          'b41c6e7d163f98d0ddc4bddb3063dbdff82ea3462064b2b887954367b457bcc9')
         frozen = json.loads((ROOT / candidate.PRESERVED_RUNTIME_PATH).read_text())['source_sha256']
@@ -56,7 +56,7 @@ class TerrainCentroidSourceAdmissionTests(unittest.TestCase):
             self.assertEqual(candidate.digest(ROOT / relative), expected)
         self.assertEqual(len(candidate.COCKPIT_REPLAY_CONTRACT_PATHS - candidate.TERRAIN_STITCH_SOURCE_PATHS
                              - candidate.ALPHA22_SOURCE_PATHS - candidate.COCKPIT_SOURCE_PATHS), 930)
-        self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 499)
+        self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 503)
         self.assertEqual(len(candidate.HISTORICAL_REPLAY_CONTRACT_PATHS), 404)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)
         self.assertEqual(len(candidate.CORE_PIPELINE_SOURCE_PATHS), 55)

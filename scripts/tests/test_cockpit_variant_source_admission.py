@@ -86,7 +86,9 @@ class CockpitVariantSourceAdmissionTests(unittest.TestCase):
         for path, expected in base['source_sha256'].items():
             historical = RELOCATIONS.get(path, path)
             self.assertEqual(current['source_sha256'][historical], expected, path)
-            self.assertEqual(candidate.digest(ROOT / candidate.CHASE_HUD_HISTORICAL_RELOCATIONS.get(historical, candidate.ALPHA24_HISTORICAL_RELOCATIONS.get(historical, historical))), expected, path)
+            checkout = candidate.CHASE_HUD_HISTORICAL_RELOCATIONS.get(historical, candidate.ALPHA24_HISTORICAL_RELOCATIONS.get(historical, historical))
+            checkout = candidate.URBAN_HISTORICAL_RELOCATIONS.get(checkout, checkout)
+            self.assertEqual(candidate.digest(ROOT / checkout), expected, path)
         for path, expected in candidate.COCKPIT_VARIANT_BASE_CONTRACT_HASHES.items():
             self.assertEqual(candidate.digest(ROOT / candidate.SWIFT_FORWARD_HISTORICAL_RELOCATIONS.get(path, path)), expected, path)
         for path in CHANGED:
@@ -100,10 +102,10 @@ class CockpitVariantSourceAdmissionTests(unittest.TestCase):
         preserved = json.loads((ROOT / candidate.PRESERVED_RUNTIME_PATH).read_text())['source_sha256']
         self.assertEqual(len(preserved), 497)
         self.assertEqual(len(candidate.PRESERVED_CRATE_SOURCE_PATHS), 492)
-        self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 499)
+        self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 503)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)
         self.assertEqual(len(candidate.CORE_PIPELINE_SOURCE_PATHS), 55)
-        self.assertEqual(len(capture.check.SOURCE_PATHS), 69)
+        self.assertEqual(len(capture.check.SOURCE_PATHS), 70)
         self.assertEqual(len(capture.BOUND_FILES), 4)
         self.assertEqual(current['contract'], 'full-two-aircraft-cockpit-variant-source-v1')
         self.assertEqual(current['scope'], candidate.SOURCE_ADMISSION_SCOPE)
