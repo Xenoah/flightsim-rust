@@ -10,10 +10,10 @@
     "docs/release/components/MICROSOFT-COMPONENT-TERMS.txt",
     "Publication permission only. This receipt does not assert new legal assent, native runtime acceptance or distribution qualification. Genuine final-source native applicability, same-build archive verification and both extracted-aircraft smokes remain independent required gates."
   ],
-  "release_inventory_sha256": "3b0c66fabe38f3c8b30446a59b11ca2900a0306f55e831b434cdc1e5494cf209",
+  "release_inventory_sha256": "75396132895947ad733ba54d80cdf900ce55f782fefca207d7b87fe761200098",
   "schema_version": 1,
   "scope": "github-windows-prerelease",
-  "source_inventory_sha256": "dd2b38eb7e1ce514815b97a5cac3bc23f2811e2d772686316317aac8ed71ae22",
+  "source_inventory_sha256": "e0f21651b7e63125db15001fd461c9bcff7146ec509e997edefad2caecb74cf8",
   "status": "authorized",
   "target": "x86_64-pc-windows-msvc",
   "version": "0.6.0-alpha.27"
