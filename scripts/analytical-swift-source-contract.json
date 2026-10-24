@@ -38,7 +38,7 @@
     "scripts/check-analytical-swift-recipe.py": "bdf8702ba5e7bc8e1933c38bcbcd1f1c56be7669531c9d3a3683f144a541e5af",
     "scripts/check-commercial-readiness.py": "a33119350da4b0a7e7e57a062283eacdb8cab4fa2ef5b11b3497de7529a7f111",
     "scripts/check-release-authorization.py": "b8ad298984f385724d3bee748f8af32bc29468d543f3b8f3ab6782ca45453a67",
-    "scripts/check-swift-windows-candidate.py": "aec6e68b87956ebd229f4cdeb6f1f9f3d1198cad691d5d696da87cc32267a8d6",
+    "scripts/check-swift-windows-candidate.py": "69ea6d98dac792654d1e511c7ba29a63c147107408db5dd2a9197a438f628662",
     "scripts/check-tonemapping-build.py": "1a4e8a60b65c0ca1b000e3041978b47c88fdeb50f6eeb90fa8bb1d18a348dfd1",
     "scripts/ci-timeout-source-migration.json": "33375880cd5a90b934914464d2ed415421378698879d3993193f2931ba93bebc",
     "scripts/ci-tonemapping.py": "c350a212fa5e316b30c88492ae8513457ba237bd440a40ec72c9419844630af2",

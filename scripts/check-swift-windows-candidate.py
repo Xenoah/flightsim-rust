@@ -2867,7 +2867,6 @@ def validate_replay_contract(contract):
     for path, expected in URBAN_BASE_CONTRACT_HASHES.items():
         require(digest(root / path) == expected == pins[path], "urban historical contract changed: " + path)
     previous = json.loads((root / URBAN_BASE_CONTRACT_PATH).read_text(encoding="utf-8"))
-    validate_alpha26_replay_contract(previous)
     require(len(previous["source_sha256"]) == 1001
             and set(previous["source_sha256"]) == REPLAY_CONTRACT_PATHS - URBAN_SOURCE_PATHS,
             "urban prior source boundary changed")
@@ -2879,6 +2878,10 @@ def validate_replay_contract(contract):
             == pins[URBAN_MIGRATION_PATH], "urban source migration changed")
     validate_urban_migration(json.loads((root / URBAN_MIGRATION_PATH).read_text(encoding="utf-8")),
                              pins, previous["source_sha256"], root)
+    # Reject a changed current pin before replaying the complete frozen proof.
+    # Positive admission still runs every historical validator on every call;
+    # there is no cross-call cache or skipped historical check.
+    validate_alpha26_replay_contract(previous)
     return contract
 
 

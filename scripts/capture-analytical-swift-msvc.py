@@ -38,7 +38,7 @@ BOUND_FILES = {
     '.github/workflows/analytical-swift-msvc-build.yml',
     'docs/release/analytical-swift-msvc-capture.md',
 }
-INHERITED_CONTRACTS = {'scripts/analytical-swift-source-contract.json': '46e56026cef68482eb0009cead81f85c1650e791ee16d08e773446fec452c7af', 'scripts/replay-candidate-contract.json': 'a1de597349919a06777318f11b2edc7225a2734322068aca879aba2d308327b5'}
+INHERITED_CONTRACTS = {'scripts/analytical-swift-source-contract.json': 'ef97a108c93366dd154b7dc31822ef881a1f9c21eb7e148dd57ec2e76ba17237', 'scripts/replay-candidate-contract.json': 'a1de597349919a06777318f11b2edc7225a2734322068aca879aba2d308327b5'}
 
 MODES = ('analytic', 'ordinary')
 OUTPUTS = {'rustc': 'rustc.txt', 'graph': 'graph.txt', 'build': 'messages.jsonl', 'metadata': 'metadata.json'}
