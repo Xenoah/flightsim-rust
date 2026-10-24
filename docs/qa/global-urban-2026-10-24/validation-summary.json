@@ -1,0 +1,301 @@
+{
+  "application_commit": "c2b177d32a209b4d4a43044b53ea6d39d2ade308",
+  "rust_aggregate_passed": 2770,
+  "rust_aggregate_ignored": 3,
+  "pure_doctests_passed": 6,
+  "python_source_aggregate": {
+    "total": 829,
+    "passed": 721,
+    "failures": 15,
+    "errors": 92,
+    "skipped": 1,
+    "status": "failed reviewed-source hash/closure admissions; pins unchanged"
+  },
+  "full_logs_directory": "/workspace/flightsim-evidence",
+  "logs": [
+    {
+      "file": "headless-tests.log",
+      "sha256": "265f46193f1077ef880854490ac6996038301006121d29d1242de2ea9d788de2",
+      "bytes": 135977,
+      "rust_passed": 1395,
+      "rust_failed": 0,
+      "rust_ignored": 0,
+      "tail": [
+        "Success",
+        "",
+        "Testing terrain_seam_planning/south_pole/reference_full_including_queue_and_drop",
+        "Success",
+        "Testing terrain_seam_planning/south_pole/incremental_full_including_queue_and_drop",
+        "Success",
+        "",
+        "Testing terrain_seam_planning/uniform_l6_8192/reference_full_including_queue_and_drop",
+        "Success",
+        "Testing terrain_seam_planning/uniform_l6_8192/incremental_full_including_queue_and_drop",
+        "Success",
+        ""
+      ]
+    },
+    {
+      "file": "render-tests.log",
+      "sha256": "13b3ae00fc297d47f8fc4f061429bf4b516cff664b50fbc0df84cd8182bcf715",
+      "bytes": 131933,
+      "rust_passed": 1375,
+      "rust_failed": 0,
+      "rust_ignored": 3,
+      "tail": [
+        "     Running unittests examples/attitude_clip_repro.rs (target/debug/examples/attitude_clip_repro-5983e7d1b5d810c0)",
+        "",
+        "running 0 tests",
+        "",
+        "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "",
+        "     Running unittests examples/attitude_matrix.rs (target/debug/examples/attitude_matrix-4426f45cd3ed8089)",
+        "",
+        "running 0 tests",
+        "",
+        "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        ""
+      ]
+    },
+    {
+      "file": "headless-doc-tests.log",
+      "sha256": "94fb9ed53fc2aa1ef98b3f4d6e57a0d719818b61daf9f5a803d27ac1ba9a0c33",
+      "bytes": 1724,
+      "rust_passed": 6,
+      "rust_failed": 0,
+      "rust_ignored": 0,
+      "tail": [
+        "running 0 tests",
+        "",
+        "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "",
+        "   Doc-tests flightsim_world",
+        "",
+        "running 1 test",
+        "test crates/flightsim-world/src/lib.rs - (line 31) ... ok",
+        "",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "",
+        "all doctests ran in 0.13s; merged doctests compilation took 0.13s"
+      ]
+    },
+    {
+      "file": "headless-clippy.log",
+      "sha256": "9fce4d7628d1e441ce1b251b49763b124b75356aff5168102ee80857c218b913",
+      "bytes": 4696,
+      "rust_passed": 0,
+      "rust_failed": 0,
+      "rust_ignored": 0,
+      "tail": [
+        "    Checking digest v0.10.7",
+        "    Checking form_urlencoded v1.2.2",
+        "    Checking cpufeatures v0.2.17",
+        "    Checking sha2 v0.10.9",
+        "    Checking url v2.5.8",
+        "    Checking ureq v3.3.0",
+        "    Checking fs2 v0.4.3",
+        "    Checking rawzip v0.5.1",
+        "    Checking flightsim-net v0.6.0-alpha.26 (/workspace/flightsim-rust/crates/flightsim-net)",
+        "    Checking flightsim-assetgen v0.6.0-alpha.26 (/workspace/flightsim-rust/crates/flightsim-assetgen)",
+        "    Checking flightsim-content v0.6.0-alpha.26 (/workspace/flightsim-rust/crates/flightsim-content)",
+        "    Finished `dev` profile [optimized] target(s) in 51.32s"
+      ]
+    },
+    {
+      "file": "workspace-clippy.log",
+      "sha256": "3bd998ccd4ba6a2df6cc070b74c85c13c0982da15f4c48bccd9578e1c816cf81",
+      "bytes": 11872,
+      "rust_passed": 0,
+      "rust_failed": 0,
+      "rust_ignored": 0,
+      "tail": [
+        "    Checking http v1.5.0",
+        "    Checking rustls-webpki v0.103.13",
+        "    Checking flightsim-audio v0.6.0-alpha.26 (/workspace/flightsim-rust/crates/flightsim-audio)",
+        "    Checking subtle v2.6.1",
+        "    Checking ureq-proto v0.6.0",
+        "    Checking webpki-roots v1.0.9",
+        "    Checking flightsim-input v0.6.0-alpha.26 (/workspace/flightsim-rust/crates/flightsim-input)",
+        "    Checking utf8-zero v0.8.1",
+        "    Checking flightsim-app v0.6.0-alpha.26 (/workspace/flightsim-rust/crates/flightsim-app)",
+        "    Checking ureq v3.3.0",
+        "    Checking flightsim-assetgen v0.6.0-alpha.26 (/workspace/flightsim-rust/crates/flightsim-assetgen)",
+        "    Finished `dev` profile [optimized] target(s) in 13m 42s"
+      ]
+    },
+    {
+      "file": "app-build.log",
+      "sha256": "c3dd9c23dd6b0cf0acb165a004988eb510a84be69f6192e2707bf1c9c984e477",
+      "bytes": 209,
+      "rust_passed": 0,
+      "rust_failed": 0,
+      "rust_ignored": 0,
+      "tail": [
+        "    Blocking waiting for file lock on artifact directory",
+        "   Compiling flightsim-app v0.6.0-alpha.26 (/workspace/flightsim-rust/crates/flightsim-app)",
+        "    Finished `dev` profile [optimized] target(s) in 11m 41s"
+      ]
+    },
+    {
+      "file": "architecture.log",
+      "sha256": "277c025522371f3d487608a83a0c4c1b5e0f054c744b7a9453f3b0caca3a4513",
+      "bytes": 27,
+      "rust_passed": 0,
+      "rust_failed": 0,
+      "rust_ignored": 0,
+      "tail": [
+        "architecture checks passed"
+      ]
+    },
+    {
+      "file": "fmt.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "rust_passed": 0,
+      "rust_failed": 0,
+      "rust_ignored": 0,
+      "tail": []
+    },
+    {
+      "file": "urban-world-final.log",
+      "sha256": "6a180e1f0eb3ad05800430a872089330cb5ca456a468b902d3a1e6e5efc4c969",
+      "bytes": 2707,
+      "rust_passed": 8,
+      "rust_failed": 0,
+      "rust_ignored": 0,
+      "tail": [
+        "     Running tests/terrain_seam_geometry.rs (/workspace/flightsim-world-target/debug/deps/terrain_seam_geometry-e4bd44852c6b4b0c)",
+        "",
+        "running 0 tests",
+        "",
+        "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 16 filtered out; finished in 0.00s",
+        "",
+        "     Running tests/v3_fuzz_review.rs (/workspace/flightsim-world-target/debug/deps/v3_fuzz_review-873fbfecb5bb875b)",
+        "",
+        "running 0 tests",
+        "",
+        "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s",
+        ""
+      ]
+    },
+    {
+      "file": "bake-tests.log",
+      "sha256": "36c3240ab20bce7c022e4dc9122fb2a5d744335cf02cadf52102b6b9875b5eb8",
+      "bytes": 330,
+      "rust_passed": 0,
+      "rust_failed": 0,
+      "rust_ignored": 0,
+      "tail": [
+        "test_hole_remains_empty (scripts.tests.test_bake_urban.UrbanBakeTests.test_hole_remains_empty) ... ok",
+        "test_pinned_payload_and_row_intervals (scripts.tests.test_bake_urban.UrbanBakeTests.test_pinned_payload_and_row_intervals) ... ok",
+        "",
+        "----------------------------------------------------------------------",
+        "Ran 2 tests in 0.062s",
+        "",
+        "OK"
+      ]
+    },
+    {
+      "file": "urban-benchmark.log",
+      "sha256": "7a3d528f150f30720103b0e6229be24abc44469b90bd19d5a41ac67b40d95dca",
+      "bytes": 529,
+      "rust_passed": 0,
+      "rust_failed": 0,
+      "rust_ignored": 0,
+      "tail": [
+        "   Compiling flightsim-world v0.6.0-alpha.26 (/workspace/flightsim-rust/crates/flightsim-world)",
+        "    Finished `dev` profile [optimized] target(s) in 3.35s",
+        "     Running benches/scenery.rs (/workspace/flightsim-world-target/debug/deps/scenery-ffe70d10303adfd5)",
+        "Gnuplot not found, using plotters backend",
+        "Benchmarking urban_london_4500m_cap2048",
+        "Benchmarking urban_london_4500m_cap2048: Analyzing",
+        "urban_london_4500m_cap2048",
+        "                        time:   [6.1978 ms 6.2440 ms 6.4288 ms]",
+        "",
+        "scenery benchmark: 1000 features, 60154 bytes"
+      ]
+    },
+    {
+      "file": "python-source-tests.log",
+      "sha256": "ae393f8713c88ae04afca55094ddfb33e14cfb4ad8c99dccc2191f3dfab6ae31",
+      "bytes": 354832,
+      "rust_passed": 0,
+      "rust_failed": 0,
+      "rust_ignored": 0,
+      "tail": [
+        "Traceback (most recent call last):",
+        "  File \"/workspace/flightsim-rust/scripts/tests/test_terrain_stitch_source_admission.py\", line 62, in test_exact_delta_preserves_all_prior_pins_without_local_git_history",
+        "    self.assertEqual(candidate.digest(ROOT / checkout_path), expected, path)",
+        "AssertionError: '725678241d165179cf61ca4b1914c09339ab90ed66824afa5f4a7fd0b113f240' != '6e1429dac936896795ffa37bdf031e73e7881377b6f27f74c55b31e32a29c223'",
+        "- 725678241d165179cf61ca4b1914c09339ab90ed66824afa5f4a7fd0b113f240",
+        "+ 6e1429dac936896795ffa37bdf031e73e7881377b6f27f74c55b31e32a29c223",
+        " : .gitattributes",
+        "",
+        "----------------------------------------------------------------------",
+        "Ran 829 tests in 624.315s",
+        "",
+        "FAILED (failures=15, errors=92, skipped=1)"
+      ]
+    },
+    {
+      "file": "python-followup-tests.log",
+      "sha256": "58faa6e9872e85a2b3eafda0cb9191c98388ced42b68956f96863d1cae9f2616",
+      "bytes": 7066,
+      "rust_passed": 0,
+      "rust_failed": 0,
+      "rust_ignored": 0,
+      "tail": [
+        "    \"swift_sport.glb\": \"9f30f6f9babe87a54d0f1f5da104f719d7e99cb05aada2848f8ea88b0bf9e3b1\",",
+        "    \"swift_sport.blend\": \"29a25578733be83d25ccff12c117b29124b57b5e69e8356bd8189d128e514e77\"",
+        "  },",
+        "  \"sha256\": {",
+        "    \"meadow_trainer.glb\": \"c873b59a5e638c16bd2fb36c789704a41b1146ea90c7c44950257cbf5f806412\",",
+        "    \"meadow_trainer.blend\": \"5a11c5453d62a68add7706230832d2e289c6626331c066a7fd1f25b650dc37db\",",
+        "    \"meadow_trainer.json\": \"8ce67e37e40ece15bdaba239a058632b11efd73755d8965ca014bbaeb39313c0\",",
+        "    \"build_meadow_trainer.py\": \"3b7ed8696b0e2d4a656645ceca9b5acddfd3242047cee698f98605eb68d49a1d\"",
+        "  }",
+        "}",
+        "EXIT 0",
+        "FAILED []"
+      ]
+    },
+    {
+      "file": "source-admission-repro.log",
+      "sha256": "139926d190076de391c6d58295f4e2395b503d84e1b72e5335288a034623e2a7",
+      "bytes": 2312,
+      "rust_passed": 0,
+      "rust_failed": 0,
+      "rust_ignored": 0,
+      "tail": [
+        "    source = candidate.source_inputs(repo, expected)",
+        "             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+        "  File \"/workspace/flightsim-rust/scripts/check-swift-windows-candidate.py\", line 2852, in source_inputs",
+        "    require(canonical_hash == expected_hash, \"reviewed replay canonical baseline changed: \" + diagnostic)",
+        "  File \"/workspace/flightsim-rust/scripts/check-swift-windows-candidate.py\", line 1559, in require",
+        "    raise ValueError(message)",
+        "ValueError: reviewed replay canonical baseline changed: .gitattributes; expected_sha256=6e1429dac936896795ffa37bdf031e73e7881377b6f27f74c55b31e32a29c223; canonical_sha256=725678241d165179cf61ca4b1914c09339ab90ed66824afa5f4a7fd0b113f240; checkout_sha256=725678241d165179cf61ca4b1914c09339ab90ed66824afa5f4a7fd0b113f240",
+        "",
+        "----------------------------------------------------------------------",
+        "Ran 1 test in 1.896s",
+        "",
+        "FAILED (errors=1)"
+      ]
+    },
+    {
+      "file": "source-admission-baseline.log",
+      "sha256": "094f077a7108486fb4a9bc07f9dcbdfb5b44679bc27c09cf5210bc6682d94f1d",
+      "bytes": 342,
+      "rust_passed": 0,
+      "rust_failed": 0,
+      "rust_ignored": 0,
+      "tail": [
+        "test_actual_capture_chain_requires_exact_bytes_without_checkpoint_objects (scripts.tests.test_alpha22_version_source_admission.Alpha22VersionSourceAdmissionTests.test_actual_capture_chain_requires_exact_bytes_without_checkpoint_objects) ... ok",
+        "",
+        "----------------------------------------------------------------------",
+        "Ran 1 test in 12.940s",
+        "",
+        "OK"
+      ]
+    }
+  ]
+}

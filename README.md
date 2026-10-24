@@ -408,3 +408,12 @@ means work offline; local DEMs take priority. This is not live weather or global
 detailed30m terrain. See [the global map guide](docs/global-map.md),
 [data provenance](docs/data/global-sources.md) and [ADR-0011](docs/adr/0011-offline-global-terrain-climate.md).
 Validation and publication status are reported separately.
+
+### Offline urban scenery (development branch)
+
+Global terrain now has bounded nearby fictional buildings/streets inside mapped
+Natural Earth urban areas, without downloading regional scenery. Actual regional
+OSM scenery takes priority. Individual footprints and heights are approximate;
+coastal cells may be omitted, and precise world building tiles are not implemented.
+See [usage and limits](docs/global-urban-scenery.md) and
+[cloud verification](docs/qa/global-urban-cloud-2026-10-24.md).

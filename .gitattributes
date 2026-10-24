@@ -15,6 +15,7 @@
 # Compact baked world atlases are binary; never normalize their bytes.
 *.fsgt binary
 *.fsclim binary
+*.fsua binary
 
 # Source ledgers are checksum-pinned; Windows checkouts must preserve LF bytes.
 docs/data/global-surface-corrections.json text eol=lf linguist-generated=true

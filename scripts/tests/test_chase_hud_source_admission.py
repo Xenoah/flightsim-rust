@@ -59,17 +59,17 @@ class ChaseHudSourceAdmissionTests(unittest.TestCase):
         for path, expected in previous['source_sha256'].items():
             historical = RELOCATIONS.get(path, path)
             self.assertEqual(current['source_sha256'][historical], expected, path)
-            self.assertEqual(candidate.digest(ROOT / candidate.ALPHA26_HISTORICAL_RELOCATIONS.get(historical, historical)), expected, path)
+            self.assertEqual(candidate.digest(ROOT / candidate.URBAN_HISTORICAL_RELOCATIONS.get(candidate.ALPHA26_HISTORICAL_RELOCATIONS.get(historical, historical), candidate.ALPHA26_HISTORICAL_RELOCATIONS.get(historical, historical))), expected, path)
         for path in CHANGED:
-            self.assertEqual(candidate.CHASE_HUD_CURRENT_SHA256[path], candidate.digest(ROOT / path))
-        self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 499)
+            self.assertEqual(candidate.CHASE_HUD_CURRENT_SHA256[path], candidate.digest(ROOT / candidate.URBAN_HISTORICAL_RELOCATIONS.get(path, path)))
+        self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 503)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)
         frozen = json.loads((ROOT / candidate.PRESERVED_RUNTIME_PATH).read_text())['source_sha256']
         self.assertEqual(len(frozen), 497)
         for path, expected in frozen.items():
-            historical = candidate.CURRENT_HISTORICAL_RUNTIME_RELOCATIONS.get(path, path)
+            historical = candidate.ALPHA26_HISTORICAL_RUNTIME_RELOCATIONS.get(path, path)
             self.assertEqual(current['source_sha256'][historical], expected)
-        self.assertEqual(len(check.SOURCE_PATHS), 69)
+        self.assertEqual(len(check.SOURCE_PATHS), 70)
         self.assertEqual(len(capture.BOUND_FILES), 4)
         self.assertIs(current['release_authorized'], False)
 

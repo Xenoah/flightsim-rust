@@ -218,3 +218,14 @@ candidate's asset allowlist, and does not constitute release or rights clearance
 ## Current original Light Single exterior (2026-10-08 candidate)
 
 The current `assets/aircraft/light_single.glb` is the project-original Meadow Trainer exterior, adapted for the existing Light Single -X/+Y model basis. The deterministic adapter, unchanged original source, license texts and independent asset review are retained in `tools/original-highwing/`. Its 140,840-byte SHA-256 is `b41f29ade89701d31759e6bc8164d5cdb3aa8734f512628af63823ad7eaaa3cc`. Geometry/materials and adapter use the project MIT OR Apache-2.0 terms. No old Meshy geometry or texture is incorporated. This does not relicense the old asset; its unresolved record above remains historical. See [candidate scope and remaining gates](docs/release/full-two-aircraft-source-candidate.md).
+
+## Offline procedural urban extent (2026-10-24)
+
+Made with Natural Earth. The bundled urban-cell index is derived from Natural
+Earth vector v5.1.2 `ne_10m_urban_areas.shp`, public-domain data under
+https://www.naturalearthdata.com/about/terms-of-use/. Source SHA-256 and the
+reproducible transform are recorded in
+`crates/flightsim-world/data/natural-earth-urban.provenance.json`. See
+[urban scenery](docs/global-urban-scenery.md) for source age and scale.
+Only approximate urban extent is sourced geography; individual buildings, streets
+and heights are invented visual scenery. This notice is not a release approval.

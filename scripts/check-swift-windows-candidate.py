@@ -51,7 +51,8 @@ ALPHA24_REPLAY_CONTRACT_ID = "full-two-aircraft-alpha24-version-source-v1"
 SWIFT_FORWARD_REPLAY_CONTRACT_ID = "full-two-aircraft-swift-forward-visibility-source-v1"
 ALPHA25_REPLAY_CONTRACT_ID = "full-two-aircraft-alpha25-version-source-v1"
 CHASE_HUD_REPLAY_CONTRACT_ID = "full-two-aircraft-chase-hud-source-v1"
-REPLAY_CONTRACT_ID = "full-two-aircraft-alpha26-version-source-v1"
+ALPHA26_REPLAY_CONTRACT_ID = "full-two-aircraft-alpha26-version-source-v1"
+REPLAY_CONTRACT_ID = "full-two-aircraft-offline-urban-source-v1"
 REVIEWED_RUNTIME_SOURCE = "960c3126e6a4bc22b8d4acc6e6737f8f2b473bef"
 REVIEWED_RUNTIME_TREE = "b3bbd57bc3819b1b1eda35ce4f8b476c52d1b24e"
 SOURCE_ADMISSION_SCOPE = "source-only; native, whole-target and publication gates remain unqualified"
@@ -316,6 +317,59 @@ ALPHA26_SOURCE_PATHS = frozenset({
 })
 ALPHA26_WORKSPACE_PACKAGES = ALPHA25_WORKSPACE_PACKAGES
 
+
+# Source-only urban successor. Preserve every alpha.26 pin and native/release gate.
+URBAN_MIGRATION_PATH = 'scripts/urban-source-migration.json'
+URBAN_MIGRATION_SHA256 = 'a6e73f3f725a874c6dfe5eb98eac12ee7e3640ac0ccbca5a16eaece76578292b'
+URBAN_BASE_SOURCE = 'fc2ca797a1e13b36f208fbcbbab5fce647b172e7'
+URBAN_BASE_TREE = '999bf0474859647c139d9fed3b281aa1d2f80107'
+URBAN_BASE_CONTRACT_PATH = 'scripts/history/fc2ca797-scripts-replay-candidate-contract.json'
+URBAN_BASE_CONTRACT_HASHES = {'scripts/history/fc2ca797-scripts-analytical-swift-capture-contract.json': 'f814ff8f28d30e0c829b2b2e6c3a0c5cb685147bcd788deb94798c984b67395b',
+ 'scripts/history/fc2ca797-scripts-analytical-swift-source-contract.json': 'e40bd020dd4bc53a065803d1e800576eb5f6533629a83e4d66759b5b80568eea',
+ 'scripts/history/fc2ca797-scripts-replay-candidate-contract.json': 'c0fefc7136b4cca02a11c8f80684661ab426a4936c25e99b4ce326b34ee4dbf9'}
+URBAN_HISTORICAL_RELOCATIONS = {'.gitattributes': 'scripts/history/fc2ca797-gitattributes',
+ 'ATTRIBUTION.md': 'scripts/history/fc2ca797-ATTRIBUTION.md',
+ 'crates/flightsim-app/src/scenery_runtime.rs': 'scripts/history/fc2ca797-crates-flightsim-app-src-scenery_runtime.rs',
+ 'crates/flightsim-app/src/scenery_runtime_tests.rs': 'scripts/history/fc2ca797-crates-flightsim-app-src-scenery_runtime_tests.rs',
+ 'crates/flightsim-app/src/world_runtime.rs': 'scripts/history/fc2ca797-crates-flightsim-app-src-world_runtime.rs',
+ 'crates/flightsim-world/benches/scenery.rs': 'scripts/history/fc2ca797-crates-flightsim-world-benches-scenery.rs',
+ 'crates/flightsim-world/src/lib.rs': 'scripts/history/fc2ca797-crates-flightsim-world-src-lib.rs',
+ 'crates/flightsim-world/src/scenery.rs': 'scripts/history/fc2ca797-crates-flightsim-world-src-scenery.rs',
+ 'crates/flightsim-world/src/scenery/io.rs': 'scripts/history/fc2ca797-crates-flightsim-world-src-scenery-io.rs'}
+URBAN_PREVIOUS_SHA256 = {'.gitattributes': '6e1429dac936896795ffa37bdf031e73e7881377b6f27f74c55b31e32a29c223',
+ 'ATTRIBUTION.md': '30991a2bb5b8fb907302be18cfe10f1e645505c1029a58ddb610d67f3629cd4d',
+ 'crates/flightsim-app/src/scenery_runtime.rs': '1d969d5aea0823a0ed6fde7fce39e23e6aaf8a66725906cde88e49f52182868a',
+ 'crates/flightsim-app/src/scenery_runtime_tests.rs': '3f39f8ee9c9467f826c7a271beb87ef756d05ab6f7397eedb59b4cd13e55d7b3',
+ 'crates/flightsim-app/src/world_runtime.rs': 'c7e6556356161b6cb4044b5d19d5bc1137c843b105ac284e9154ed18fddb468d',
+ 'crates/flightsim-world/benches/scenery.rs': '83c644c35e923a4a78be6bea7dba87fabca6a0cd89147538cf657d91dc7c8388',
+ 'crates/flightsim-world/src/lib.rs': 'ccfebaefa71ab0d3bd474e93b61746bc838eaacec2e1f50a82fada8b220b700e',
+ 'crates/flightsim-world/src/scenery.rs': 'ade44baa3aa0b2603ee7d7453e5036d60e0053287a34a019c24842a393bde704',
+ 'crates/flightsim-world/src/scenery/io.rs': 'e65fb9e24150a353d37553d2521c56b6c3f6c5dd0acf145188b8c3291bb16297'}
+URBAN_CURRENT_SHA256 = {'.gitattributes': '725678241d165179cf61ca4b1914c09339ab90ed66824afa5f4a7fd0b113f240',
+ 'ATTRIBUTION.md': '6df3c7176a8b6b7b6f49d610b9879a80e2904e44a660d48570f59dd73c20d835',
+ 'crates/flightsim-app/src/scenery_runtime.rs': 'bd227dde6ab55980ecdd6f9b709363112ddc2d2064f1c5a6e3157b64986490fa',
+ 'crates/flightsim-app/src/scenery_runtime_tests.rs': '02f00c5486e2a9bc5e140c247e8349c13d469ddec411b77dfd02839a2d5754a4',
+ 'crates/flightsim-app/src/world_runtime.rs': 'fc52c8ae6f02c2b0b744eff1ba2adb3f8a21f089e3a1c2042207a0342d98b6cc',
+ 'crates/flightsim-world/benches/scenery.rs': '63209c531215453c8b175870c1080187340efe92c7de1c4ec5961750bd928727',
+ 'crates/flightsim-world/src/lib.rs': 'ba4862a2279f174ddb08c461f4e7a62e6505fae3fc89459f5142e52803bfa955',
+ 'crates/flightsim-world/src/scenery.rs': '61527b75363ba6b798a06ef78556e6a8cc5832682d49c5956ce6f81aa3ddef9c',
+ 'crates/flightsim-world/src/scenery/io.rs': 'dbe8ad852754f4a3d3526980125a436f1d531d651739431143d566147b635993'}
+URBAN_ADDED_SHA256 = {'crates/flightsim-world/data/natural-earth-urban.fsua': '3632a0b9993e173a483756535e3175497fa355828d58070013bd8045e48b5db8',
+ 'crates/flightsim-world/data/natural-earth-urban.provenance.json': '20eece5efb6b833d03504caef12ad037c90c3f1ceb1f5a313fb9bbc5d2cdc111',
+ 'crates/flightsim-world/src/urban.rs': '637dc26c87665479ea367a3cc90381b349d112df00e30501b7581c1ecd1c5053',
+ 'crates/flightsim-world/src/urban_tests.rs': '37a8821ec15a65b3f7712ad05dadde9ba17c8b5a4d6ba6f656b89053ca54075e',
+ 'docs/global-urban-scenery.md': 'aea5600b8d0f8d45f8cc737b80f5e4c8902ca61c4921fab1afba2ba5c55202c3',
+ 'docs/qa/urban-source-admission-2026-10-24.md': '17ff131d4a882f22285ed53cd4df646241af6bf60d18e9662f484e3acb1ecda4',
+ 'scripts/bake_urban.py': '65edb523b7f77aba9b086b7290dd2cebbe50f6af57770e0f5927cbb6bbbaf6a9',
+ 'scripts/tests/test_bake_urban.py': '1024f758364e48c7e29072d95729d194db068b41023df0aa06d39a24db3b2b79'}
+URBAN_RUNTIME_PATHS = frozenset({
+    'crates/flightsim-world/data/natural-earth-urban.fsua',
+    'crates/flightsim-world/data/natural-earth-urban.provenance.json',
+    'crates/flightsim-world/src/urban.rs',
+    'crates/flightsim-world/src/urban_tests.rs',
+})
+URBAN_SOURCE_PATHS = frozenset({URBAN_MIGRATION_PATH, *URBAN_BASE_CONTRACT_HASHES, *URBAN_HISTORICAL_RELOCATIONS.values(), *URBAN_ADDED_SHA256})
+
 # The oldest main.rs witness remains the component-terms witness. Other newly
 # replaced preserved files now have their own exact published-base witnesses.
 ALPHA25_HISTORICAL_RUNTIME_RELOCATIONS = {
@@ -323,8 +377,11 @@ ALPHA25_HISTORICAL_RUNTIME_RELOCATIONS = {
     **COCKPIT_VARIANT_HISTORICAL_RELOCATIONS,
     **COCKPIT_HISTORICAL_RELOCATIONS, **HISTORICAL_RUNTIME_RELOCATIONS,
 }
-CURRENT_HISTORICAL_RUNTIME_RELOCATIONS = {
+ALPHA26_HISTORICAL_RUNTIME_RELOCATIONS = {
     **ALPHA25_HISTORICAL_RUNTIME_RELOCATIONS, **CHASE_HUD_HISTORICAL_RELOCATIONS,
+}
+CURRENT_HISTORICAL_RUNTIME_RELOCATIONS = {
+    **URBAN_HISTORICAL_RELOCATIONS, **ALPHA26_HISTORICAL_RUNTIME_RELOCATIONS,
 }
 # The reviewed additive jet/turboprop exports change this file, but no legacy FDM
 # body. Keep a literal full-file guard; the historical lib hash above never moves.
@@ -1395,6 +1452,7 @@ REPLAY_CONTRACT_PATHS |= CHASE_HUD_SOURCE_PATHS
 CHASE_HUD_REPLAY_CONTRACT_PATHS = frozenset(REPLAY_CONTRACT_PATHS)
 REPLAY_CONTRACT_PATHS |= ALPHA26_SOURCE_PATHS
 ALPHA26_REPLAY_CONTRACT_PATHS = frozenset(REPLAY_CONTRACT_PATHS)
+REPLAY_CONTRACT_PATHS |= URBAN_SOURCE_PATHS
 
 # Independent Python encoders and their existing bytes stay frozen separately
 # from the moving reviewed implementation. Never regenerate to satisfy a pin.
@@ -1576,7 +1634,7 @@ def git(repo, *args):
 # retain 492 preserved members, two terms inputs, one terrain test and two
 # explicitly reviewed cockpit helpers plus two aircraft-layout helpers.
 # No on-disk glob can admit additional build, binary, example or benchmark files.
-PRESERVED_CRATE_SOURCE_PATHS = frozenset(path for path in REPLAY_CONTRACT_PATHS
+PRESERVED_CRATE_SOURCE_PATHS = frozenset(path for path in ALPHA26_REPLAY_CONTRACT_PATHS
                                        if path.startswith("crates/")
                                        and path not in (COMPONENT_TERMS_RUNTIME_PATHS
                                                         | TERRAIN_CENTROID_RUNTIME_PATHS
@@ -1584,7 +1642,7 @@ PRESERVED_CRATE_SOURCE_PATHS = frozenset(path for path in REPLAY_CONTRACT_PATHS
                                                         | COCKPIT_VARIANT_RUNTIME_PATHS))
 CURRENT_CRATE_SOURCE_PATHS = (PRESERVED_CRATE_SOURCE_PATHS | COMPONENT_TERMS_RUNTIME_PATHS
                               | TERRAIN_CENTROID_RUNTIME_PATHS | COCKPIT_RUNTIME_PATHS
-                              | COCKPIT_VARIANT_RUNTIME_PATHS)
+                              | COCKPIT_VARIANT_RUNTIME_PATHS | URBAN_RUNTIME_PATHS)
 MODIFIED_SOURCE_BOUNDARIES = (
     ("crates/", CURRENT_CRATE_SOURCE_PATHS),
     ("docs/release/components/", COMPONENT_TERMS_DOCUMENT_PATHS),
@@ -2676,13 +2734,13 @@ def validate_alpha26_version_delta(previous, current):
                 "alpha26 version bytes differ outside approved substitutions: " + path)
 
 
-def validate_replay_contract(contract):
+def validate_alpha26_replay_contract(contract):
     """Admit only alpha.25 to alpha.26 versions over the frozen merged HUD proof."""
     require(isinstance(contract, dict) and set(contract) == {"schema_version", "contract",
             "base_reviewed_source", "base_reviewed_runtime_tree", "source_migration_sha256",
             "scope", "release_authorized", "source_sha256"}
             and type(contract.get("schema_version")) is int and contract["schema_version"] == 1
-            and contract.get("contract") == REPLAY_CONTRACT_ID,
+            and contract.get("contract") == ALPHA26_REPLAY_CONTRACT_ID,
             "invalid reviewed replay contract")
     require(contract.get("base_reviewed_source") == REVIEWED_RUNTIME_SOURCE
             and contract.get("base_reviewed_runtime_tree") == REVIEWED_RUNTIME_TREE
@@ -2754,6 +2812,76 @@ def validate_replay_contract(contract):
         require(replacements[path] == {"previous_sha256": expected, "sha256": current_digest}
                 and pins[path] == current_digest, "alpha26 version replacement changed: " + path)
     validate_alpha26_version_delta(previous_bytes, current_bytes)
+    return contract
+
+def validate_urban_migration(migration, pins, previous_pins, root):
+    """A closed source-only review; never a native or publication receipt."""
+    expected = {
+        "schema_version": 1, "identity": "full-two-aircraft-offline-urban-source-migration-v1",
+        "base_source": URBAN_BASE_SOURCE, "base_tree": URBAN_BASE_TREE,
+        "base_source_kind": "published-commit", "base_source_status": "released-alpha26-parent",
+        "scope": SOURCE_ADMISSION_SCOPE, "release_authorized": False,
+        "base_contract_sha256": URBAN_BASE_CONTRACT_HASHES,
+        "previous_source_migration_sha256": ALPHA26_MIGRATION_SHA256,
+        "preserved_runtime_sha256": PRESERVED_RUNTIME_SHA256,
+        "historical_relocations": URBAN_HISTORICAL_RELOCATIONS,
+        "replaced_source_sha256": {p: {"previous_sha256": h, "sha256": URBAN_CURRENT_SHA256[p]}
+                                    for p, h in URBAN_PREVIOUS_SHA256.items()},
+        "added_source_sha256": URBAN_ADDED_SHA256,
+    }
+    require(isinstance(migration, dict) and type(migration.get("schema_version")) is int
+            and migration.get("release_authorized") is False and migration == expected,
+            "urban source migration identity or scope changed")
+    for path, prior in URBAN_PREVIOUS_SHA256.items():
+        historical = URBAN_HISTORICAL_RELOCATIONS[path]
+        require(previous_pins[path] == prior == pins[historical] == digest(root / historical)
+                and pins[path] == URBAN_CURRENT_SHA256[path] != prior,
+                "urban source replacement changed: " + path)
+    for path, expected_hash in URBAN_ADDED_SHA256.items():
+        require(pins.get(path) == expected_hash, "urban source addition changed: " + path)
+
+
+def validate_replay_contract(contract):
+    """Admit only reviewed offline urban code/data over the complete alpha.26 proof."""
+    require(isinstance(contract, dict) and set(contract) == {"schema_version", "contract",
+            "base_reviewed_source", "base_reviewed_runtime_tree", "source_migration_sha256",
+            "scope", "release_authorized", "source_sha256"}
+            and type(contract.get("schema_version")) is int and contract["schema_version"] == 1
+            and contract.get("contract") == REPLAY_CONTRACT_ID,
+            "invalid reviewed replay contract")
+    require(contract["base_reviewed_source"] == REVIEWED_RUNTIME_SOURCE
+            and contract["base_reviewed_runtime_tree"] == REVIEWED_RUNTIME_TREE
+            and contract["source_migration_sha256"] == URBAN_MIGRATION_SHA256
+            and contract["scope"] == SOURCE_ADMISSION_SCOPE and contract["release_authorized"] is False,
+            "source admission identity or scope changed")
+    pins = contract["source_sha256"]
+    require(isinstance(pins, dict) and set(pins) == REPLAY_CONTRACT_PATHS,
+            "reviewed replay source boundary changed")
+    require(all(isinstance(h, str) and re.fullmatch(r"[0-9a-f]{64}", h) for h in pins.values()),
+            "invalid reviewed replay source digest")
+    for path in ("assets/aircraft/light_single.json", "crates/flightsim-fdm/src/aircraft.rs"):
+        require(pins[path] == LEGACY_SOURCE_HASHES[path], "frozen legacy input changed: " + path)
+    require(pins["crates/flightsim-fdm/src/lib.rs"] == REVIEWED_ADDITIVE_FDM_LIB_SHA256,
+            "frozen reviewed FDM module input changed")
+    root = Path(__file__).parent.parent
+    for path, expected in URBAN_BASE_CONTRACT_HASHES.items():
+        require(digest(root / path) == expected == pins[path], "urban historical contract changed: " + path)
+    previous = json.loads((root / URBAN_BASE_CONTRACT_PATH).read_text(encoding="utf-8"))
+    require(len(previous["source_sha256"]) == 1001
+            and set(previous["source_sha256"]) == REPLAY_CONTRACT_PATHS - URBAN_SOURCE_PATHS,
+            "urban prior source boundary changed")
+    for path, expected in previous["source_sha256"].items():
+        historical = URBAN_HISTORICAL_RELOCATIONS.get(path, path)
+        require(pins[historical] == expected,
+                "urban prior source pins changed (preserved runtime/historical contract): " + path)
+    require(digest(root / URBAN_MIGRATION_PATH) == URBAN_MIGRATION_SHA256
+            == pins[URBAN_MIGRATION_PATH], "urban source migration changed")
+    validate_urban_migration(json.loads((root / URBAN_MIGRATION_PATH).read_text(encoding="utf-8")),
+                             pins, previous["source_sha256"], root)
+    # Reject a changed current pin before replaying the complete frozen proof.
+    # Positive admission still runs every historical validator on every call;
+    # there is no cross-call cache or skipped historical check.
+    validate_alpha26_replay_contract(previous)
     return contract
 
 

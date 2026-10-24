@@ -278,6 +278,7 @@ fn source_notice(kind: ScenerySourceKind) -> String {
             "{OSM_ATTRIBUTION}; {OSM_COPYRIGHT_URL}; derived database licensed under ODbL 1.0: {ODBL_URL}"
         ),
         ScenerySourceKind::Synthetic => "Synthetic test geometry; not real geography".to_owned(),
+        ScenerySourceKind::ProceduralUrban => crate::urban::URBAN_ATTRIBUTION.to_owned(),
     }
 }
 fn read_source(bytes: &[u8]) -> Result<ScenerySource, SceneryError> {
@@ -285,6 +286,7 @@ fn read_source(bytes: &[u8]) -> Result<ScenerySource, SceneryError> {
     let kind = match c.u8()? {
         1 => ScenerySourceKind::OpenStreetMap,
         2 => ScenerySourceKind::Synthetic,
+        3 => ScenerySourceKind::ProceduralUrban,
         _ => return Err(SceneryError::Invalid("source kind")),
     };
     let input_fingerprint = c.u64()?;

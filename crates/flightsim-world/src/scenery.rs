@@ -38,6 +38,8 @@ pub const ODBL_URL: &str = "https://opendatacommons.org/licenses/odbl/1-0/";
 pub enum ScenerySourceKind {
     OpenStreetMap = 1,
     Synthetic = 2,
+    /// Invented geometry inside mapped coarse Natural Earth urban extent.
+    ProceduralUrban = 3,
 }
 
 /// Bounded source identity. No addresses, names of residents or contributor metadata.

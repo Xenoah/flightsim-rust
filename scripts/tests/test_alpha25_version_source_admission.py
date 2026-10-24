@@ -58,9 +58,11 @@ class Alpha25VersionSourceAdmissionTests(unittest.TestCase):
         for path, expected in base['source_sha256'].items():
             historical = RELOCATIONS.get(path, path)
             self.assertEqual(contract['source_sha256'][historical], expected, path)
-            self.assertEqual(candidate.digest(ROOT / candidate.CHASE_HUD_HISTORICAL_RELOCATIONS.get(historical, historical)), expected, path)
+            checkout = candidate.CHASE_HUD_HISTORICAL_RELOCATIONS.get(historical, historical)
+            checkout = candidate.URBAN_HISTORICAL_RELOCATIONS.get(checkout, checkout)
+            self.assertEqual(candidate.digest(ROOT / checkout), expected, path)
         for path, expected in candidate.ALPHA25_BASE_CONTRACT_HASHES.items():
-            self.assertEqual(candidate.digest(ROOT / path), expected)
+            self.assertEqual(candidate.digest(ROOT / candidate.URBAN_HISTORICAL_RELOCATIONS.get(path, path)), expected)
         for path in CHANGED:
             self.assertEqual(migration['replaced_source_sha256'][path], {
                 'previous_sha256': base['source_sha256'][path],
@@ -71,9 +73,9 @@ class Alpha25VersionSourceAdmissionTests(unittest.TestCase):
         self.assertEqual(len(candidate.ALPHA25_SOURCE_PATHS), 6)
         self.assertEqual(len(candidate.ALPHA25_WORKSPACE_PACKAGES), 13)
         self.assertEqual(candidate.ALPHA25_WORKSPACE_PACKAGES, candidate.ALPHA24_WORKSPACE_PACKAGES)
-        self.assertEqual(len(capture.check.SOURCE_PATHS), 69)
+        self.assertEqual(len(capture.check.SOURCE_PATHS), 70)
         self.assertEqual(len(capture.BOUND_FILES), 4)
-        self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 499)
+        self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 503)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)
         self.assertEqual(len(json.loads((ROOT / candidate.PRESERVED_RUNTIME_PATH).read_text())['source_sha256']), 497)
         self.assertIs(contract['release_authorized'], False)

@@ -42,6 +42,22 @@ fn data() -> Vec<u8> {
     bytes
 }
 fn benches(c: &mut Criterion) {
+    let urban = flightsim_world::urban::UrbanAtlas::bundled().unwrap();
+    let land = flightsim_world::global::GlobalTerrain::bundled().unwrap();
+    let cancel = std::sync::atomic::AtomicBool::new(false);
+    c.bench_function("urban_london_4500m_cap2048", |b| {
+        b.iter(|| {
+            urban
+                .generate(
+                    black_box(Geodetic::from_degrees(51.51, -0.12, 0.0)),
+                    Meters(4_500.0),
+                    &land,
+                    &|_, _| false,
+                    &cancel,
+                )
+                .unwrap()
+        })
+    });
     let bytes = data();
     let db = SceneryDatabase::read(bytes.as_slice())
         .expect("benchmark fixture passes current full validation");

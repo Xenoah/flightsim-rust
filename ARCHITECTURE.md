@@ -270,6 +270,18 @@ hashes at runtime reads. Supported replay formats cannot represent regional iden
 must be explicitly blocked for package-backed flights. Their bytes are unchanged;
 a future format must record and verify package ID, version and exact manifest hash.
 
+### Bounded offline urban fallback (2026-10-24)
+
+`world::urban` reads a validated, public-domain Natural Earth urban-cell index.
+With global terrain enabled, app scenery generates at most 2,048 invented buildings
+and 256 street segments near the observer, beneath actual regional scenery priority.
+Existing independent land/water, airport, scenery LOD, worker cancellation, mesh
+and upload bounds apply; no network or physics/replay changes are introduced.
+Map relocation refreshes exclusions and cancels old geometry. Footprints/streets/
+heights are fictional, with coarse shoreline and unknown-airport limitations.
+See [data, bounds and limitations](docs/global-urban-scenery.md) and
+[cloud QA](docs/qa/global-urban-cloud-2026-10-24.md) for measured acceptance.
+
 ### Offline global baseline and regional climate (2026-10-02 branch)
 
 [ADR-0011](docs/adr/0011-offline-global-terrain-climate.md) adds a compact, complete

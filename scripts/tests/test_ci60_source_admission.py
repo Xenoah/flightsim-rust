@@ -22,7 +22,7 @@ class Ci60SourceAdmissionTests(unittest.TestCase):
     commit = staticmethod(fixture_module.ComponentTermsSourceAdmissionTests.commit)
 
     def pins(self):
-        return json.loads((ROOT / check.CONTRACT).read_text())['source_sha256']
+        return json.loads((ROOT / check.URBAN_BASE_CONTRACT_PATH).read_text())['source_sha256']
 
     def workflow_bytes(self):
         return ((ROOT / check.CI60_HISTORY_PATH).read_bytes(),
@@ -47,7 +47,7 @@ class Ci60SourceAdmissionTests(unittest.TestCase):
         for path in (candidate.REPLAY_CONTRACT_PATH, 'scripts/check-swift-windows-candidate.py',
                      'Cargo.toml', 'Cargo.lock', 'scripts/check-release-authorization.py'):
             self.assertEqual(current[path], historical['source_sha256'][path])
-        self.assertEqual(len(candidate.REPLAY_CONTRACT_PATHS), 1001)
+        self.assertEqual(len(candidate.ALPHA26_REPLAY_CONTRACT_PATHS), 1001)
         self.assertEqual(len(capture.BOUND_FILES), 4)
         self.assertIs(candidate.load_replay_contract(ROOT)['release_authorized'], False)
 
