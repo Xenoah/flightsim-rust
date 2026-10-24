@@ -13,7 +13,7 @@ omits central Sydney. Unknown real airports remain a limitation. Precise worldwi
 building tiles are not implemented. Existing CHASE HUD spacing is retained; the
 separate unpublished cloud-rendering candidate is not included.
 
-See the [urban scenery guide](https://github.com/Xenoah/flightsim-rust/blob/@SOURCE_SHA@/docs/global-urban-scenery.md)
+See the [urban scenery guide](https://github.com/Xenoah/flightsim-rust/blob/c2b177d32a209b4d4a43044b53ea6d39d2ade308/docs/global-urban-scenery.md)
 for provenance, controls and approximation limits. Source tests and software
 rendering do not establish physical GPU performance, controller or audio acceptance.
 The ordinary Windows bundle continues to contain Light Single and Swift Sport.

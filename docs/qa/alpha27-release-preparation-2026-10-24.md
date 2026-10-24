@@ -53,3 +53,13 @@ omissions/aliases/repins, unrelated Cargo edits, joint manifest resealing,
 actual checkout drift, exported evidence tampering and forged acceptance claims.
 Final committed-source checks, complete CI and genuine Windows release outcomes
 are recorded separately as they complete; this preparation text supplies none.
+
+The actual release-note template was also exercised through the unchanged
+`publication_notes` output function. Adding an urban guide as a fourth
+`@SOURCE_SHA@` link failed its closed three-component-document contract, while
+the existing assembly tests used a synthetic three-link template. The guide now
+links to `c2b177d32a209b4d4a43044b53ea6d39d2ade308`, whose guide blob is identical
+to this preparation. Only the three component documents use the final source
+substitution. A real-template regression covers this integration; the production
+output validator and all component document bytes remain unchanged. This check
+is release-note preparation, not a new native run, assent or publication result.
