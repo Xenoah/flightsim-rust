@@ -561,3 +561,16 @@ Ordinary code checks, genuine Linux visual evidence and source admission do not
 create Windows assent, native qualification, rights applicability, same-build
 archive acceptance or exact-inventory publication authority. Existing release
 receipts and all release/consent gates remain byte-exact and independently required.
+
+
+## Alpha.27 urban version successor (2026-10-24)
+
+Merged urban source de5d43ab is preserved as the exact predecessor. Five Git-blob
+witnesses and the closed alpha27 descriptor add six inputs to the 1,022-pin urban
+boundary. Only one workspace and thirteen lockfile project versions change.
+The complete urban/alpha.26/earlier validators remain mandatory; 503 live crate
+inputs, 497 original runtime identities and 102 independent anchors are unchanged.
+The analytical wrapper preserves all 70 predecessor inputs, explicitly rebinds
+only source auditors/contracts/current-versus-historical assertions and this guide,
+and adds one adversarial suite (71 inputs). Capture retains four inputs. No native,
+recipient-assent or release qualification is supplied by this source admission.

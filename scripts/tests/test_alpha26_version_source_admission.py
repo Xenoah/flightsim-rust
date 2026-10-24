@@ -27,13 +27,18 @@ ADDED = {
 }
 
 
+def retained_alpha26_path(relative):
+    prior = candidate.URBAN_HISTORICAL_RELOCATIONS.get(relative, relative)
+    return ROOT / candidate.ALPHA27_HISTORICAL_RELOCATIONS.get(prior, prior)
+
+
 class Alpha26VersionSourceAdmissionTests(unittest.TestCase):
     fixture = fixture_module.ComponentTermsSourceAdmissionTests.fixture
     commit = staticmethod(fixture_module.ComponentTermsSourceAdmissionTests.commit)
 
     def version_bytes(self):
         return ({path: (ROOT / historical).read_bytes() for path, historical in RELOCATIONS.items()},
-                {path: (ROOT / path).read_bytes() for path in CHANGED})
+                {path: (ROOT / candidate.ALPHA27_HISTORICAL_RELOCATIONS.get(path, path)).read_bytes() for path in CHANGED})
 
     def test_exact_two_file_transition_preserves_all_995_prior_pins(self):
         contract = json.loads((ROOT / candidate.URBAN_BASE_CONTRACT_PATH).read_text())
@@ -58,20 +63,20 @@ class Alpha26VersionSourceAdmissionTests(unittest.TestCase):
         for path, expected in base['source_sha256'].items():
             historical = RELOCATIONS.get(path, path)
             self.assertEqual(contract['source_sha256'][historical], expected, path)
-            self.assertEqual(candidate.digest(ROOT / candidate.URBAN_HISTORICAL_RELOCATIONS.get(historical, historical)), expected, path)
+            self.assertEqual(candidate.digest(retained_alpha26_path(historical)), expected, path)
         for path, expected in candidate.ALPHA26_BASE_CONTRACT_HASHES.items():
-            self.assertEqual(candidate.digest(ROOT / candidate.URBAN_HISTORICAL_RELOCATIONS.get(path, path)), expected)
+            self.assertEqual(candidate.digest(retained_alpha26_path(path)), expected)
         for path in CHANGED:
             self.assertEqual(migration['replaced_source_sha256'][path], {
                 'previous_sha256': base['source_sha256'][path],
-                'sha256': candidate.digest(ROOT / candidate.URBAN_HISTORICAL_RELOCATIONS.get(path, path)),
+                'sha256': candidate.digest(retained_alpha26_path(path)),
             })
         candidate.validate_alpha26_version_delta(*self.version_bytes())
         self.assertEqual(len(candidate.CHASE_HUD_REPLAY_CONTRACT_PATHS), 995)
         self.assertEqual(len(candidate.ALPHA26_SOURCE_PATHS), 6)
         self.assertEqual(len(candidate.ALPHA26_WORKSPACE_PACKAGES), 13)
         self.assertEqual(candidate.ALPHA26_WORKSPACE_PACKAGES, candidate.ALPHA25_WORKSPACE_PACKAGES)
-        self.assertEqual(len(capture.check.SOURCE_PATHS), 70)
+        self.assertEqual(len(capture.check.SOURCE_PATHS), 71)
         self.assertEqual(len(capture.BOUND_FILES), 4)
         self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 503)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)

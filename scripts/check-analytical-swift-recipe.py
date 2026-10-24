@@ -35,7 +35,7 @@ IDENTITY = tone.ANALYTICAL_SWIFT_RECIPE
 TARGET, TOOLCHAIN = candidate.TARGET, candidate.TOOLCHAIN
 FEATURES = ['analytic-tonemapping', 'commercial-staging']
 CONTRACT = 'scripts/analytical-swift-source-contract.json'
-SOURCE_ADMISSION = 'analytical-swift-offline-urban-source-admission-v1'
+SOURCE_ADMISSION = 'analytical-swift-alpha27-version-source-admission-v1'
 SOURCE_RECIPE = tone.TWO_LUT_SOURCE
 SOURCE_PATHS = {
     'Cargo.toml', 'Cargo.lock', 'crates/flightsim-app/Cargo.toml',
@@ -249,6 +249,29 @@ URBAN_REBOUND_PATHS = frozenset(['docs/release/full-two-aircraft-source-admissio
  'scripts/tests/test_terrain_centroid_source_admission.py',
  'scripts/tests/test_terrain_stitch_source_admission.py'])
 SOURCE_PATHS |= URBAN_SOURCE_PATHS
+URBAN_ADMISSION_SOURCE_PATHS = frozenset(SOURCE_PATHS)
+ALPHA27_BASE_CONTRACT_PATH = 'scripts/history/de5d43ab-analytical-swift-source-contract.json'
+ALPHA27_SOURCE_PATHS = frozenset({'scripts/tests/test_alpha27_version_source_admission.py'})
+ALPHA27_REBOUND_PATHS = frozenset(['Cargo.lock',
+ 'Cargo.toml',
+ 'docs/release/full-two-aircraft-source-admission.md',
+ 'scripts/check-analytical-swift-recipe.py',
+ 'scripts/check-swift-windows-candidate.py',
+ 'scripts/replay-candidate-contract.json',
+ 'scripts/tests/test_alpha23_version_source_admission.py',
+ 'scripts/tests/test_alpha24_version_source_admission.py',
+ 'scripts/tests/test_alpha25_version_source_admission.py',
+ 'scripts/tests/test_alpha26_version_source_admission.py',
+ 'scripts/tests/test_analytical_swift_recipe.py',
+ 'scripts/tests/test_chase_hud_source_admission.py',
+ 'scripts/tests/test_cockpit_source_admission.py',
+ 'scripts/tests/test_cockpit_variant_source_admission.py',
+ 'scripts/tests/test_component_terms_source_admission.py',
+ 'scripts/tests/test_swift_forward_visibility_source_admission.py',
+ 'scripts/tests/test_swift_windows_candidate.py',
+ 'scripts/tests/test_terrain_stitch_source_admission.py',
+ 'scripts/tests/test_urban_source_admission.py'])
+SOURCE_PATHS |= ALPHA27_SOURCE_PATHS
 
 GATES = {
     'combined_feature_regressions': 'Combined release/MSVC app/render tests and Clippy; real render tonemapping_modes; ordinary controls and mixed/neither rejection',
@@ -545,7 +568,7 @@ def validate_ci60_admission(repo, pins):
 
 def validate_urban_admission(repo, pins):
     """Keep the whole CI60 proof and every unrelated analytical input exact."""
-    require(isinstance(pins, dict) and set(pins) == SOURCE_PATHS,
+    require(isinstance(pins, dict) and set(pins) == URBAN_ADMISSION_SOURCE_PATHS,
             'urban analytical boundary changed')
     require(digest(repo / URBAN_BASE_CONTRACT_PATH)
             == candidate.URBAN_BASE_CONTRACT_HASHES[URBAN_BASE_CONTRACT_PATH],
@@ -570,6 +593,32 @@ def validate_urban_admission(repo, pins):
             require(pins[path] == prior, 'urban unrelated analytical source changed: ' + path)
 
 
+def validate_alpha27_admission(repo, pins):
+    """Retain the entire 70-input urban proof and unrelated analytical bytes."""
+    path = ALPHA27_BASE_CONTRACT_PATH
+    require(digest(repo / path) == candidate.ALPHA27_BASE_CONTRACT_HASHES[path],
+            'alpha27 historical analytical contract changed')
+    previous = json.loads((repo / path).read_text(encoding='utf-8'))
+    require(set(previous) == {'schema_version', 'recipe', 'source_admission', 'source_recipe',
+            'base_reviewed_source', 'base_reviewed_runtime_tree', 'source_migration_sha256',
+            'release_authorized', 'source_sha256'}
+            and type(previous['schema_version']) is int and previous['schema_version'] == 1
+            and previous['recipe'] == IDENTITY and previous['source_recipe'] == SOURCE_RECIPE
+            and previous['source_admission'] == 'analytical-swift-offline-urban-source-admission-v1'
+            and previous['base_reviewed_source'] == candidate.REVIEWED_RUNTIME_SOURCE
+            and previous['base_reviewed_runtime_tree'] == candidate.REVIEWED_RUNTIME_TREE
+            and previous['source_migration_sha256'] == candidate.URBAN_MIGRATION_SHA256
+            and previous['release_authorized'] is False
+            and len(previous['source_sha256']) == 70
+            and set(previous['source_sha256']) == URBAN_ADMISSION_SOURCE_PATHS,
+            'invalid alpha27 historical analytical contract')
+    require(isinstance(pins, dict) and set(pins) == SOURCE_PATHS, 'alpha27 analytical boundary changed')
+    for path, prior in previous['source_sha256'].items():
+        if path not in ALPHA27_REBOUND_PATHS:
+            require(pins[path] == prior, 'alpha27 unrelated analytical source changed: ' + path)
+    validate_urban_admission(repo, previous['source_sha256'])
+
+
 def source_evidence(repo, expected):
     # Versioned source admission retains the historical 404 pins and all 102 independent anchors.
     source = candidate.source_inputs(repo, expected)
@@ -581,14 +630,14 @@ def source_evidence(repo, expected):
             and contract.get('schema_version') == 1 and contract.get('recipe') == IDENTITY
             and contract.get('base_reviewed_source') == candidate.REVIEWED_RUNTIME_SOURCE
             and contract.get('base_reviewed_runtime_tree') == candidate.REVIEWED_RUNTIME_TREE
-            and contract.get('source_migration_sha256') == candidate.URBAN_MIGRATION_SHA256
+            and contract.get('source_migration_sha256') == candidate.ALPHA27_MIGRATION_SHA256
             and contract.get('source_admission') == SOURCE_ADMISSION
             and contract.get('source_recipe') == SOURCE_RECIPE
             and contract.get('release_authorized') is False,
             'invalid analytical source contract')
     pins = contract.get('source_sha256')
     require(isinstance(pins, dict) and set(pins) == SOURCE_PATHS, 'analytical source boundary changed')
-    validate_urban_admission(repo, pins)
+    validate_alpha27_admission(repo, pins)
     files = {entry['path']: entry for entry in source['files']}
     require(CONTRACT in files, 'analytical source contract must be tracked')
     for relative in SOURCE_PATHS | {CONTRACT}:

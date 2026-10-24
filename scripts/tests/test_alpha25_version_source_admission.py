@@ -73,7 +73,7 @@ class Alpha25VersionSourceAdmissionTests(unittest.TestCase):
         self.assertEqual(len(candidate.ALPHA25_SOURCE_PATHS), 6)
         self.assertEqual(len(candidate.ALPHA25_WORKSPACE_PACKAGES), 13)
         self.assertEqual(candidate.ALPHA25_WORKSPACE_PACKAGES, candidate.ALPHA24_WORKSPACE_PACKAGES)
-        self.assertEqual(len(capture.check.SOURCE_PATHS), 70)
+        self.assertEqual(len(capture.check.SOURCE_PATHS), 71)
         self.assertEqual(len(capture.BOUND_FILES), 4)
         self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 503)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)

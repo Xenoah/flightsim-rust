@@ -25,7 +25,8 @@ class UrbanSourceAdmissionTests(unittest.TestCase):
         return json.loads((ROOT / candidate.URBAN_BASE_CONTRACT_PATH).read_text())
 
     def test_exact_boundary_retains_all_prior_bytes_and_unrelated_authorities(self):
-        current = candidate.load_replay_contract(ROOT)
+        current = json.loads((ROOT / candidate.ALPHA27_BASE_CONTRACT_PATH).read_text())
+        candidate.validate_urban_replay_contract(current)
         previous = self.previous()
         candidate.validate_alpha26_replay_contract(previous)
         self.assertEqual(len(previous['source_sha256']), 1001)
@@ -41,7 +42,7 @@ class UrbanSourceAdmissionTests(unittest.TestCase):
         for path, expected in previous['source_sha256'].items():
             historical = candidate.URBAN_HISTORICAL_RELOCATIONS.get(path, path)
             self.assertEqual(current['source_sha256'][historical], expected, path)
-            self.assertEqual(candidate.digest(ROOT / historical), expected, path)
+            self.assertEqual(candidate.digest(ROOT / candidate.ALPHA27_HISTORICAL_RELOCATIONS.get(historical, historical)), expected, path)
         for path in ('scripts/check-release-authorization.py', 'scripts/stage-commercial-candidate.py',
                      'crates/flightsim-app/src/component_terms.rs',
                      'crates/flightsim-app/src/component_terms_dialog.ps1', '.github/workflows/ci.yml'):
@@ -96,7 +97,7 @@ class UrbanSourceAdmissionTests(unittest.TestCase):
 
     def test_analytical_historical_ci_and_release_checks_remain_mandatory(self):
         previous = json.loads((ROOT / check.URBAN_BASE_CONTRACT_PATH).read_text())
-        current = json.loads((ROOT / check.CONTRACT).read_text())
+        current = json.loads((ROOT / check.ALPHA27_BASE_CONTRACT_PATH).read_text())
         check.validate_ci60_admission(ROOT, previous['source_sha256'])
         check.validate_urban_admission(ROOT, current['source_sha256'])
         self.assertEqual(len(previous['source_sha256']), 69)

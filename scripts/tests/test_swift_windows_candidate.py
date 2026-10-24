@@ -1901,7 +1901,7 @@ class CandidateAcceptanceTests(unittest.TestCase):
         self.assertEqual(len(candidate.MODIFIED_SOURCE_POLICY_PATHS), 9)
         self.assertEqual(len(candidate.HISTORICAL_REPLAY_CONTRACT_PATHS), 404)
         self.assertEqual(len(candidate.CORE_PIPELINE_SOURCE_PATHS), 55)
-        self.assertEqual(len(candidate.REPLAY_CONTRACT_PATHS), 1022)
+        self.assertEqual(len(candidate.REPLAY_CONTRACT_PATHS), 1028)
         component_additions = {
             "LICENSE-MIT", "LICENSE-APACHE",
             "crates/flightsim-app/src/component_terms.rs",

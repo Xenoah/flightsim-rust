@@ -103,7 +103,7 @@ class ComponentTermsSourceAdmissionTests(unittest.TestCase):
             self.assertNotIn('reviewed_runtime_tree', contract)
             self.assertEqual(contract['base_reviewed_source'], '960c3126e6a4bc22b8d4acc6e6737f8f2b473bef')
             self.assertEqual(contract['base_reviewed_runtime_tree'], 'b3bbd57bc3819b1b1eda35ce4f8b476c52d1b24e')
-            self.assertEqual(contract['source_migration_sha256'], candidate.digest(ROOT / candidate.URBAN_MIGRATION_PATH))
+            self.assertEqual(contract['source_migration_sha256'], candidate.digest(ROOT / candidate.ALPHA27_MIGRATION_PATH))
         self.assertIs(replay['release_authorized'], False)
         self.assertIs(analytical['release_authorized'], False)
         with self.assertRaises(ValueError):
