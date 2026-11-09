@@ -6,6 +6,7 @@ use bevy::tasks::{AsyncComputeTaskPool, Task, block_on, poll_once};
 use flightsim_render::scenery::{
     SceneryGroundMesh, SceneryMesh, SceneryMeshOptions, SceneryMeshStatistics,
 };
+use flightsim_render::scenery_surface::SceneryMaterial;
 use flightsim_render::terrain_drape::{ATTRIBUTE_OVERLAY_LIFT, TerrainOverlay};
 use flightsim_render::{TerrainOverlayRegistration, TerrainOverlaySwap};
 use flightsim_world::draw_distance::DrawDistancePolicy;
@@ -45,7 +46,7 @@ pub(super) struct SceneryRuntime {
     database: Option<Arc<SceneryDatabase>>,
     urban: Option<Arc<flightsim_world::urban::UrbanAtlas>>,
     build_config: Option<Arc<SceneryBuildConfig>>,
-    material: Option<Handle<StandardMaterial>>,
+    material: Option<Handle<SceneryMaterial>>,
     selected_at: Option<Geodetic>,
     generation: u64,
     reset_revision: u64,
@@ -343,7 +344,7 @@ pub(super) fn stream(
     mut runtime: ResMut<SceneryRuntime>,
     mut tiles: ResMut<TerrainTiles>,
     mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<StandardMaterial>>,
+    mut materials: ResMut<Assets<SceneryMaterial>>,
 ) {
     let runtime = &mut *runtime;
     if runtime.database.is_none() && runtime.urban.is_none() {
@@ -822,12 +823,9 @@ fn build_available_scene_config(
         options.cancellation = Some(cancel);
         options.airport_ground_exclusions = Some(&config.ground_exclusions);
         options.vegetation = !exclusions.suppress_all && !config.airport_exclusions.suppress_all;
-        let distance = anchor.great_circle_distance(observer).get();
-        // Regional geometry keeps its existing facade range. Procedural city
-        // windows are useful only very close: spending the whole scene budget
-        // on their panes would hide the surrounding skyline at normal altitude.
-        let regional = database.is_some_and(|db| db.bounds().intersects(anchor, Meters::ZERO));
-        options.facades = distance < 2_400.0 && (regional || distance < 350.0);
+        // Surface detail consumes no extra geometry. The shader filters by
+        // projected pixel footprint while selection/vertex budgets stay fixed.
+        options.facades = true;
         let batch = flightsim_render::scenery::scenery_mesh(
             &features,
             anchor,

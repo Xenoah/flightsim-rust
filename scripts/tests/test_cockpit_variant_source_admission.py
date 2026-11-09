@@ -88,24 +88,24 @@ class CockpitVariantSourceAdmissionTests(unittest.TestCase):
             self.assertEqual(current['source_sha256'][historical], expected, path)
             checkout = candidate.CHASE_HUD_HISTORICAL_RELOCATIONS.get(historical, candidate.ALPHA24_HISTORICAL_RELOCATIONS.get(historical, historical))
             checkout = candidate.URBAN_HISTORICAL_RELOCATIONS.get(checkout, checkout)
-            self.assertEqual(candidate.digest(ROOT / checkout), expected, path)
+            self.assertEqual(candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(checkout, checkout)), expected, path)
         for path, expected in candidate.COCKPIT_VARIANT_BASE_CONTRACT_HASHES.items():
-            self.assertEqual(candidate.digest(ROOT / candidate.SWIFT_FORWARD_HISTORICAL_RELOCATIONS.get(path, path)), expected, path)
+            self.assertEqual(candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(candidate.SWIFT_FORWARD_HISTORICAL_RELOCATIONS.get(path, path), candidate.SWIFT_FORWARD_HISTORICAL_RELOCATIONS.get(path, path))), expected, path)
         for path in CHANGED:
             expected = base['source_sha256'][path]
             self.assertEqual(candidate.COCKPIT_VARIANT_PREVIOUS_SHA256[path], expected)
             self.assertEqual(migration['replaced_source_sha256'][path], {
-                'previous_sha256': expected, 'sha256': candidate.digest(ROOT / candidate.SWIFT_FORWARD_HISTORICAL_RELOCATIONS.get(path, path))})
-            self.assertNotEqual(candidate.digest(ROOT / candidate.SWIFT_FORWARD_HISTORICAL_RELOCATIONS.get(path, path)), expected)
+                'previous_sha256': expected, 'sha256': candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(candidate.SWIFT_FORWARD_HISTORICAL_RELOCATIONS.get(path, path), candidate.SWIFT_FORWARD_HISTORICAL_RELOCATIONS.get(path, path)))})
+            self.assertNotEqual(candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(candidate.SWIFT_FORWARD_HISTORICAL_RELOCATIONS.get(path, path), candidate.SWIFT_FORWARD_HISTORICAL_RELOCATIONS.get(path, path))), expected)
         for path in RUNTIME:
-            self.assertEqual(migration['added_source_sha256'][path], candidate.digest(ROOT / candidate.SWIFT_FORWARD_HISTORICAL_RELOCATIONS.get(path, path)))
+            self.assertEqual(migration['added_source_sha256'][path], candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(candidate.SWIFT_FORWARD_HISTORICAL_RELOCATIONS.get(path, path), candidate.SWIFT_FORWARD_HISTORICAL_RELOCATIONS.get(path, path))))
         preserved = json.loads((ROOT / candidate.PRESERVED_RUNTIME_PATH).read_text())['source_sha256']
         self.assertEqual(len(preserved), 497)
         self.assertEqual(len(candidate.PRESERVED_CRATE_SOURCE_PATHS), 492)
-        self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 503)
+        self.assertEqual(len(candidate.ALPHA27_CRATE_SOURCE_PATHS), 503)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)
         self.assertEqual(len(candidate.CORE_PIPELINE_SOURCE_PATHS), 55)
-        self.assertEqual(len(capture.check.SOURCE_PATHS), 71)
+        self.assertEqual(len(capture.check.ALPHA27_ADMISSION_SOURCE_PATHS), 71)
         self.assertEqual(len(capture.BOUND_FILES), 4)
         self.assertEqual(current['contract'], 'full-two-aircraft-cockpit-variant-source-v1')
         self.assertEqual(current['scope'], candidate.SOURCE_ADMISSION_SCOPE)
@@ -371,7 +371,7 @@ class CockpitVariantSourceAdmissionTests(unittest.TestCase):
             'crates/flightsim-fdm/', 'crates/flightsim-sim/', 'assets/', 'docs/release/'))}
         for path in unchanged:
             expected = base.get(path, candidate.INDEPENDENT_REPLAY_HASHES.get(path))
-            self.assertEqual(candidate.digest(ROOT / candidate.ALPHA24_HISTORICAL_RELOCATIONS.get(path, path)), expected, path)
+            self.assertEqual(candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(candidate.ALPHA24_HISTORICAL_RELOCATIONS.get(path, path), candidate.ALPHA24_HISTORICAL_RELOCATIONS.get(path, path))), expected, path)
             if path in base:
                 self.assertEqual(current[path], expected, path)
 

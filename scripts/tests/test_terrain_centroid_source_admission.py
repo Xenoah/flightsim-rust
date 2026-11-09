@@ -39,24 +39,24 @@ class TerrainCentroidSourceAdmissionTests(unittest.TestCase):
         self.assertEqual(set(migration['added_source_sha256']), {TEST})
         self.assertEqual(candidate.TERRAIN_CENTROID_RUNTIME_PATHS, {TEST})
         self.assertEqual(migration['historical_relocations'], {DETAIL: HISTORY})
-        self.assertEqual(candidate.digest(ROOT / HISTORY),
+        self.assertEqual(candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(HISTORY, HISTORY)),
                          '6670c630aa58391ae05d5b70b847bf2df1f2b01c3805dc594628053b3a317aa5')
         for path in CHANGED:
             row = migration['replaced_source_sha256'][path]
             self.assertEqual(row['previous_sha256'], candidate.TERRAIN_CENTROID_PREVIOUS_SHA256[path])
             self.assertNotEqual(row['previous_sha256'], row['sha256'])
-            self.assertEqual(row['sha256'], candidate.digest(ROOT / candidate.URBAN_HISTORICAL_RELOCATIONS.get(path, path)))
-        self.assertEqual(candidate.digest(ROOT / candidate.COMPONENT_TERMS_MIGRATION_PATH),
+            self.assertEqual(row['sha256'], candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(candidate.URBAN_HISTORICAL_RELOCATIONS.get(path, path), candidate.URBAN_HISTORICAL_RELOCATIONS.get(path, path))))
+        self.assertEqual(candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(candidate.COMPONENT_TERMS_MIGRATION_PATH, candidate.COMPONENT_TERMS_MIGRATION_PATH)),
                          'b41c6e7d163f98d0ddc4bddb3063dbdff82ea3462064b2b887954367b457bcc9')
         frozen = json.loads((ROOT / candidate.PRESERVED_RUNTIME_PATH).read_text())['source_sha256']
         self.assertEqual(len(frozen), 497)
         for path, expected in frozen.items():
             relative = candidate.CURRENT_HISTORICAL_RUNTIME_RELOCATIONS.get(path, path)
             self.assertEqual(contract['source_sha256'][relative], expected)
-            self.assertEqual(candidate.digest(ROOT / relative), expected)
+            self.assertEqual(candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(relative, relative)), expected)
         self.assertEqual(len(candidate.COCKPIT_REPLAY_CONTRACT_PATHS - candidate.TERRAIN_STITCH_SOURCE_PATHS
                              - candidate.ALPHA22_SOURCE_PATHS - candidate.COCKPIT_SOURCE_PATHS), 930)
-        self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 503)
+        self.assertEqual(len(candidate.ALPHA27_CRATE_SOURCE_PATHS), 503)
         self.assertEqual(len(candidate.HISTORICAL_REPLAY_CONTRACT_PATHS), 404)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)
         self.assertEqual(len(candidate.CORE_PIPELINE_SOURCE_PATHS), 55)
@@ -131,7 +131,7 @@ class TerrainCentroidSourceAdmissionTests(unittest.TestCase):
         provenance = json.loads((ROOT / 'docs/release/analytical-modified-source-provenance.json').read_text())
         row = next(p for p in provenance['packages'] if p['id'] == 'bevy_pbr@0.18.1')
         self.assertIn('src/render/forward_io.wgsl', row['modified_paths'])
-        self.assertEqual(candidate.digest(ROOT / row['patch']['path']), row['patch']['sha256'])
+        self.assertEqual(candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(row['patch']['path'], row['patch']['path'])), row['patch']['sha256'])
         with tempfile.TemporaryDirectory() as temporary:
             destination = Path(temporary)
             subprocess.run(['git', 'apply', '--binary', str(ROOT / row['patch']['path'])],

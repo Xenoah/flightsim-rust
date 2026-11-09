@@ -25,7 +25,8 @@ class Alpha27VersionSourceAdmissionTests(unittest.TestCase):
                 {p: (ROOT / p).read_bytes() for p in paths})
 
     def test_exact_version_delta_retains_complete_urban_history(self):
-        current = candidate.load_replay_contract(ROOT)
+        current = json.loads((ROOT / candidate.SURFACE_BASE_CONTRACT_PATH).read_text())
+        candidate.validate_alpha27_replay_contract(current)
         prior = json.loads((ROOT / candidate.ALPHA27_BASE_CONTRACT_PATH).read_text())
         candidate.validate_urban_replay_contract(prior)
         self.assertEqual(len(prior['source_sha256']), 1022)
@@ -37,11 +38,11 @@ class Alpha27VersionSourceAdmissionTests(unittest.TestCase):
         for p, h in prior['source_sha256'].items():
             historical = candidate.ALPHA27_HISTORICAL_RELOCATIONS.get(p, p)
             self.assertEqual(current['source_sha256'][historical], h, p)
-            self.assertEqual(candidate.digest(ROOT / historical), h, p)
+            self.assertEqual(candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(historical, historical)), h, p)
         candidate.validate_alpha27_version_delta(*self.version_bytes())
-        self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 503)
+        self.assertEqual(len(candidate.ALPHA27_CRATE_SOURCE_PATHS), 503)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)
-        self.assertEqual(len(check.SOURCE_PATHS), 71)
+        self.assertEqual(len(check.ALPHA27_ADMISSION_SOURCE_PATHS), 71)
         self.assertEqual(len(capture.BOUND_FILES), 4)
         self.assertIs(current['release_authorized'], False)
 
@@ -86,7 +87,7 @@ class Alpha27VersionSourceAdmissionTests(unittest.TestCase):
                 candidate.validate_replay_contract({**current, key: value})
 
     def test_historical_analytical_proof_and_unrelated_checks_remain_required(self):
-        current = json.loads((ROOT / check.CONTRACT).read_text())
+        current = json.loads((ROOT / check.SURFACE_BASE_CONTRACT_PATH).read_text())
         prior = json.loads((ROOT / check.ALPHA27_BASE_CONTRACT_PATH).read_text())
         check.validate_alpha27_admission(ROOT, current['source_sha256'])
         check.validate_urban_admission(ROOT, prior['source_sha256'])

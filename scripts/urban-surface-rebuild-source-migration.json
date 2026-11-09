@@ -1,0 +1,62 @@
+{
+  "added_source_sha256": {
+    "crates/flightsim-render/src/scenery_surface.rs": "8138a2aaabfee07039a87ce043f89615fa17f2ee3a9050fdd06d183c17134823",
+    "crates/flightsim-render/src/scenery_surface.wgsl": "7195c34c47cf5118579b111d6e53e40b55e6eb2f19a88fb8d26452f57c494228",
+    "crates/flightsim-render/src/scenery_surface_tests.rs": "f8037bfee39a24b0a114e538de6c256b3be91c30406855f1b713eea9c88076db",
+    "docs/adr/0035-bounded-building-surface-detail.md": "927ad6620b80d616a7921a09ae73c38fbd1b0a16dd0a2ea8e7790a8b6a3a5445",
+    "docs/qa/urban-surface-source-reconstruction-2026-11-08.md": "e9acc214febd55fda3eb1ca73d482d99616ef592ff255e09220c61108b4219fb"
+  },
+  "base_contract_sha256": {
+    "scripts/history/729a72d2-scripts-analytical-swift-capture-contract.json": "e02a8b0afa1805081ceb8dfa6b9ada7f90284ae498afcadc23dd4f5bf919f559",
+    "scripts/history/729a72d2-scripts-analytical-swift-source-contract.json": "05d92da28f674592b4eaa352cc7e669554b1fbc825d4c771bdf2030462d6d876",
+    "scripts/history/729a72d2-scripts-replay-candidate-contract.json": "c3ac664f8ebd45b8928e1e6f7601eb6f9a2b7c9c2a48af88b9258b51bcb380af"
+  },
+  "base_source": "729a72d205d3cdee4c2b18779b5d8a14e24672a2",
+  "base_source_kind": "public-draft-alpha27-commit",
+  "base_tree": "3747783385d9f5cab4163dde6dc2b930ae441a07",
+  "historical_relocations": {
+    "crates/flightsim-app/src/main.rs": "scripts/history/729a72d2-crates-flightsim-app-src-main.rs",
+    "crates/flightsim-app/src/scenery_runtime.rs": "scripts/history/729a72d2-crates-flightsim-app-src-scenery_runtime.rs",
+    "crates/flightsim-app/src/scenery_runtime_tests.rs": "scripts/history/729a72d2-crates-flightsim-app-src-scenery_runtime_tests.rs",
+    "crates/flightsim-render/src/graphics_quality.rs": "scripts/history/729a72d2-crates-flightsim-render-src-graphics_quality.rs",
+    "crates/flightsim-render/src/lib.rs": "scripts/history/729a72d2-crates-flightsim-render-src-lib.rs",
+    "crates/flightsim-render/src/scenery.rs": "scripts/history/729a72d2-crates-flightsim-render-src-scenery.rs",
+    "crates/flightsim-render/tests/scenery_bounds.rs": "scripts/history/729a72d2-crates-flightsim-render-tests-scenery_bounds.rs"
+  },
+  "identity": "full-two-aircraft-urban-surface-rebuild-source-migration-v1",
+  "preserved_runtime_sha256": "c9b71ddad46396b3b6ba8961a17f8323a28788f3c641e51f5c47098846653667",
+  "previous_source_migration_sha256": "e772cea06da00a1a21d0050fdfbc61fb7b86cc90cd7492eb00c073f342d02926",
+  "release_authorized": false,
+  "replaced_source_sha256": {
+    "crates/flightsim-app/src/main.rs": {
+      "previous_sha256": "4587a0a986d031b6c8aabf0f09510820b263320e7a1351fdf57027c3f33e86f3",
+      "sha256": "a4fd5ddcbb6c934e83622626beb5bc2a6b14a5afadbc4ee6011dcda926c0e403"
+    },
+    "crates/flightsim-app/src/scenery_runtime.rs": {
+      "previous_sha256": "bd227dde6ab55980ecdd6f9b709363112ddc2d2064f1c5a6e3157b64986490fa",
+      "sha256": "6251ac457a7b1523e68967db82001bb08141c92f0e264afa8219e4524eac900f"
+    },
+    "crates/flightsim-app/src/scenery_runtime_tests.rs": {
+      "previous_sha256": "02f00c5486e2a9bc5e140c247e8349c13d469ddec411b77dfd02839a2d5754a4",
+      "sha256": "a6cfcdafe05a1bacff376ba5b792bc061a265edc28f5449e00ad0f50dd38b1a1"
+    },
+    "crates/flightsim-render/src/graphics_quality.rs": {
+      "previous_sha256": "d6acc548a3b9a69b7e387a1e396b6b5fbd961e7d8ef2a3dc5faab5c1b398f83d",
+      "sha256": "cd9fe05b52d5dc3df0bf510519c0a49407312b547ba7ff1450534629029df629"
+    },
+    "crates/flightsim-render/src/lib.rs": {
+      "previous_sha256": "0e3e80debb6331e32635632ced5a3026ae5766bf099cf0808d73da5b4de19ef8",
+      "sha256": "1aa173d0d9299836a4a619bfe43b0e9530537a57fe176690839e1ed84266e70c"
+    },
+    "crates/flightsim-render/src/scenery.rs": {
+      "previous_sha256": "48b54cdfded69a3e0de816dc19bb2d0ac7bc9a722a310145b057f9676c4226a1",
+      "sha256": "2ebf034982cf0deed721a6b78f4f02cfc117768741a0c11b0658b72c47384df5"
+    },
+    "crates/flightsim-render/tests/scenery_bounds.rs": {
+      "previous_sha256": "c3630149b6b00467b02918fe7876e97c24674ef1420b2cbb66a0f3b8f72c55d2",
+      "sha256": "55913e79622a7db2d37d6ed64ecedfc3bc99197cb2d66d5a970dc2cc4fb9909c"
+    }
+  },
+  "schema_version": 1,
+  "scope": "source-only; native, whole-target and publication gates remain unqualified"
+}

@@ -397,13 +397,15 @@ class CandidateAcceptanceTests(unittest.TestCase):
             changed = json.loads(json.dumps(original))
             changed["source_sha256"][relative] = "0" * 64
             candidate.write_json(path, changed)
-            with self.subTest(relative=relative), self.assertRaisesRegex(ValueError, "frozen legacy input changed"):
+            # The surface successor compares unchanged prior pins before
+            # evaluating the complete frozen legacy proof.
+            with self.subTest(relative=relative), self.assertRaisesRegex(ValueError, "surface prior source pins changed"):
                 candidate.load_replay_contract(repo)
         for value in ("0" * 64, candidate.LEGACY_SOURCE_HASHES["crates/flightsim-fdm/src/lib.rs"]):
             changed = json.loads(json.dumps(original))
             changed["source_sha256"]["crates/flightsim-fdm/src/lib.rs"] = value
             candidate.write_json(path, changed)
-            with self.subTest(fdm_lib=value), self.assertRaisesRegex(ValueError, "frozen reviewed FDM module input changed"):
+            with self.subTest(fdm_lib=value), self.assertRaisesRegex(ValueError, "surface prior source pins changed"):
                 candidate.load_replay_contract(repo)
 
     def test_additive_jet_review_does_not_admit_legacy_behavior_or_feature_drift(self):
@@ -478,7 +480,7 @@ class CandidateAcceptanceTests(unittest.TestCase):
             "4d51cf4b5d62ce0f6bcc031df445225ac07c2bad0ed590c4b422ad6cca579462"
         )
         candidate.write_json(path, contract)
-        with self.assertRaisesRegex(ValueError, "frozen reviewed FDM module input changed"):
+        with self.assertRaisesRegex(ValueError, "surface prior source pins changed"):
             candidate.load_replay_contract(repo)
 
     def test_turboprop_replay_review_rejects_export_and_old_codec_dispatch_drift(self):
@@ -1901,7 +1903,7 @@ class CandidateAcceptanceTests(unittest.TestCase):
         self.assertEqual(len(candidate.MODIFIED_SOURCE_POLICY_PATHS), 9)
         self.assertEqual(len(candidate.HISTORICAL_REPLAY_CONTRACT_PATHS), 404)
         self.assertEqual(len(candidate.CORE_PIPELINE_SOURCE_PATHS), 55)
-        self.assertEqual(len(candidate.REPLAY_CONTRACT_PATHS), 1028)
+        self.assertEqual(len(candidate.REPLAY_CONTRACT_PATHS), 1044)
         component_additions = {
             "LICENSE-MIT", "LICENSE-APACHE",
             "crates/flightsim-app/src/component_terms.rs",
@@ -1921,7 +1923,8 @@ class CandidateAcceptanceTests(unittest.TestCase):
         self.assertEqual(len(candidate.REPLAY_CONTRACT_PATHS - component_additions - terrain_additions
                              - candidate.TERRAIN_STITCH_SOURCE_PATHS - candidate.ALPHA22_SOURCE_PATHS
                              - candidate.COCKPIT_SOURCE_PATHS - candidate.ALPHA23_SOURCE_PATHS
-                             - candidate.COCKPIT_VARIANT_SOURCE_PATHS - candidate.ALPHA24_SOURCE_PATHS - candidate.SWIFT_FORWARD_SOURCE_PATHS - candidate.ALPHA25_SOURCE_PATHS - candidate.CHASE_HUD_SOURCE_PATHS - candidate.ALPHA26_SOURCE_PATHS - candidate.URBAN_SOURCE_PATHS - candidate.ALPHA27_SOURCE_PATHS), 918)
+                             - candidate.COCKPIT_VARIANT_SOURCE_PATHS - candidate.ALPHA24_SOURCE_PATHS - candidate.SWIFT_FORWARD_SOURCE_PATHS - candidate.ALPHA25_SOURCE_PATHS - candidate.CHASE_HUD_SOURCE_PATHS - candidate.ALPHA26_SOURCE_PATHS - candidate.URBAN_SOURCE_PATHS - candidate.ALPHA27_SOURCE_PATHS
+                             - candidate.SURFACE_SOURCE_PATHS), 918)
         for prefix, paths in candidate.MODIFIED_SOURCE_BOUNDARIES:
             actual = {path.relative_to(ROOT).as_posix() for path in (ROOT / prefix).rglob('*') if path.is_file()}
             self.assertEqual(actual, {p for p in paths if p.startswith(prefix)}, prefix)

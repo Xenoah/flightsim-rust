@@ -44,7 +44,7 @@ class TerrainStitchSourceAdmissionTests(unittest.TestCase):
         self.assertEqual(migration['base_tree'], 'a469ee76cd0d7aabf3dd2c07114d44c0bbdf5d37')
         self.assertEqual(migration['public_base_source'], '42a7ddeae36f3022c2c77e54d5dce33f71b11bca')
         self.assertEqual(migration['public_base_tree'], '625c39f9b182b16a0dada2dc4131434d178a0831')
-        self.assertEqual(candidate.digest(ROOT / BASE_CONTRACT),
+        self.assertEqual(candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(BASE_CONTRACT, BASE_CONTRACT)),
                          '1b72efcc010124b0a02708f0c4b75c07c79a272e352ac697b71934fc9aa20869')
         self.assertEqual(base['contract'], 'full-two-aircraft-terrain-centroid-source-v1')
         self.assertEqual(len(base['source_sha256']), 930)
@@ -59,22 +59,22 @@ class TerrainStitchSourceAdmissionTests(unittest.TestCase):
             checkout_path = candidate.COCKPIT_HISTORICAL_RELOCATIONS.get(checkout_path, checkout_path)
             checkout_path = candidate.COCKPIT_VARIANT_HISTORICAL_RELOCATIONS.get(checkout_path, checkout_path)
             checkout_path = candidate.CHASE_HUD_HISTORICAL_RELOCATIONS.get(checkout_path, checkout_path)
-            self.assertEqual(candidate.digest(ROOT / candidate.URBAN_HISTORICAL_RELOCATIONS.get(checkout_path, checkout_path)), expected, path)
+            self.assertEqual(candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(candidate.URBAN_HISTORICAL_RELOCATIONS.get(checkout_path, checkout_path), candidate.URBAN_HISTORICAL_RELOCATIONS.get(checkout_path, checkout_path))), expected, path)
         for path in CHANGED:
             self.assertEqual(migration['replaced_source_sha256'][path], {
                 'previous_sha256': base['source_sha256'][path],
-                'sha256': candidate.digest(ROOT / candidate.URBAN_HISTORICAL_RELOCATIONS.get(path, path)),
+                'sha256': candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(candidate.URBAN_HISTORICAL_RELOCATIONS.get(path, path), candidate.URBAN_HISTORICAL_RELOCATIONS.get(path, path))),
             })
-        self.assertEqual(candidate.digest(ROOT / candidate.TERRAIN_CENTROID_MIGRATION_PATH),
+        self.assertEqual(candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(candidate.TERRAIN_CENTROID_MIGRATION_PATH, candidate.TERRAIN_CENTROID_MIGRATION_PATH)),
                          '203d43b06ef860813fd3f21f482f4751d3ad0b625872086a7eb76d3b91d04db5')
-        self.assertEqual(candidate.digest(ROOT / candidate.COMPONENT_TERMS_MIGRATION_PATH),
+        self.assertEqual(candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(candidate.COMPONENT_TERMS_MIGRATION_PATH, candidate.COMPONENT_TERMS_MIGRATION_PATH)),
                          'b41c6e7d163f98d0ddc4bddb3063dbdff82ea3462064b2b887954367b457bcc9')
         self.assertEqual(len(candidate.ALPHA22_REPLAY_CONTRACT_PATHS - candidate.ALPHA22_SOURCE_PATHS), 934)
-        self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 503)
+        self.assertEqual(len(candidate.ALPHA27_CRATE_SOURCE_PATHS), 503)
         self.assertEqual(len(candidate.HISTORICAL_REPLAY_CONTRACT_PATHS), 404)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)
         self.assertEqual(len(candidate.CORE_PIPELINE_SOURCE_PATHS), 55)
-        self.assertEqual(len(capture.check.SOURCE_PATHS), 71)
+        self.assertEqual(len(capture.check.ALPHA27_ADMISSION_SOURCE_PATHS), 71)
         self.assertEqual(len(capture.BOUND_FILES), 4)
         self.assertIs(contract['release_authorized'], False)
 

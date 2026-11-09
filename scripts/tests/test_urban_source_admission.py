@@ -33,7 +33,7 @@ class UrbanSourceAdmissionTests(unittest.TestCase):
         self.assertEqual(len(current['source_sha256']), 1022)
         self.assertEqual(len(candidate.URBAN_PREVIOUS_SHA256), 9)
         self.assertEqual(len(candidate.URBAN_ADDED_SHA256), 8)
-        self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 503)
+        self.assertEqual(len(candidate.ALPHA27_CRATE_SOURCE_PATHS), 503)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)
         self.assertEqual(set(current['source_sha256']) - set(previous['source_sha256']),
                          candidate.URBAN_SOURCE_PATHS)
@@ -42,12 +42,12 @@ class UrbanSourceAdmissionTests(unittest.TestCase):
         for path, expected in previous['source_sha256'].items():
             historical = candidate.URBAN_HISTORICAL_RELOCATIONS.get(path, path)
             self.assertEqual(current['source_sha256'][historical], expected, path)
-            self.assertEqual(candidate.digest(ROOT / candidate.ALPHA27_HISTORICAL_RELOCATIONS.get(historical, historical)), expected, path)
+            self.assertEqual(candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(candidate.ALPHA27_HISTORICAL_RELOCATIONS.get(historical, historical), candidate.ALPHA27_HISTORICAL_RELOCATIONS.get(historical, historical))), expected, path)
         for path in ('scripts/check-release-authorization.py', 'scripts/stage-commercial-candidate.py',
                      'crates/flightsim-app/src/component_terms.rs',
                      'crates/flightsim-app/src/component_terms_dialog.ps1', '.github/workflows/ci.yml'):
             prior = json.loads((ROOT / check.URBAN_BASE_CONTRACT_PATH).read_text())['source_sha256']
-            self.assertEqual(candidate.digest(ROOT / path), prior[path], path)
+            self.assertEqual(candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(path, path)), prior[path], path)
         self.assertIs(current['release_authorized'], False)
         self.assertEqual(current['scope'], candidate.SOURCE_ADMISSION_SCOPE)
         before = (ROOT / candidate.URBAN_HISTORICAL_RELOCATIONS['.gitattributes']).read_bytes()
@@ -56,10 +56,13 @@ class UrbanSourceAdmissionTests(unittest.TestCase):
 
     def test_descriptor_and_contract_cannot_jointly_reseal_or_claim_acceptance(self):
         current = candidate.load_replay_contract(ROOT)
+        # Validate the retained urban descriptor against its own frozen pins;
+        # the current successor contract is still mutated separately below.
+        historical = json.loads((ROOT / candidate.ALPHA27_BASE_CONTRACT_PATH).read_text())
         previous = self.previous()['source_sha256']
         original = json.loads((ROOT / candidate.URBAN_MIGRATION_PATH).read_text())
         def validate(value, pins=None):
-            candidate.validate_urban_migration(value, pins or current['source_sha256'], previous, ROOT)
+            candidate.validate_urban_migration(value, pins or historical['source_sha256'], previous, ROOT)
         validate(original)
         for key, value in {'schema_version': True, 'base_source': '0' * 40,
                            'base_tree': '0' * 40, 'release_authorized': True,
@@ -82,7 +85,7 @@ class UrbanSourceAdmissionTests(unittest.TestCase):
             else:
                 changed['added_source_sha256'][path] = '0' * 64
             with self.subTest(resealed=path), self.assertRaises(ValueError):
-                validate(changed, {**current['source_sha256'], path: '0' * 64})
+                validate(changed, {**historical['source_sha256'], path: '0' * 64})
         for path in candidate.URBAN_SOURCE_PATHS | set(candidate.URBAN_PREVIOUS_SHA256):
             for attack in ('omit', 'alias', 'repin'):
                 changed = copy.deepcopy(current)
