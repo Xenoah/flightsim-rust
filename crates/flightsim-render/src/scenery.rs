@@ -278,6 +278,8 @@ struct Builder<'a> {
     positions: Vec<[f32; 3]>,
     normals: Vec<[f32; 3]>,
     colors: Vec<[f32; 4]>,
+    surface_uvs: Vec<[f32; 2]>,
+    surface_kinds: Vec<[f32; 2]>,
     lifts: Vec<f32>,
     layer_lift: f32,
     limit: usize,
@@ -293,6 +295,8 @@ impl<'a> Builder<'a> {
             positions: Vec::new(),
             normals: Vec::new(),
             colors: Vec::new(),
+            surface_uvs: Vec::new(),
+            surface_kinds: Vec::new(),
             lifts: Vec::new(),
             layer_lift: 0.0,
             limit,
@@ -312,9 +316,21 @@ impl<'a> Builder<'a> {
         self.positions.truncate(len);
         self.normals.truncate(len);
         self.colors.truncate(len);
+        self.surface_uvs.truncate(len);
+        self.surface_kinds.truncate(len);
         self.lifts.truncate(len);
     }
     fn triangle(&mut self, points: [Ecef; 3], tint: [f32; 4], top: bool) -> bool {
+        self.triangle_surface(points, tint, top, [[0.0; 2]; 3], [0.0; 2])
+    }
+    fn triangle_surface(
+        &mut self,
+        points: [Ecef; 3],
+        tint: [f32; 4],
+        top: bool,
+        mut uvs: [[f32; 2]; 3],
+        kind: [f32; 2],
+    ) -> bool {
         if self.cancelled() {
             return false;
         }
@@ -337,10 +353,11 @@ impl<'a> Builder<'a> {
         }
         if top && normal.dot(p[0]) < 0.0 {
             p.swap(1, 2);
+            uvs.swap(1, 2);
             normal = -normal;
         }
         normal = normal.normalize();
-        for point in p {
+        for (point, uv) in p.into_iter().zip(uvs) {
             let local = point - self.origin.as_vec();
             if local.length_squared() > 400_000.0_f64.powi(2) {
                 return false;
@@ -348,12 +365,24 @@ impl<'a> Builder<'a> {
             self.positions.push(local.as_vec3().to_array());
             self.normals.push(normal.as_vec3().to_array());
             self.colors.push(tint);
+            self.surface_uvs.push(uv);
+            self.surface_kinds.push(kind);
             self.lifts.push(self.layer_lift);
         }
         true
     }
     fn quad(&mut self, p: [Ecef; 4], tint: [f32; 4], top: bool) -> bool {
         self.triangle([p[0], p[1], p[2]], tint, top) && self.triangle([p[0], p[2], p[3]], tint, top)
+    }
+    fn quad_surface(
+        &mut self,
+        p: [Ecef; 4],
+        tint: [f32; 4],
+        uv: [[f32; 2]; 4],
+        kind: [f32; 2],
+    ) -> bool {
+        self.triangle_surface([p[0], p[1], p[2]], tint, false, [uv[0], uv[1], uv[2]], kind)
+            && self.triangle_surface([p[0], p[2], p[3]], tint, false, [uv[0], uv[2], uv[3]], kind)
     }
     fn finish(self) -> Mesh {
         let indices: Vec<_> = (0..self.positions.len())
@@ -366,6 +395,8 @@ impl<'a> Builder<'a> {
         .with_inserted_attribute(Mesh::ATTRIBUTE_POSITION, self.positions)
         .with_inserted_attribute(Mesh::ATTRIBUTE_NORMAL, self.normals)
         .with_inserted_attribute(Mesh::ATTRIBUTE_COLOR, self.colors)
+        .with_inserted_attribute(Mesh::ATTRIBUTE_UV_0, self.surface_uvs)
+        .with_inserted_attribute(Mesh::ATTRIBUTE_UV_1, self.surface_kinds)
         .with_inserted_indices(Indices::U32(indices))
     }
 }
@@ -422,6 +453,23 @@ fn build_building_with_foundation(
     let roof = color(
         roof_palette[usize::try_from(hash(seed.wrapping_add(1)) % 3).expect("palette bound")],
     );
+    // Coordinates are local to the source building, independent of batch origin.
+    // The fractional seed byte is exactly representable in f32 and constant on
+    // each face, keeping style interpolation away from classification boundaries.
+    let local = LocalFrame::new(building.footprint[0]);
+    let style = f64::from(u8::try_from(hash(seed) % 3).expect("three styles")) + 1.0;
+    let seed_byte = f64::from(u8::try_from(hash(seed.wrapping_add(7)) & 255).expect("seed byte"));
+    let kind = if facades {
+        style + seed_byte / 256.0
+    } else {
+        0.0
+    };
+    let wall_kind = glam::DVec2::new(kind, building.height.get())
+        .as_vec2()
+        .to_array();
+    let roof_kind = glam::DVec2::new(-kind, building.height.get())
+        .as_vec2()
+        .to_array();
     for triangle in &building.triangles {
         let Some(points): Option<Vec<_>> = triangle
             .iter()
@@ -430,7 +478,7 @@ fn build_building_with_foundation(
         else {
             return false;
         };
-        if !builder.triangle(
+        if !builder.triangle_surface(
             [
                 at_height(points[0], roof_height),
                 at_height(points[1], roof_height),
@@ -438,13 +486,17 @@ fn build_building_with_foundation(
             ],
             roof,
             true,
+            std::array::from_fn(|index| {
+                let p = local.ecef_to_ned_position(points[index].to_ecef());
+                glam::DVec2::new(p.east(), p.north()).as_vec2().to_array()
+            }),
+            roof_kind,
         ) {
             return false;
         }
     }
     // Input simple polygons are validated/canonicalized by the database; use
     // outward winding derived from the footprint's signed local area as well.
-    let local = LocalFrame::new(building.footprint[0]);
     let area: f64 = building
         .footprint
         .iter()
@@ -466,79 +518,20 @@ fn build_building_with_foundation(
             at_height(b, roof_height),
             at_height(a, roof_height),
         ];
+        let width = a.to_ecef().distance_to(b.to_ecef()).get();
+        let mut uv = [
+            glam::DVec2::new(0.0, ground[index] - highest - foundation_depth.get()),
+            glam::DVec2::new(width, ground[next] - highest - foundation_depth.get()),
+            glam::DVec2::new(width, building.height.get()),
+            glam::DVec2::new(0.0, building.height.get()),
+        ]
+        .map(|p| p.as_vec2().to_array());
         if area < 0.0 {
             wall.reverse();
+            uv.reverse();
         }
-        if !builder.quad(wall, tint, false) {
+        if !builder.quad_surface(wall, tint, uv, wall_kind) {
             return false;
-        }
-        if facades
-            && !windows(
-                builder,
-                a,
-                b,
-                ground[index].max(ground[next]),
-                roof_height,
-                area,
-                seed.wrapping_add(index as u64),
-            )
-        {
-            return false;
-        }
-    }
-    true
-}
-
-#[allow(
-    clippy::cast_possible_truncation,
-    reason = "window grid dimensions are explicitly floored and capped to12columns/6rows"
-)]
-fn windows(
-    builder: &mut Builder,
-    a: Geodetic,
-    b: Geodetic,
-    ground: f64,
-    roof: f64,
-    area: f64,
-    seed: u64,
-) -> bool {
-    let left = at_height(a, ground);
-    let right = at_height(b, ground);
-    let width = left.distance_to(right).get();
-    if !(4.0..=120.0).contains(&width) || roof - ground < 3.0 {
-        return true;
-    }
-    let columns = (width / 3.2).floor().clamp(1.0, 12.0) as u32;
-    let rows = ((roof - ground - 1.0) / 3.0).floor().clamp(1.0, 6.0) as u32;
-    let up = LocalFrame::new(a).ned_to_ecef_vector(Ned::new(0.0, 0.0, -1.0));
-    let edge = right.as_vec() - left.as_vec();
-    let outward = edge.cross(up).normalize() * if area < 0.0 { -0.025 } else { 0.025 };
-    for row in 0..rows {
-        for col in 0..columns {
-            let x = (f64::from(col) + 0.5) / f64::from(columns);
-            let half = (0.62 / width).min(0.3 / f64::from(columns));
-            let z = 1.2 + f64::from(row) * 3.0;
-            let base = left.as_vec() + outward;
-            let mut quad = [
-                base + edge * (x - half) + up * z,
-                base + edge * (x + half) + up * z,
-                base + edge * (x + half) + up * (z + 1.1),
-                base + edge * (x - half) + up * (z + 1.1),
-            ]
-            .map(Ecef::from_vec);
-            if area < 0.0 {
-                quad.reverse();
-            }
-            let tint = if hash(seed.wrapping_add(u64::from(row) * 31 + u64::from(col)))
-                .is_multiple_of(7)
-            {
-                color([0.39, 0.43, 0.43])
-            } else {
-                color([0.14, 0.22, 0.25])
-            };
-            if !builder.quad(quad, tint, false) {
-                return false;
-            }
         }
     }
     true
@@ -964,14 +957,21 @@ fn tree_with_roots(
 /// Original geometry uses opaque vertex colours; no texture dependencies or
 /// separate shadow-casting light/entity is created per building or tree.
 #[must_use]
-pub fn scenery_material() -> StandardMaterial {
-    StandardMaterial {
-        base_color: Color::WHITE,
-        perceptual_roughness: 0.94,
-        metallic: 0.0,
-        ..default()
+pub fn scenery_material() -> crate::scenery_surface::SceneryMaterial {
+    crate::scenery_surface::SceneryMaterial {
+        base: StandardMaterial {
+            base_color: Color::WHITE,
+            perceptual_roughness: 0.94,
+            metallic: 0.0,
+            ..default()
+        },
+        extension: default(),
     }
 }
+
+#[cfg(test)]
+#[path = "scenery_surface_tests.rs"]
+mod surface_tests;
 
 #[cfg(test)]
 #[path = "scenery_canopy_tests.rs"]
@@ -1052,7 +1052,7 @@ mod tests {
         let output = plain(&[SceneryFeatureRef::Building(&source)]);
         assert_eq!(output.statistics.buildings, 1);
         assert_eq!(output.statistics.roads, 0);
-        assert!(output.statistics.vertices > 36 && output.statistics.vertices < 1000);
+        assert_eq!(output.statistics.vertices, 30);
         for p in positions(&output.mesh) {
             let world =
                 Ecef::from_vec(output.origin.as_vec() + glam::Vec3::from_array(*p).as_dvec3())
@@ -1181,7 +1181,18 @@ mod tests {
         .unwrap();
         assert_eq!(source, before);
         assert_eq!(simple.statistics.vertices, 30);
-        assert!(detailed.statistics.vertices > simple.statistics.vertices);
+        assert_eq!(detailed.statistics.vertices, simple.statistics.vertices);
+        for attribute in [
+            Mesh::ATTRIBUTE_POSITION,
+            Mesh::ATTRIBUTE_NORMAL,
+            Mesh::ATTRIBUTE_COLOR,
+        ] {
+            assert_eq!(
+                detailed.mesh.attribute(attribute),
+                simple.mesh.attribute(attribute)
+            );
+        }
+        assert_eq!(detailed.mesh.indices(), simple.mesh.indices());
     }
     #[test]
     fn failed_feature_rolls_back_without_partial_walls() {

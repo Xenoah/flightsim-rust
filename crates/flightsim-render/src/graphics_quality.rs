@@ -303,6 +303,62 @@ mod tests {
     use super::*;
     use bevy::light::GeneratedEnvironmentMapLight;
 
+    #[test]
+    fn scenery_surface_ownership_and_strength_survive_quality_cycle() {
+        use crate::scenery_surface::SceneryMaterial;
+        let (mut app, _, _) = app();
+        app.init_resource::<Assets<Mesh>>()
+            .init_resource::<Assets<SceneryMaterial>>();
+        let mesh = app
+            .world_mut()
+            .resource_mut::<Assets<Mesh>>()
+            .add(Cuboid::new(10.0, 20.0, 15.0));
+        let material = app
+            .world_mut()
+            .resource_mut::<Assets<SceneryMaterial>>()
+            .add(crate::scenery::scenery_material());
+        let original = app
+            .world()
+            .resource::<Assets<SceneryMaterial>>()
+            .get(&material)
+            .unwrap()
+            .clone();
+        let entity = app
+            .world_mut()
+            .spawn((Mesh3d(mesh.clone()), MeshMaterial3d(material.clone())))
+            .id();
+        for quality in [
+            GraphicsQuality::Light,
+            GraphicsQuality::High,
+            GraphicsQuality::Ultra,
+            GraphicsQuality::Light,
+        ] {
+            app.insert_resource(quality);
+            app.update();
+            assert_eq!(app.world().get::<Mesh3d>(entity).unwrap().0, mesh);
+            assert_eq!(
+                app.world()
+                    .get::<MeshMaterial3d<SceneryMaterial>>(entity)
+                    .unwrap()
+                    .0,
+                material
+            );
+            let current = app
+                .world()
+                .resource::<Assets<SceneryMaterial>>()
+                .get(&material)
+                .unwrap();
+            assert_eq!(current.extension, original.extension);
+            assert_eq!(current.base.emissive, LinearRgba::BLACK);
+            assert_eq!(current.base.base_color, original.base.base_color);
+            assert_eq!(
+                current.base.perceptual_roughness.to_bits(),
+                original.base.perceptual_roughness.to_bits()
+            );
+            assert_eq!(app.world().resource::<Assets<SceneryMaterial>>().len(), 1);
+        }
+    }
+
     fn renderable_camera() -> Camera {
         Camera {
             computed: bevy::camera::ComputedCameraValues {

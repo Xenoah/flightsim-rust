@@ -901,6 +901,7 @@ fn main() -> bevy::app::AppExit {
         .add_plugins((
             FlightsimRenderPlugin,
             flightsim_render::terrain_detail::TerrainDetailPlugin,
+            flightsim_render::scenery_surface::ScenerySurfacePlugin,
             flightsim_render::water::WaterSurfacePlugin,
             FlightsimInputPlugin,
             FlightsimUiPlugin,

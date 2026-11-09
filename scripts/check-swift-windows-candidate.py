@@ -53,7 +53,8 @@ ALPHA25_REPLAY_CONTRACT_ID = "full-two-aircraft-alpha25-version-source-v1"
 CHASE_HUD_REPLAY_CONTRACT_ID = "full-two-aircraft-chase-hud-source-v1"
 ALPHA26_REPLAY_CONTRACT_ID = "full-two-aircraft-alpha26-version-source-v1"
 URBAN_REPLAY_CONTRACT_ID = "full-two-aircraft-offline-urban-source-v1"
-REPLAY_CONTRACT_ID = "full-two-aircraft-alpha27-version-source-v1"
+ALPHA27_REPLAY_CONTRACT_ID = "full-two-aircraft-alpha27-version-source-v1"
+REPLAY_CONTRACT_ID = "full-two-aircraft-urban-surface-rebuild-source-v1"
 REVIEWED_RUNTIME_SOURCE = "960c3126e6a4bc22b8d4acc6e6737f8f2b473bef"
 REVIEWED_RUNTIME_TREE = "b3bbd57bc3819b1b1eda35ce4f8b476c52d1b24e"
 SOURCE_ADMISSION_SCOPE = "source-only; native, whole-target and publication gates remain unqualified"
@@ -388,6 +389,45 @@ ALPHA27_PREVIOUS_SHA256 = {'Cargo.lock': 'a4be7f2a769d9c0d5b33369334fe8dafb5c356
 ALPHA27_SOURCE_PATHS = frozenset({ALPHA27_MIGRATION_PATH, *ALPHA27_BASE_CONTRACT_HASHES, *ALPHA27_HISTORICAL_RELOCATIONS.values()})
 ALPHA27_WORKSPACE_PACKAGES = ALPHA26_WORKSPACE_PACKAGES
 
+
+# Bounded reconstruction from a verified public alpha.27 base; source only.
+SURFACE_MIGRATION_PATH = 'scripts/urban-surface-rebuild-source-migration.json'
+SURFACE_MIGRATION_SHA256 = '2ada2a5aaaed76ac31f9e8b802ea2ace7bb453d24dd4f7a1eb8701515eb1f834'
+SURFACE_BASE_SOURCE = '729a72d205d3cdee4c2b18779b5d8a14e24672a2'
+SURFACE_BASE_TREE = '3747783385d9f5cab4163dde6dc2b930ae441a07'
+SURFACE_BASE_CONTRACT_PATH = 'scripts/history/729a72d2-scripts-replay-candidate-contract.json'
+SURFACE_BASE_CONTRACT_HASHES = {'scripts/history/729a72d2-scripts-analytical-swift-capture-contract.json': 'e02a8b0afa1805081ceb8dfa6b9ada7f90284ae498afcadc23dd4f5bf919f559',
+ 'scripts/history/729a72d2-scripts-analytical-swift-source-contract.json': '05d92da28f674592b4eaa352cc7e669554b1fbc825d4c771bdf2030462d6d876',
+ 'scripts/history/729a72d2-scripts-replay-candidate-contract.json': 'c3ac664f8ebd45b8928e1e6f7601eb6f9a2b7c9c2a48af88b9258b51bcb380af'}
+SURFACE_HISTORICAL_RELOCATIONS = {'crates/flightsim-app/src/main.rs': 'scripts/history/729a72d2-crates-flightsim-app-src-main.rs',
+ 'crates/flightsim-app/src/scenery_runtime.rs': 'scripts/history/729a72d2-crates-flightsim-app-src-scenery_runtime.rs',
+ 'crates/flightsim-app/src/scenery_runtime_tests.rs': 'scripts/history/729a72d2-crates-flightsim-app-src-scenery_runtime_tests.rs',
+ 'crates/flightsim-render/src/graphics_quality.rs': 'scripts/history/729a72d2-crates-flightsim-render-src-graphics_quality.rs',
+ 'crates/flightsim-render/src/lib.rs': 'scripts/history/729a72d2-crates-flightsim-render-src-lib.rs',
+ 'crates/flightsim-render/src/scenery.rs': 'scripts/history/729a72d2-crates-flightsim-render-src-scenery.rs',
+ 'crates/flightsim-render/tests/scenery_bounds.rs': 'scripts/history/729a72d2-crates-flightsim-render-tests-scenery_bounds.rs'}
+SURFACE_PREVIOUS_SHA256 = {'crates/flightsim-app/src/main.rs': '4587a0a986d031b6c8aabf0f09510820b263320e7a1351fdf57027c3f33e86f3',
+ 'crates/flightsim-app/src/scenery_runtime.rs': 'bd227dde6ab55980ecdd6f9b709363112ddc2d2064f1c5a6e3157b64986490fa',
+ 'crates/flightsim-app/src/scenery_runtime_tests.rs': '02f00c5486e2a9bc5e140c247e8349c13d469ddec411b77dfd02839a2d5754a4',
+ 'crates/flightsim-render/src/graphics_quality.rs': 'd6acc548a3b9a69b7e387a1e396b6b5fbd961e7d8ef2a3dc5faab5c1b398f83d',
+ 'crates/flightsim-render/src/lib.rs': '0e3e80debb6331e32635632ced5a3026ae5766bf099cf0808d73da5b4de19ef8',
+ 'crates/flightsim-render/src/scenery.rs': '48b54cdfded69a3e0de816dc19bb2d0ac7bc9a722a310145b057f9676c4226a1',
+ 'crates/flightsim-render/tests/scenery_bounds.rs': 'c3630149b6b00467b02918fe7876e97c24674ef1420b2cbb66a0f3b8f72c55d2'}
+SURFACE_CURRENT_SHA256 = {'crates/flightsim-app/src/main.rs': 'a4fd5ddcbb6c934e83622626beb5bc2a6b14a5afadbc4ee6011dcda926c0e403',
+ 'crates/flightsim-app/src/scenery_runtime.rs': '6251ac457a7b1523e68967db82001bb08141c92f0e264afa8219e4524eac900f',
+ 'crates/flightsim-app/src/scenery_runtime_tests.rs': 'a6cfcdafe05a1bacff376ba5b792bc061a265edc28f5449e00ad0f50dd38b1a1',
+ 'crates/flightsim-render/src/graphics_quality.rs': 'cd9fe05b52d5dc3df0bf510519c0a49407312b547ba7ff1450534629029df629',
+ 'crates/flightsim-render/src/lib.rs': '1aa173d0d9299836a4a619bfe43b0e9530537a57fe176690839e1ed84266e70c',
+ 'crates/flightsim-render/src/scenery.rs': '2ebf034982cf0deed721a6b78f4f02cfc117768741a0c11b0658b72c47384df5',
+ 'crates/flightsim-render/tests/scenery_bounds.rs': '55913e79622a7db2d37d6ed64ecedfc3bc99197cb2d66d5a970dc2cc4fb9909c'}
+SURFACE_ADDED_SHA256 = {'crates/flightsim-render/src/scenery_surface.rs': '8138a2aaabfee07039a87ce043f89615fa17f2ee3a9050fdd06d183c17134823',
+ 'crates/flightsim-render/src/scenery_surface.wgsl': '7195c34c47cf5118579b111d6e53e40b55e6eb2f19a88fb8d26452f57c494228',
+ 'crates/flightsim-render/src/scenery_surface_tests.rs': 'f8037bfee39a24b0a114e538de6c256b3be91c30406855f1b713eea9c88076db',
+ 'docs/adr/0035-bounded-building-surface-detail.md': '927ad6620b80d616a7921a09ae73c38fbd1b0a16dd0a2ea8e7790a8b6a3a5445',
+ 'docs/qa/urban-surface-source-reconstruction-2026-11-08.md': 'e9acc214febd55fda3eb1ca73d482d99616ef592ff255e09220c61108b4219fb'}
+SURFACE_RUNTIME_PATHS = frozenset(['crates/flightsim-render/src/scenery_surface.rs', 'crates/flightsim-render/src/scenery_surface.wgsl', 'crates/flightsim-render/src/scenery_surface_tests.rs'])
+SURFACE_SOURCE_PATHS = frozenset({SURFACE_MIGRATION_PATH, *SURFACE_BASE_CONTRACT_HASHES, *SURFACE_HISTORICAL_RELOCATIONS.values(), *SURFACE_ADDED_SHA256})
+
 # The oldest main.rs witness remains the component-terms witness. Other newly
 # replaced preserved files now have their own exact published-base witnesses.
 ALPHA25_HISTORICAL_RUNTIME_RELOCATIONS = {
@@ -399,6 +439,7 @@ ALPHA26_HISTORICAL_RUNTIME_RELOCATIONS = {
     **ALPHA25_HISTORICAL_RUNTIME_RELOCATIONS, **CHASE_HUD_HISTORICAL_RELOCATIONS,
 }
 CURRENT_HISTORICAL_RUNTIME_RELOCATIONS = {
+    **SURFACE_HISTORICAL_RELOCATIONS,
     **URBAN_HISTORICAL_RELOCATIONS, **ALPHA26_HISTORICAL_RUNTIME_RELOCATIONS,
 }
 # The reviewed additive jet/turboprop exports change this file, but no legacy FDM
@@ -1473,6 +1514,8 @@ ALPHA26_REPLAY_CONTRACT_PATHS = frozenset(REPLAY_CONTRACT_PATHS)
 REPLAY_CONTRACT_PATHS |= URBAN_SOURCE_PATHS
 URBAN_REPLAY_CONTRACT_PATHS = frozenset(REPLAY_CONTRACT_PATHS)
 REPLAY_CONTRACT_PATHS |= ALPHA27_SOURCE_PATHS
+ALPHA27_REPLAY_CONTRACT_PATHS = frozenset(REPLAY_CONTRACT_PATHS)
+REPLAY_CONTRACT_PATHS |= SURFACE_SOURCE_PATHS
 
 # Independent Python encoders and their existing bytes stay frozen separately
 # from the moving reviewed implementation. Never regenerate to satisfy a pin.
@@ -1663,6 +1706,8 @@ PRESERVED_CRATE_SOURCE_PATHS = frozenset(path for path in ALPHA26_REPLAY_CONTRAC
 CURRENT_CRATE_SOURCE_PATHS = (PRESERVED_CRATE_SOURCE_PATHS | COMPONENT_TERMS_RUNTIME_PATHS
                               | TERRAIN_CENTROID_RUNTIME_PATHS | COCKPIT_RUNTIME_PATHS
                               | COCKPIT_VARIANT_RUNTIME_PATHS | URBAN_RUNTIME_PATHS)
+ALPHA27_CRATE_SOURCE_PATHS = frozenset(CURRENT_CRATE_SOURCE_PATHS)
+CURRENT_CRATE_SOURCE_PATHS |= SURFACE_RUNTIME_PATHS
 MODIFIED_SOURCE_BOUNDARIES = (
     ("crates/", CURRENT_CRATE_SOURCE_PATHS),
     ("docs/release/components/", COMPONENT_TERMS_DOCUMENT_PATHS),
@@ -2954,20 +2999,20 @@ def validate_alpha27_version_delta(previous, current):
                 and current[path] == previous[path].replace(old.encode("ascii"), new.encode("ascii")),
                 "alpha27 version bytes differ outside approved substitutions: " + path)
 
-def validate_replay_contract(contract):
+def validate_alpha27_replay_contract(contract):
     """Admit the exact alpha.26 -> alpha.27 version delta over the full urban proof."""
     require(isinstance(contract, dict) and set(contract) == {"schema_version", "contract",
             "base_reviewed_source", "base_reviewed_runtime_tree", "source_migration_sha256",
             "scope", "release_authorized", "source_sha256"}
             and type(contract.get("schema_version")) is int and contract["schema_version"] == 1
-            and contract.get("contract") == REPLAY_CONTRACT_ID, "invalid reviewed replay contract")
+            and contract.get("contract") == ALPHA27_REPLAY_CONTRACT_ID, "invalid reviewed replay contract")
     require(contract["base_reviewed_source"] == REVIEWED_RUNTIME_SOURCE
             and contract["base_reviewed_runtime_tree"] == REVIEWED_RUNTIME_TREE
             and contract["source_migration_sha256"] == ALPHA27_MIGRATION_SHA256
             and contract["scope"] == SOURCE_ADMISSION_SCOPE and contract["release_authorized"] is False,
             "source admission identity or scope changed")
     pins = contract["source_sha256"]
-    require(isinstance(pins, dict) and set(pins) == REPLAY_CONTRACT_PATHS
+    require(isinstance(pins, dict) and set(pins) == ALPHA27_REPLAY_CONTRACT_PATHS
             and all(isinstance(h, str) and re.fullmatch(r"[0-9a-f]{64}", h) for h in pins.values()),
             "reviewed replay source boundary changed")
     for path in ("assets/aircraft/light_single.json", "crates/flightsim-fdm/src/aircraft.rs"):
@@ -2979,7 +3024,7 @@ def validate_replay_contract(contract):
         require(digest(root / path) == expected == pins[path], "alpha27 historical contract changed: " + path)
     previous = json.loads((root / ALPHA27_BASE_CONTRACT_PATH).read_text(encoding="utf-8"))
     require(len(previous["source_sha256"]) == 1022
-            and set(previous["source_sha256"]) == REPLAY_CONTRACT_PATHS - ALPHA27_SOURCE_PATHS,
+            and set(previous["source_sha256"]) == ALPHA27_REPLAY_CONTRACT_PATHS - ALPHA27_SOURCE_PATHS,
             "alpha27 prior source boundary changed")
     for path, expected in previous["source_sha256"].items():
         historical = ALPHA27_HISTORICAL_RELOCATIONS.get(path, path)
@@ -3011,6 +3056,71 @@ def validate_replay_contract(contract):
     validate_alpha27_version_delta(before, after)
     # A positive result always checks the complete frozen proof, without a cache.
     validate_urban_replay_contract(previous)
+    return contract
+
+
+def validate_surface_migration(value, pins, prior):
+    expected = {
+        "schema_version": 1,
+        "identity": "full-two-aircraft-urban-surface-rebuild-source-migration-v1",
+        "base_source": SURFACE_BASE_SOURCE, "base_tree": SURFACE_BASE_TREE,
+        "base_source_kind": "public-draft-alpha27-commit",
+        "base_contract_sha256": SURFACE_BASE_CONTRACT_HASHES,
+        "previous_source_migration_sha256": ALPHA27_MIGRATION_SHA256,
+        "preserved_runtime_sha256": PRESERVED_RUNTIME_SHA256,
+        "scope": SOURCE_ADMISSION_SCOPE, "release_authorized": False,
+        "historical_relocations": SURFACE_HISTORICAL_RELOCATIONS,
+        "replaced_source_sha256": {
+            path: {"previous_sha256": previous, "sha256": SURFACE_CURRENT_SHA256[path]}
+            for path, previous in SURFACE_PREVIOUS_SHA256.items()},
+        "added_source_sha256": SURFACE_ADDED_SHA256,
+    }
+    require(isinstance(value, dict) and type(value.get("schema_version")) is int
+            and value.get("release_authorized") is False and value == expected,
+            "invalid building-surface migration boundary")
+    for path, previous in SURFACE_PREVIOUS_SHA256.items():
+        require(prior[path] == previous
+                and pins[SURFACE_HISTORICAL_RELOCATIONS[path]] == previous
+                and pins[path] == SURFACE_CURRENT_SHA256[path],
+                "reviewed building-surface replacement changed: " + path)
+    for path, expected_hash in SURFACE_ADDED_SHA256.items():
+        require(pins[path] == expected_hash, "reviewed building-surface addition changed: " + path)
+
+
+def validate_replay_contract(contract):
+    """Retain the complete alpha.27 proof while adding only reviewed surface inputs."""
+    require(isinstance(contract, dict) and set(contract) == {"schema_version", "contract",
+            "base_reviewed_source", "base_reviewed_runtime_tree", "source_migration_sha256",
+            "scope", "release_authorized", "source_sha256"}
+            and type(contract.get("schema_version")) is int and contract["schema_version"] == 1
+            and contract.get("contract") == REPLAY_CONTRACT_ID, "invalid reviewed replay contract")
+    require(contract["base_reviewed_source"] == REVIEWED_RUNTIME_SOURCE
+            and contract["base_reviewed_runtime_tree"] == REVIEWED_RUNTIME_TREE
+            and contract["source_migration_sha256"] == SURFACE_MIGRATION_SHA256
+            and contract["scope"] == SOURCE_ADMISSION_SCOPE and contract["release_authorized"] is False,
+            "source admission identity or scope changed")
+    pins = contract["source_sha256"]
+    require(isinstance(pins, dict) and set(pins) == REPLAY_CONTRACT_PATHS
+            and all(isinstance(h, str) and re.fullmatch(r"[0-9a-f]{64}", h) for h in pins.values()),
+            "reviewed replay source boundary changed")
+    root = Path(__file__).parent.parent
+    for path, expected in SURFACE_BASE_CONTRACT_HASHES.items():
+        require(digest(root / path) == expected == pins[path],
+                "surface historical contract changed: " + path)
+    previous = json.loads((root / SURFACE_BASE_CONTRACT_PATH).read_text(encoding="utf-8"))
+    require(len(previous["source_sha256"]) == 1028
+            and set(previous["source_sha256"]) == ALPHA27_REPLAY_CONTRACT_PATHS,
+            "surface prior source boundary changed")
+    for path, expected in previous["source_sha256"].items():
+        historical = SURFACE_HISTORICAL_RELOCATIONS.get(path, path)
+        require(pins[historical] == expected,
+                "surface prior source pins changed (preserved runtime/historical contract): " + path)
+    require(digest(root / SURFACE_MIGRATION_PATH) == SURFACE_MIGRATION_SHA256 == pins[SURFACE_MIGRATION_PATH],
+            "surface source migration changed")
+    validate_surface_migration(json.loads((root / SURFACE_MIGRATION_PATH).read_text(encoding="utf-8")),
+                               pins, previous["source_sha256"])
+    # No cached approval: every positive re-evaluates all prior source validators.
+    validate_alpha27_replay_contract(previous)
     return contract
 
 

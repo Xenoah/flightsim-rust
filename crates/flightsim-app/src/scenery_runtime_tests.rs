@@ -90,6 +90,7 @@ fn fixture_app() -> App {
         .init_resource::<SceneryReset>()
         .init_resource::<Assets<Mesh>>()
         .init_resource::<Assets<StandardMaterial>>()
+        .init_resource::<Assets<SceneryMaterial>>()
         .init_resource::<TerrainTiles>()
         .insert_resource(OverlayDriveEnabled(true))
         .add_systems(Update, drive_overlay_cut.before(stream))

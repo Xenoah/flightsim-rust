@@ -51,23 +51,49 @@ fn dense_fixtures_respect_vertex_and_tree_caps_even_with_unbounded_requested_lim
 fn clipped_dense_source_never_exceeds_callers_vertex_budget() {
     let fixture = Fixture::buildings();
     let features = fixture.features();
-    for cap in [3, 29, 30, 31, 63, 511, 1_024, 7_777] {
-        let mut options = SceneryMeshOptions::near(anchor());
-        options.max_vertices = cap;
-        if let Some(batch) = scenery_mesh(
-            &features,
-            anchor(),
-            options,
-            &mut |_| Some(Meters::ZERO),
-            &|_| false,
-        ) {
-            assert!(batch.statistics.vertices <= cap);
-            assert_eq!(batch.statistics.vertices % 3, 0);
-            assert!(batch.statistics.skipped_features > 0);
-            assert_eq!(
-                batch.statistics.buildings + batch.statistics.skipped_features,
-                features.len()
+    // Each rectangular fixture has two roof and eight wall triangles. Surface
+    // detail adds no pane geometry, so all 64 buildings fit at 1,920 vertices.
+    let vertices_per_building = 3 * (2 + 4 * 2);
+    let full = features.len() * vertices_per_building;
+    for facades in [false, true] {
+        for cap in [
+            0,
+            3,
+            29,
+            30,
+            31,
+            63,
+            511,
+            1_024,
+            full - 1,
+            full,
+            full + 1,
+            7_777,
+        ] {
+            let mut options = SceneryMeshOptions::near(anchor());
+            options.max_vertices = cap;
+            options.facades = facades;
+            let output = scenery_mesh(
+                &features,
+                anchor(),
+                options,
+                &mut |_| Some(Meters::ZERO),
+                &|_| false,
             );
+            let expected = (cap / vertices_per_building).min(features.len());
+            if expected == 0 {
+                assert!(
+                    output.is_none(),
+                    "no partial building below its complete budget"
+                );
+                continue;
+            }
+            let batch = output.expect("a complete building fits the requested budget");
+            assert!(batch.statistics.vertices <= cap);
+            assert_eq!(batch.statistics.vertices, expected * vertices_per_building);
+            assert_eq!(batch.mesh.count_vertices(), batch.statistics.vertices);
+            assert_eq!(batch.statistics.buildings, expected);
+            assert_eq!(batch.statistics.skipped_features, features.len() - expected);
         }
     }
 }

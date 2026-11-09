@@ -75,6 +75,7 @@ pub mod runway;
 pub mod runway_lights;
 pub mod scenery;
 pub mod scenery_exclusions;
+pub mod scenery_surface;
 pub mod sun;
 pub mod taxiway;
 pub mod taxiway_lights;

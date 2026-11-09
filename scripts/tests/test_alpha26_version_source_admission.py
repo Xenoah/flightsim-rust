@@ -29,7 +29,8 @@ ADDED = {
 
 def retained_alpha26_path(relative):
     prior = candidate.URBAN_HISTORICAL_RELOCATIONS.get(relative, relative)
-    return ROOT / candidate.ALPHA27_HISTORICAL_RELOCATIONS.get(prior, prior)
+    prior = candidate.ALPHA27_HISTORICAL_RELOCATIONS.get(prior, prior)
+    return ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(prior, prior)
 
 
 class Alpha26VersionSourceAdmissionTests(unittest.TestCase):
@@ -76,9 +77,9 @@ class Alpha26VersionSourceAdmissionTests(unittest.TestCase):
         self.assertEqual(len(candidate.ALPHA26_SOURCE_PATHS), 6)
         self.assertEqual(len(candidate.ALPHA26_WORKSPACE_PACKAGES), 13)
         self.assertEqual(candidate.ALPHA26_WORKSPACE_PACKAGES, candidate.ALPHA25_WORKSPACE_PACKAGES)
-        self.assertEqual(len(capture.check.SOURCE_PATHS), 71)
+        self.assertEqual(len(capture.check.ALPHA27_ADMISSION_SOURCE_PATHS), 71)
         self.assertEqual(len(capture.BOUND_FILES), 4)
-        self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 503)
+        self.assertEqual(len(candidate.ALPHA27_CRATE_SOURCE_PATHS), 503)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)
         self.assertEqual(len(json.loads((ROOT / candidate.PRESERVED_RUNTIME_PATH).read_text())['source_sha256']), 497)
         self.assertIs(contract['release_authorized'], False)

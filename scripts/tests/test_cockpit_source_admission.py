@@ -72,19 +72,19 @@ class CockpitSourceAdmissionTests(unittest.TestCase):
             checkout = candidate.ALPHA23_HISTORICAL_RELOCATIONS.get(historical, historical)
             checkout = candidate.COCKPIT_VARIANT_HISTORICAL_RELOCATIONS.get(checkout, checkout)
             checkout = candidate.CHASE_HUD_HISTORICAL_RELOCATIONS.get(checkout, checkout)
-            self.assertEqual(candidate.digest(ROOT / candidate.URBAN_HISTORICAL_RELOCATIONS.get(checkout, checkout)), expected, path)
+            self.assertEqual(candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(candidate.URBAN_HISTORICAL_RELOCATIONS.get(checkout, checkout), candidate.URBAN_HISTORICAL_RELOCATIONS.get(checkout, checkout))), expected, path)
         for path in CHANGED:
             self.assertEqual(migration['replaced_source_sha256'][path], {
-                'previous_sha256': base['source_sha256'][path], 'sha256': candidate.digest(ROOT / candidate.COCKPIT_VARIANT_HISTORICAL_RELOCATIONS.get(path, path))})
+                'previous_sha256': base['source_sha256'][path], 'sha256': candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(candidate.COCKPIT_VARIANT_HISTORICAL_RELOCATIONS.get(path, path), candidate.COCKPIT_VARIANT_HISTORICAL_RELOCATIONS.get(path, path)))})
         for path in RUNTIME:
             self.assertEqual(migration['added_source_sha256'][path],
-                             candidate.digest(ROOT / candidate.COCKPIT_VARIANT_HISTORICAL_RELOCATIONS.get(path, path)))
+                             candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(candidate.COCKPIT_VARIANT_HISTORICAL_RELOCATIONS.get(path, path), candidate.COCKPIT_VARIANT_HISTORICAL_RELOCATIONS.get(path, path))))
         self.assertEqual(len(candidate.PRESERVED_CRATE_SOURCE_PATHS), 492)
-        self.assertEqual(len(candidate.CURRENT_CRATE_SOURCE_PATHS), 503)
+        self.assertEqual(len(candidate.ALPHA27_CRATE_SOURCE_PATHS), 503)
         self.assertEqual(len(candidate.HISTORICAL_REPLAY_CONTRACT_PATHS), 404)
         self.assertEqual(len(candidate.INDEPENDENT_REPLAY_HASHES), 102)
         self.assertEqual(len(candidate.CORE_PIPELINE_SOURCE_PATHS), 55)
-        self.assertEqual(len(capture.check.SOURCE_PATHS), 71)
+        self.assertEqual(len(capture.check.ALPHA27_ADMISSION_SOURCE_PATHS), 71)
         self.assertEqual(len(capture.BOUND_FILES), 4)
         self.assertIs(current['release_authorized'], False)
 
@@ -116,11 +116,11 @@ class CockpitSourceAdmissionTests(unittest.TestCase):
         earlier = json.loads((ROOT / candidate.COMPONENT_TERMS_MIGRATION_PATH).read_text())
         self.assertEqual(candidate.HISTORICAL_RUNTIME_RELOCATIONS[main], candidate.COMPONENT_TERMS_HISTORY_PATH)
         self.assertEqual(candidate.CURRENT_HISTORICAL_RUNTIME_RELOCATIONS[main], candidate.COMPONENT_TERMS_HISTORY_PATH)
-        self.assertEqual(candidate.digest(ROOT / RELOCATIONS[main]),
+        self.assertEqual(candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(RELOCATIONS[main], RELOCATIONS[main])),
                          earlier['replaced_source_sha256'][main]['sha256'])
-        self.assertEqual(candidate.digest(ROOT / candidate.COMPONENT_TERMS_HISTORY_PATH),
+        self.assertEqual(candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(candidate.COMPONENT_TERMS_HISTORY_PATH, candidate.COMPONENT_TERMS_HISTORY_PATH)),
                          earlier['replaced_source_sha256'][main]['previous_sha256'])
-        self.assertNotEqual(candidate.digest(ROOT / main), candidate.digest(ROOT / RELOCATIONS[main]))
+        self.assertNotEqual(candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(main, main)), candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(RELOCATIONS[main], RELOCATIONS[main])))
 
     def test_no_version_physics_replay_or_prior_migration_repin(self):
         current = candidate.load_replay_contract(ROOT)['source_sha256']
@@ -135,7 +135,7 @@ class CockpitSourceAdmissionTests(unittest.TestCase):
             historical = candidate.ALPHA23_HISTORICAL_RELOCATIONS.get(path, path)
             checkout = candidate.CHASE_HUD_HISTORICAL_RELOCATIONS.get(historical, historical)
             checkout = candidate.URBAN_HISTORICAL_RELOCATIONS.get(checkout, checkout)
-            self.assertEqual(candidate.digest(ROOT / checkout), expected, path)
+            self.assertEqual(candidate.digest(ROOT / candidate.SURFACE_HISTORICAL_RELOCATIONS.get(checkout, checkout)), expected, path)
             if path in base:
                 self.assertEqual(current[historical], expected, path)
 
